@@ -5,7 +5,7 @@ services:
   github:
     repo: shashanksGitHub/str-optimizer-backend
     branch: main
-  run_command: gunicorn --bind 0.0.0.0:$PORT --workers 1 --timeout 120 wsgi:application
+  run_command: bash start.sh
   environment_slug: python
   instance_count: 1
   instance_size_slug: basic-xxs
