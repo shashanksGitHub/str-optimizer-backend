@@ -511,6 +511,49 @@ def test_pdf():
             'traceback': traceback.format_exc()
         }), 500
 
+# Test premium PDF generation endpoint
+@app.route('/api/test-premium-pdf')
+def test_premium_pdf():
+    """Test premium PDF generation functionality"""
+    try:
+        import tempfile
+        from services.str_optimizer import optimize_listing
+        
+        # Create test data simulating a premium package
+        test_form_data = {
+            'url': 'https://www.airbnb.com/rooms/test',
+            'email': 'test@example.com',
+            'title': 'Beautiful Test Property',
+            'description': 'This is a test property description for PDF generation testing.',
+            'wants_pdf': True,  # This is the key - premium package
+            'wants_email': False
+        }
+        
+        # Process optimization with PDF generation
+        result = optimize_listing(test_form_data)
+        
+        if result.get('pdf_download_url'):
+            return jsonify({
+                'status': 'success',
+                'message': 'Premium PDF generation working!',
+                'pdf_download_url': result['pdf_download_url'],
+                'has_pdf': True
+            })
+        else:
+            return jsonify({
+                'status': 'error',
+                'message': 'Premium PDF generation failed - no download URL',
+                'has_pdf': False
+            }), 500
+            
+    except Exception as e:
+        import traceback
+        return jsonify({
+            'status': 'error',
+            'message': f'Premium PDF test error: {str(e)}',
+            'traceback': traceback.format_exc()
+        }), 500
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5001))
     app.run(host='0.0.0.0', port=port, debug=True) 
