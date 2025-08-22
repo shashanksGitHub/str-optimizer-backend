@@ -444,7 +444,96 @@ class ModernPDF(FPDF):
         self.ln(box_height + 10)
 
 def generate_professional_pdf(optimization_data, output_path):
-    """Generate professional PDF using HTML-to-PDF for pixel-perfect results"""
+    """Generate professional PDF with fallback system"""
     
-    # Use the new HTML-to-PDF system for 100% replica
-    return generate_html_pdf(optimization_data, output_path) 
+    print("🔄 Attempting HTML-to-PDF generation...")
+    
+    # Try HTML-to-PDF first for pixel-perfect results
+    try:
+        success = generate_html_pdf(optimization_data, output_path)
+        if success and os.path.exists(output_path) and os.path.getsize(output_path) > 0:
+            print("✅ HTML-to-PDF generation successful!")
+            return True
+        else:
+            print("⚠️ HTML-to-PDF failed, trying fallback...")
+    except Exception as e:
+        print(f"⚠️ HTML-to-PDF error: {e}, trying fallback...")
+    
+    # Fallback to FPDF method
+    print("🔄 Using FPDF fallback method...")
+    try:
+        pdf = ModernPDF()
+        
+        # Add first page
+        pdf.add_page()
+        
+        # Title section
+        pdf.set_font('Arial', 'B', 24)
+        pdf.set_text_color(*pdf.colors['primary_blue'])
+        pdf.cell(0, 15, 'STR Performance Optimization Report', 0, 1, 'C')
+        pdf.ln(10)
+        
+        # Property info
+        pdf.set_font('Arial', 'B', 16)
+        pdf.set_text_color(*pdf.colors['dark_gray'])
+        pdf.cell(0, 10, clean_text_for_pdf(optimization_data.get('title', 'Property Analysis')), 0, 1, 'L')
+        pdf.ln(5)
+        
+        # Description
+        pdf.set_font('Arial', '', 12)
+        pdf.set_text_color(*pdf.colors['text_gray'])
+        description = clean_text_for_pdf(optimization_data.get('description', ''))
+        if description:
+            pdf.multi_cell(0, 6, description[:500] + ('...' if len(description) > 500 else ''))
+        pdf.ln(10)
+        
+        # Key recommendations
+        pdf.set_font('Arial', 'B', 14)
+        pdf.set_text_color(*pdf.colors['primary_blue'])
+        pdf.cell(0, 10, 'Key Optimization Recommendations:', 0, 1, 'L')
+        pdf.ln(5)
+        
+        # Add some key points
+        pdf.set_font('Arial', '', 11)
+        pdf.set_text_color(*pdf.colors['text_gray'])
+        
+        recommendations = [
+            "Optimize your listing title for better search visibility",
+            "Enhance property description with targeted keywords",
+            "Improve photo quality and add missing shot types",
+            "Implement dynamic pricing strategies",
+            "Focus on guest experience improvements"
+        ]
+        
+        for rec in recommendations:
+            pdf.cell(5, 6, '•', 0, 0, 'L')
+            pdf.multi_cell(0, 6, f" {rec}")
+            pdf.ln(2)
+        
+        pdf.ln(10)
+        
+        # Pricing analysis if available
+        if optimization_data.get('pricing_analysis'):
+            pdf.set_font('Arial', 'B', 14)
+            pdf.set_text_color(*pdf.colors['primary_blue'])
+            pdf.cell(0, 10, 'Pricing Analysis:', 0, 1, 'L')
+            pdf.ln(3)
+            
+            pdf.set_font('Arial', '', 11)
+            pdf.set_text_color(*pdf.colors['text_gray'])
+            pricing_text = clean_text_for_pdf(optimization_data['pricing_analysis'])
+            pdf.multi_cell(0, 6, pricing_text[:800] + ('...' if len(pricing_text) > 800 else ''))
+        
+        # Save the PDF
+        pdf.output(output_path)
+        
+        if os.path.exists(output_path) and os.path.getsize(output_path) > 0:
+            print(f"✅ FPDF fallback generation successful! Size: {os.path.getsize(output_path)} bytes")
+            return True
+        else:
+            print("❌ FPDF fallback also failed")
+            return False
+            
+    except Exception as e:
+        print(f"❌ FPDF fallback error: {e}")
+        return False 
