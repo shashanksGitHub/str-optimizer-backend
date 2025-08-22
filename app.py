@@ -29,14 +29,7 @@ from services.str_optimizer import optimize_listing
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'your-secret-key-here')
 
-# Health check endpoint for Digital Ocean App Platform
-@app.route('/health')
-def health_check():
-    return jsonify({
-        'status': 'healthy',
-        'service': 'STR Optimizer Backend',
-        'version': '1.0.0'
-    }), 200
+# Health check endpoint removed - duplicate exists below
 
 # Enable CORS for React frontend
 allowed_origins = [
