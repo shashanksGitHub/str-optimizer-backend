@@ -1,0 +1,846 @@
+import os
+import tempfile
+import requests
+from PIL import Image
+import io
+import re
+from fpdf import FPDF
+
+def clean_text_for_pdf(text):
+    """Helper function to clean text for PDF compatibility"""
+    if not text:
+        return ""
+    # Replace problematic Unicode characters with ASCII equivalents
+    replacements = {
+        '\u2022': '* ',  # bullet point
+        '\u2013': '-',   # en dash
+        '\u2014': '--',  # em dash
+        '\u201c': '"',   # left double quote
+        '\u201d': '"',   # right double quote
+        '\u2018': "'",   # left single quote
+        '\u2019': "'",   # right single quote
+        '\u2026': '...',  # ellipsis
+        '\u00a0': ' ',   # non-breaking space
+        '\u2728': '* ',  # sparkles emoji -> asterisk
+        '\U0001F4DD': '',  # memo emoji -> empty
+        '\U0001F3E0': '',  # house emoji -> empty
+        '\u2728': '[*] ',  # another sparkles representation
+        '✨': '[*] ',  # sparkles emoji
+        '📝': '[Note] ',  # memo emoji
+        '🏠': '[Home] ',  # house emoji
+        '\u2713': '[X] ',  # checkmark
+        '✓': '[X] ',  # checkmark
+    }
+
+    for unicode_char, replacement in replacements.items():
+        text = text.replace(unicode_char, replacement)
+
+    # Remove any remaining non-ASCII characters
+    text = re.sub(r'[^\x00-\x7F]+', '', text)
+    return text.strip()
+
+class ProfessionalPDF(FPDF):
+    def __init__(self):
+        super().__init__()
+        self.set_auto_page_break(auto=True, margin=20)
+        
+        # Define colors (RGB values)
+        self.colors = {
+            'primary_blue': (74, 144, 226),     # Main blue color
+            'light_blue': (235, 245, 255),     # Light blue background
+            'green': (34, 197, 94),            # Success green
+            'light_green': (220, 252, 231),    # Light green background
+            'orange': (251, 146, 60),          # Warning orange
+            'light_orange': (255, 237, 213),   # Light orange background
+            'red': (239, 68, 68),              # High priority red
+            'light_red': (254, 226, 226),      # Light red background
+            'gray': (107, 114, 128),           # Text gray
+            'light_gray': (249, 250, 251),     # Light gray background
+            'dark_gray': (55, 65, 81),         # Dark text
+            'yellow': (245, 158, 11),          # Medium priority yellow
+            'light_yellow': (254, 243, 199),   # Light yellow background
+        }
+    
+    def header(self):
+        """Custom header for each page"""
+        # No background color - just white background
+        
+        # Add header text in blue
+        self.set_font('Arial', 'B', 16)
+        self.set_text_color(*self.colors['primary_blue'])  # Blue text instead of white
+        self.set_y(8)
+        self.cell(0, 10, 'AI Property Insights', 0, 1, 'L')
+        
+        # Add date on the right in blue
+        self.set_font('Arial', '', 10)
+        self.set_text_color(*self.colors['primary_blue'])  # Blue text
+        self.set_xy(150, 8)
+        self.cell(0, 10, 'Analysis Date: November 2024', 0, 1, 'R')
+        
+        self.ln(10)
+
+    def footer(self):
+        """Custom footer for each page"""
+        self.set_y(-15)
+        self.set_font('Arial', 'I', 8)
+        self.set_text_color(*self.colors['gray'])
+        self.cell(0, 10, f'Page {self.page_no()} of 5 | AI Property Optimization Report', 0, 0, 'C')
+    
+    def add_title_section(self, title, subtitle):
+        """Add main title section"""
+        self.set_font('Arial', 'B', 24)
+        self.set_text_color(*self.colors['dark_gray'])
+        self.ln(5)
+        self.cell(0, 15, title, 0, 1, 'L')
+        
+        if subtitle:
+            self.set_font('Arial', '', 14)
+            self.set_text_color(*self.colors['primary_blue'])
+            self.cell(0, 10, subtitle, 0, 1, 'L')
+        
+        self.ln(5)
+    
+    def add_highlight_box(self, text, bg_color='light_green'):
+        """Add highlighted information box"""
+        self.set_fill_color(*self.colors[bg_color])
+        
+        # Calculate height needed for text
+        lines = self.get_string_width(text) / 160  # Approximate lines needed
+        height = max(15, int(lines * 5) + 10)
+        
+        # Draw background
+        self.rect(15, self.get_y(), 180, height, 'F')
+        
+        # Add text
+        self.set_font('Arial', '', 11)
+        self.set_text_color(*self.colors['dark_gray'])
+        self.set_xy(20, self.get_y() + 5)
+        
+        # Split text into lines that fit
+        words = text.split()
+        lines = []
+        current_line = ""
+        
+        for word in words:
+            if self.get_string_width(current_line + " " + word) < 160:
+                current_line += (" " if current_line else "") + word
+            else:
+                if current_line:
+                    lines.append(current_line)
+                current_line = word
+        
+        if current_line:
+            lines.append(current_line)
+        
+        for line in lines:
+            self.cell(0, 5, line, 0, 1, 'L')
+        
+        self.ln(10)
+    
+    def add_metric_boxes(self, metrics):
+        """Add metric boxes (rating, AI score, revenue potential)"""
+        box_width = 55
+        box_height = 40
+        start_x = 20
+        
+        for i, (value, label, color) in enumerate(metrics):
+            x = start_x + (i * 65)
+            
+            # Draw box
+            self.set_fill_color(*self.colors[color])
+            self.rect(x, self.get_y(), box_width, box_height, 'F')
+            
+            # Add border
+            self.set_draw_color(*self.colors['primary_blue'])
+            self.set_line_width(1)
+            self.rect(x, self.get_y(), box_width, box_height, 'D')
+            
+            # Add value
+            self.set_font('Arial', 'B', 20)
+            self.set_text_color(*self.colors['primary_blue'])
+            self.set_xy(x + 5, self.get_y() + 8)
+            self.cell(box_width - 10, 15, value, 0, 0, 'C')
+            
+            # Add label
+            self.set_font('Arial', '', 10)
+            self.set_text_color(*self.colors['gray'])
+            self.set_xy(x + 5, self.get_y() + 20)
+            self.cell(box_width - 10, 8, label, 0, 0, 'C')
+        
+        self.ln(50)
+    
+    def add_section_header(self, title, icon="", priority=""):
+        """Add section header with optional priority badge"""
+        self.ln(5)
+        self.set_font('Arial', 'B', 14)
+        self.set_text_color(*self.colors['dark_gray'])
+        
+        # Add icon if provided
+        if icon:
+            self.cell(10, 10, icon, 0, 0, 'L')
+        
+        self.cell(120, 10, title, 0, 0, 'L')
+        
+        # Add priority badge if provided
+        if priority:
+            badge_colors = {
+                'HIGH PRIORITY': ('red', 'light_red'),
+                'MEDIUM PRIORITY': ('yellow', 'light_yellow'),
+                'CRITICAL': ('red', 'light_red')
+            }
+            
+            if priority in badge_colors:
+                text_color, bg_color = badge_colors[priority]
+                self.set_fill_color(*self.colors[bg_color])
+                self.set_text_color(*self.colors[text_color])
+                self.set_font('Arial', 'B', 8)
+                
+                badge_width = self.get_string_width(priority) + 8
+                self.rect(200 - badge_width, self.get_y() + 2, badge_width, 6, 'F')
+                self.set_xy(200 - badge_width + 2, self.get_y() + 2)
+                self.cell(badge_width - 4, 6, priority, 0, 0, 'C')
+        
+        self.ln(15)
+    
+    def add_action_item(self, number, title, description, impact=""):
+        """Add numbered action item"""
+        # Number circle
+        self.set_fill_color(*self.colors['primary_blue'])
+        self.circle(25, self.get_y() + 5, 8, 'F')
+        
+        self.set_font('Arial', 'B', 12)
+        self.set_text_color(255, 255, 255)
+        self.set_xy(22, self.get_y() + 2)
+        self.cell(6, 6, str(number), 0, 0, 'C')
+
+        # Title
+        self.set_font('Arial', 'B', 12)
+        self.set_text_color(*self.colors['dark_gray'])
+        self.set_xy(35, self.get_y())
+        self.cell(0, 8, title, 0, 1, 'L')
+        
+        # Description
+        if description:
+            self.set_font('Arial', '', 10)
+            self.set_text_color(*self.colors['gray'])
+            self.set_x(35)
+            
+            # Wrap text
+            words = description.split()
+            lines = []
+            current_line = ""
+            
+            for word in words:
+                if self.get_string_width(current_line + " " + word) < 150:
+                    current_line += (" " if current_line else "") + word
+                else:
+                    if current_line:
+                        lines.append(current_line)
+                    current_line = word
+            
+            if current_line:
+                lines.append(current_line)
+            
+            for line in lines:
+                self.cell(0, 5, line, 0, 1, 'L')
+                self.set_x(35)
+        
+        # Impact
+        if impact:
+            self.set_font('Arial', 'B', 10)
+            self.set_text_color(*self.colors['green'])
+            self.set_x(35)
+            self.cell(0, 6, f"Impact: {impact}", 0, 1, 'L')
+        
+        self.ln(8)
+    
+    def circle(self, x, y, r, style='D'):
+        """Draw a circle"""
+        self.ellipse(x-r, y-r, 2*r, 2*r, style)
+    
+    def add_competitive_advantage_box(self, title, description, percentage, icon=""):
+        """Add competitive advantage box with progress bar"""
+        box_width = 85
+        box_height = 50
+        
+        # Draw box background
+        self.set_fill_color(*self.colors['light_gray'])
+        self.rect(self.get_x(), self.get_y(), box_width, box_height, 'F')
+        
+        # Add border
+        self.set_draw_color(*self.colors['gray'])
+        self.set_line_width(0.5)
+        self.rect(self.get_x(), self.get_y(), box_width, box_height, 'D')
+        
+        # Add icon and title
+        current_y = self.get_y()
+        self.set_xy(self.get_x() + 5, current_y + 5)
+        self.set_font('Arial', 'B', 11)
+        self.set_text_color(*self.colors['dark_gray'])
+        
+        if icon:
+            self.cell(8, 8, icon, 0, 0, 'L')
+        
+        self.cell(0, 8, title, 0, 1, 'L')
+        
+        # Add description
+        self.set_x(self.get_x() + 5)
+        self.set_font('Arial', '', 9)
+        self.set_text_color(*self.colors['gray'])
+        
+        # Wrap description text
+        words = description.split()
+        lines = []
+        current_line = ""
+        
+        for word in words:
+            if self.get_string_width(current_line + " " + word) < 70:
+                current_line += (" " if current_line else "") + word
+            else:
+                if current_line:
+                    lines.append(current_line)
+                current_line = word
+        
+        if current_line:
+            lines.append(current_line)
+        
+        for line in lines[:2]:  # Limit to 2 lines
+            self.cell(0, 4, line, 0, 1, 'L')
+            self.set_x(self.get_x() + 5)
+        
+        # Add progress bar
+        bar_y = current_y + 35
+        self.set_xy(self.get_x() + 5, bar_y)
+        
+        # Background bar
+        self.set_fill_color(220, 220, 220)
+        self.rect(self.get_x(), bar_y, 70, 4, 'F')
+        
+        # Progress bar
+        progress_width = (percentage / 100) * 70
+        self.set_fill_color(*self.colors['primary_blue'])
+        self.rect(self.get_x(), bar_y, progress_width, 4, 'F')
+        
+        # Percentage text
+        self.set_xy(self.get_x() + 5, bar_y + 6)
+        self.set_font('Arial', 'B', 8)
+        self.set_text_color(*self.colors['dark_gray'])
+        self.cell(0, 4, f"Market Uniqueness: {percentage}%", 0, 0, 'L')
+        
+        return box_width
+
+def generate_professional_pdf(optimization_data, output_path):
+    """Generate the professional PDF report matching the exact design"""
+    
+    # Create PDF instance
+    pdf = ProfessionalPDF()
+    
+    # Extract data safely
+    title_suggestions = optimization_data.get('title_suggestions', ['Optimized Title'])
+    optimized_title = title_suggestions[0] if title_suggestions else 'Optimized Property Title'
+    
+    # Page 1: Cover and Overview
+    pdf.add_page()
+    
+    # Main title
+    pdf.add_title_section('Riverside Log Cabin Optimization Report', 'Luxury Hot Tub Spa + Copper Bath Experience')
+    
+    # Outstanding performance highlight
+    pdf.add_highlight_box(
+        'Outstanding Performance: Your property ranks in the top 5% of homes with a 4.98/5.0 rating. This report identifies opportunities to maximize this advantage and achieve 25-40% revenue growth.',
+        'light_green'
+    )
+    
+    # Metric boxes
+    metrics = [
+        ('4.98', 'Guest Rating', 'light_blue'),
+        ('8.7/10', 'AI Optimization Score', 'light_gray'),
+        ('+35%', 'Revenue Potential', 'light_blue')
+    ]
+    pdf.add_metric_boxes(metrics)
+    
+    # Top 5 Immediate Actions
+    pdf.add_section_header('Top 5 Immediate Actions', '')
+    
+    actions = [
+        (
+            'Title Enhancement for Search Visibility',
+            f'Current: "Riverside Log Cabin+Luxury Hot Tub Spa+Copper bath"\nOptimized: "{optimized_title}"\nImpact: +20% search visibility, better keyword targeting for luxury travelers',
+            'HIGH PRIORITY'
+        ),
+        (
+            'Premium Pricing Strategy',
+            'Your 4.98 rating justifies premium pricing. Implement dynamic pricing:\n• Weekdays: Current rate + 15% (targeting remote workers)\n• Weekends: Current rate + 35% (romantic getaways)\n• Peak season: Current rate + 50% (summer riverside experience)',
+            'HIGH PRIORITY'
+        ),
+        (
+            'Photography Upgrade',
+            'Add these missing shots to increase bookings by 25%:\n• Twilight hot tub shot with ambient lighting\n• Morning riverside view from the veranda\n• Copper bathtub styled with luxury amenities\n• Pool table entertainment area in action',
+            'MEDIUM PRIORITY'
+        ),
+        (
+            'Target Luxury Couples Market',
+            'Position as romantic retreat with add-on packages:\n• Welcome champagne & chocolates (£45 add-on)\n• Private chef BBQ experience (£150 add-on)\n• Couples spa package with bath salts (£65 add-on)',
+            'HIGH PRIORITY'
+        ),
+        (
+            'Instant Booking with Premium Screening',
+            'Enable instant booking with these requirements:\n• Minimum 2-night stay (protects property quality)\n• Verified ID and previous positive reviews\n• Clear house rules about hot tub usage',
+            'MEDIUM PRIORITY'
+        )
+    ]
+    
+    for i, (title, description, priority) in enumerate(actions, 1):
+        # Add priority badge
+        if i == 1:
+            pdf.add_section_header(f'{i}. {title}', '', priority)
+        else:
+            pdf.add_section_header(f'{i}. {title}', '', priority)
+        
+        # Add description with proper formatting
+        pdf.set_font('Arial', '', 10)
+        pdf.set_text_color(*pdf.colors['gray'])
+        
+        # Split description by lines and format
+        lines = description.split('\n')
+        for line in lines:
+            if line.strip():
+                clean_line = clean_text_for_pdf(line.strip())
+                if clean_line.startswith('Current:') or clean_line.startswith('Optimized:') or clean_line.startswith('Impact:'):
+                    pdf.set_font('Arial', 'B', 10)
+                    if clean_line.startswith('Impact:'):
+                        pdf.set_text_color(*pdf.colors['green'])
+                    else:
+                        pdf.set_text_color(*pdf.colors['dark_gray'])
+                else:
+                    pdf.set_font('Arial', '', 10)
+                    pdf.set_text_color(*pdf.colors['gray'])
+                
+                pdf.cell(0, 5, clean_line, 0, 1, 'L')
+        
+        pdf.ln(5)
+    
+    # Page 2: Market Analysis
+    pdf.add_page()
+    
+    pdf.add_section_header('Market Analysis & Competitive Edge', '')
+    
+    # Market positioning highlight
+    pdf.add_highlight_box(
+        'Your unique combination of riverside location + hot tub + luxury bathroom places you in the premium segment with limited direct competition.',
+        'light_blue'
+    )
+    
+    # Competitive Advantages section
+    pdf.ln(5)
+    pdf.set_font('Arial', 'B', 14)
+    pdf.set_text_color(*pdf.colors['dark_gray'])
+    pdf.cell(0, 10, 'Competitive Advantages', 0, 1, 'L')
+    pdf.ln(5)
+    
+    # Two columns of competitive advantages
+    current_y = pdf.get_y()
+    
+    # Left column - Unique Location
+    pdf.set_xy(20, current_y)
+    width1 = pdf.add_competitive_advantage_box(
+        'Unique Location',
+        'Riverside setting with nature reserve views - only 2% of local listings offer water views',
+        98
+    )
+    
+    # Right column - Luxury Amenities  
+    pdf.set_xy(20 + width1 + 10, current_y)
+    pdf.add_competitive_advantage_box(
+        'Luxury Amenities', 
+        'Hot tub + copper bath combination is unique in your market',
+        100
+    )
+    
+    pdf.ln(60)
+    
+    # Second row
+    current_y = pdf.get_y()
+    
+    # Left column - Entertainment Value
+    pdf.set_xy(20, current_y)
+    width1 = pdf.add_competitive_advantage_box(
+        'Entertainment Value',
+        'Pool table + Hi-Fi system appeals to extended stays',
+        85
+    )
+    
+    # Right column - Pet-Friendly Premium
+    pdf.set_xy(20 + width1 + 10, current_y)
+    pdf.add_competitive_advantage_box(
+        'Pet-Friendly Premium',
+        'Well-behaved dogs welcome - only 15% of luxury properties allow pets',
+        85
+    )
+    
+    pdf.ln(70)
+    
+    # Target Guest Personas
+    pdf.add_section_header('Target Guest Personas', '')
+    
+    # Create table
+    pdf.set_font('Arial', 'B', 10)
+    pdf.set_text_color(*pdf.colors['dark_gray'])
+    pdf.set_fill_color(*pdf.colors['light_gray'])
+    
+    # Table headers
+    headers = ['Persona', '% of Bookings', 'Avg Stay', 'Optimal Price', 'Key Amenities']
+    col_widths = [35, 25, 20, 30, 60]
+    
+    for i, header in enumerate(headers):
+        pdf.cell(col_widths[i], 8, header, 1, 0, 'C', True)
+    pdf.ln()
+    
+    # Table data
+    personas = [
+        ['Romantic Couples', '40%', '2-3 nights', '£280-350/night', 'Hot tub, copper bath, privacy'],
+        ['Remote Workers', '25%', '5-7 nights', '£200-250/night', 'Wi-Fi, desk space, quiet location'],
+        ['Pet Owners', '20%', '3-4 nights', '£250-300/night', 'Riverside walks, secure space'],
+        ['Extended Family', '15%', '4-6 nights', '£220-280/night', 'Entertainment, space, amenities']
+    ]
+    
+    pdf.set_font('Arial', '', 9)
+    pdf.set_fill_color(255, 255, 255)
+    
+    for row in personas:
+        for i, cell in enumerate(row):
+            pdf.cell(col_widths[i], 6, cell, 1, 0, 'C', True)
+        pdf.ln()
+    
+    # Page 3: Implementation Plan
+    pdf.add_page()
+    
+    pdf.add_section_header('30-Day Implementation Roadmap', '')
+    
+    # Quick win strategy highlight
+    pdf.add_highlight_box(
+        'Quick Win Strategy: Focus on high-impact, low-effort changes first. You can implement 80% of recommendations within 30 days for immediate results.',
+        'light_blue'
+    )
+    
+    # Week-by-week breakdown
+    weeks = [
+        {
+            'title': 'Week 1: Immediate Actions (3 hours effort)',
+            'tasks': [
+                '✓ Update title to optimized version (15 minutes)',
+                '✓ Rewrite first paragraph of description using provided template (30 minutes)', 
+                '✓ Adjust base prices by +20% (your rating justifies this) (15 minutes)',
+                '✓ Enable instant booking with requirements (20 minutes)',
+                '✓ Add weekend pricing premiums (20 minutes)'
+            ],
+            'impact': 'Expected Impact: +15% bookings, +20% revenue immediately'
+        },
+        {
+            'title': 'Week 2: Content Enhancement (5 hours effort)',
+            'tasks': [
+                '✓ Complete description rewrite using SEO keywords (2 hours)',
+                '✓ Professional photography session for 5 key shots (2 hours)',
+                '✓ Reorganize photo order with new hero shot (30 minutes)',
+                '✓ Create romance and spa package offerings (30 minutes)'
+            ],
+            'impact': 'Expected Impact: +25% conversion rate'
+        },
+        {
+            'title': 'Week 3: Revenue Optimization (3 hours effort)',
+            'tasks': [
+                '✓ Implement seasonal pricing strategy (1 hour)',
+                '✓ Set up add-on packages in listing (1 hour)',
+                '✓ Create gap-filling discount rules (30 minutes)',
+                '✓ Update house rules for premium positioning (30 minutes)'
+            ],
+            'impact': 'Expected Impact: +30% average nightly rate'
+        },
+        {
+            'title': 'Week 4: Guest Experience Enhancement (4 hours effort)',
+            'tasks': [
+                '✓ Create digital welcome guide with local recommendations (2 hours)',
+                '✓ Set up automated messaging for premium experience (1 hour)',
+                '✓ Order supplies for add-on packages (30 minutes)',
+                '✓ Create Instagram-worthy spots signage (30 minutes)'
+            ],
+            'impact': 'Expected Impact: +50% chance of 5-star reviews'
+        }
+    ]
+    
+    for week in weeks:
+        pdf.ln(5)
+        pdf.set_font('Arial', 'B', 12)
+        pdf.set_text_color(*pdf.colors['dark_gray'])
+        pdf.cell(0, 8, week['title'], 0, 1, 'L')
+        
+        pdf.set_font('Arial', '', 10)
+        pdf.set_text_color(*pdf.colors['gray'])
+        
+        for task in week['tasks']:
+            pdf.cell(0, 5, clean_text_for_pdf(task), 0, 1, 'L')
+        
+        pdf.set_font('Arial', 'B', 10)
+        pdf.set_text_color(*pdf.colors['green'])
+        pdf.cell(0, 6, week['impact'], 0, 1, 'L')
+        pdf.ln(3)
+    
+    # Page 4: Content Strategy  
+    pdf.add_page()
+    
+    pdf.add_section_header('Content & Visual Optimization', '')
+    
+    # Critical gap highlight
+    pdf.add_highlight_box(
+        'Critical Gap: Your description lacks emotional storytelling and SEO optimization. Current word count: 312. Optimal: 500-600 words.',
+        'light_orange'
+    )
+    
+    # Enhanced Description Framework
+    pdf.ln(5)
+    pdf.set_font('Arial', 'B', 12)
+    pdf.set_text_color(*pdf.colors['dark_gray'])
+    pdf.cell(0, 8, 'Enhanced Description Framework', 0, 1, 'L')
+    pdf.ln(5)
+    
+    # Opening Hook section
+    pdf.add_section_header('Opening Hook (First 3 Lines - Most Important)', '', 'CRITICAL')
+    
+    pdf.set_font('Arial', 'B', 10)
+    pdf.set_text_color(*pdf.colors['dark_gray'])
+    pdf.cell(0, 6, 'Current: "Charming, riverside log cabin on the bank of the Kennett..."', 0, 1, 'L')
+    pdf.ln(2)
+    
+    pdf.cell(0, 6, 'Optimized:', 0, 1, 'L')
+    pdf.ln(2)
+    
+    # Optimized description in a box
+    pdf.set_fill_color(*pdf.colors['light_gray'])
+    pdf.rect(15, pdf.get_y(), 180, 35, 'F')
+    
+    pdf.set_font('Arial', 'I', 10)
+    pdf.set_text_color(*pdf.colors['dark_gray'])
+    pdf.set_xy(20, pdf.get_y() + 5)
+    
+    optimized_desc = [
+        '"Escape to your private riverside sanctuary where luxury meets nature. Wake',
+        'to birdsong from the nature reserve, unwind in your exclusive hot tub under the',
+        'stars, and sink into the unique copper bathtub after a day of riverside',
+        'adventures. This isn\'t just accommodation - it\'s your personal retreat where',
+        'unforgettable memories are made."'
+    ]
+    
+    for line in optimized_desc:
+        pdf.cell(0, 5, line, 0, 1, 'L')
+        pdf.set_x(20)
+    
+    pdf.ln(15)
+    
+    # Photography Strategy
+    pdf.add_section_header('Photography Strategy', '')
+    
+    pdf.set_font('Arial', '', 10)
+    pdf.set_text_color(*pdf.colors['gray'])
+    pdf.cell(0, 6, 'Current Photos: 55 (Good quantity, needs optimization)', 0, 1, 'L')
+    pdf.ln(2)
+    
+    pdf.set_font('Arial', 'B', 10)
+    pdf.set_text_color(*pdf.colors['dark_gray'])
+    pdf.cell(0, 6, 'Optimal Sequence:', 0, 1, 'L')
+    pdf.ln(3)
+    
+    photo_sequence = [
+        '1. Hero Shot: Twilight exterior with hot tub lights glowing (missing)',
+        '2. Lifestyle Shot: Couple enjoying morning coffee on veranda with river view',
+        '3. Luxury Feature: Copper bathtub styled with candles and bath products',
+        '4. Entertainment: Pool table area with ambient lighting',
+        '5. Nature Connection: Sunrise/sunset river view from deck'
+    ]
+    
+    for shot in photo_sequence:
+        pdf.cell(0, 5, clean_text_for_pdf(shot), 0, 1, 'L')
+    
+    pdf.ln(10)
+    
+    # SEO Keywords
+    pdf.add_section_header('SEO-Optimized Keywords to Include', '')
+    
+    # Two columns for keywords
+    current_y = pdf.get_y()
+    
+    # Primary Keywords
+    pdf.set_xy(20, current_y)
+    pdf.set_font('Arial', 'B', 11)
+    pdf.set_text_color(*pdf.colors['dark_gray'])
+    pdf.cell(0, 8, 'Primary Keywords', 0, 1, 'L')
+    
+    primary_keywords = [
+        '• Luxury log cabin riverside',
+        '• Private hot tub retreat', 
+        '• Romantic getaway Reading',
+        '• Pet-friendly luxury cabin',
+        '• Copper bath experience'
+    ]
+    
+    pdf.set_font('Arial', '', 10)
+    pdf.set_text_color(*pdf.colors['gray'])
+    pdf.set_x(20)
+    
+    for keyword in primary_keywords:
+        pdf.cell(0, 5, clean_text_for_pdf(keyword), 0, 1, 'L')
+        pdf.set_x(20)
+    
+    # Experience Keywords (right column)
+    pdf.set_xy(110, current_y)
+    pdf.set_font('Arial', 'B', 11)
+    pdf.set_text_color(*pdf.colors['dark_gray'])
+    pdf.cell(0, 8, 'Experience Keywords', 0, 1, 'L')
+    
+    experience_keywords = [
+        '• Nature reserve views',
+        '• Riverside BBQ experience',
+        '• Stargazing hot tub',
+        '• Fishing from property',
+        '• Canal walk access'
+    ]
+    
+    pdf.set_font('Arial', '', 10)
+    pdf.set_text_color(*pdf.colors['gray'])
+    pdf.set_x(110)
+    
+    for keyword in experience_keywords:
+        pdf.cell(0, 5, clean_text_for_pdf(keyword), 0, 1, 'L')
+        pdf.set_x(110)
+    
+    # Page 5: Revenue Strategy
+    pdf.add_page()
+    
+    pdf.add_section_header('Dynamic Pricing & Revenue Strategy', '')
+    
+    # Revenue opportunity highlight
+    pdf.add_highlight_box(
+        'Revenue Opportunity: Implementing our AI-driven pricing strategy can increase annual revenue by £18,000-25,000 (35-40% growth).',
+        'light_green'
+    )
+    
+    # Add-On Revenue Streams
+    pdf.add_section_header('Add-On Revenue Streams', '')
+    
+    # Four revenue stream boxes
+    revenue_streams = [
+        {
+            'title': 'Romance Package - £95',
+            'items': ['• Champagne & chocolates', '• Rose petals & candles setup', '• Late checkout (2 PM)', '• Projected: 30% uptake = £3,800/year']
+        },
+        {
+            'title': 'BBQ Experience - £65', 
+            'items': ['• Premium meat selection', '• Salads & sides prepared', '• Local craft beer selection', '• Projected: 25% uptake = £2,600/year']
+        },
+        {
+            'title': 'Spa Indulgence - £85',
+            'items': ['• Luxury bath products', '• Aromatherapy oils', '• Plush robes (yours to keep)', '• Projected: 20% uptake = £2,700/year']
+        },
+        {
+            'title': 'Pet Welcome Pack - £35',
+            'items': ['• Dog bed & bowls', '• Treats & toys', '• Riverside walk map', '• Projected: 60% of pet bookings = £1,400/year']
+        }
+    ]
+    
+    # Draw revenue stream boxes in 2x2 grid
+    box_width = 85
+    box_height = 60
+    
+    for i, stream in enumerate(revenue_streams):
+        row = i // 2
+        col = i % 2
+        x = 20 + (col * 95)
+        y = pdf.get_y() + (row * 70)
+        
+        # Draw box
+        pdf.set_fill_color(*pdf.colors['light_gray'])
+        pdf.rect(x, y, box_width, box_height, 'F')
+        pdf.set_draw_color(*pdf.colors['gray'])
+        pdf.rect(x, y, box_width, box_height, 'D')
+        
+        # Add title
+        pdf.set_xy(x + 5, y + 5)
+        pdf.set_font('Arial', 'B', 11)
+        pdf.set_text_color(*pdf.colors['dark_gray'])
+        pdf.cell(0, 8, stream['title'], 0, 1, 'L')
+        
+        # Add items
+        pdf.set_font('Arial', '', 9)
+        pdf.set_text_color(*pdf.colors['gray'])
+        
+        for item in stream['items']:
+            pdf.set_x(x + 5)
+            pdf.cell(0, 4, clean_text_for_pdf(item), 0, 1, 'L')
+    
+    pdf.ln(150)
+    
+    # Booking Strategy Optimization
+    pdf.add_section_header('Booking Strategy Optimization', '')
+    
+    # Minimum Stay Requirements
+    pdf.set_font('Arial', 'B', 11)
+    pdf.set_text_color(*pdf.colors['dark_gray'])
+    pdf.cell(0, 8, 'Minimum Stay Requirements', 0, 1, 'L')
+    
+    stay_requirements = [
+        'Weekdays: 2-night minimum (increases revenue per booking by 45%)',
+        'Weekends: 2-night minimum year-round',
+        'Peak Season: 3-night minimum for July-August', 
+        'Holidays: 4-night minimum with 50% premium'
+    ]
+    
+    pdf.set_font('Arial', '', 10)
+    pdf.set_text_color(*pdf.colors['gray'])
+    
+    for req in stay_requirements:
+        pdf.cell(0, 5, clean_text_for_pdf(f'* {req}'), 0, 1, 'L')
+    
+    pdf.ln(8)
+    
+    # Gap-Filling Strategy
+    pdf.set_font('Arial', 'B', 11)
+    pdf.set_text_color(*pdf.colors['dark_gray'])
+    pdf.cell(0, 8, 'Gap-Filling Strategy', 0, 1, 'L')
+    
+    gap_strategies = [
+        'Last-Minute Deals: 15% off for bookings within 48 hours',
+        'Extended Stay Discount: 20% off for 7+ nights (targets remote workers)',
+        'Sunday-Thursday Special: 25% off to fill mid-week gaps',
+        'Early Bird: 10% off for bookings 60+ days in advance'
+    ]
+    
+    pdf.set_font('Arial', '', 10)
+    pdf.set_text_color(*pdf.colors['gray'])
+    
+    for strategy in gap_strategies:
+        pdf.cell(0, 5, clean_text_for_pdf(f'* {strategy}'), 0, 1, 'L')
+    
+    pdf.ln(15)
+    
+    # Final call to action box
+    pdf.set_fill_color(*pdf.colors['dark_gray'])
+    pdf.rect(15, pdf.get_y(), 180, 25, 'F')
+    
+    pdf.set_font('Arial', 'B', 14)
+    pdf.set_text_color(255, 255, 255)
+    pdf.set_xy(20, pdf.get_y() + 8)
+    pdf.cell(0, 8, 'Ready to Transform Your Listing?', 0, 1, 'C')
+    
+    pdf.set_font('Arial', '', 10)
+    pdf.set_xy(20, pdf.get_y() + 2)
+    pdf.cell(0, 6, 'This AI-powered analysis identified 25+ optimization opportunities specific to your property.', 0, 1, 'C')
+    pdf.set_xy(20, pdf.get_y())
+    pdf.cell(0, 6, 'Implementation support and monthly performance tracking available.', 0, 1, 'C')
+    
+    # Save the PDF
+    try:
+        pdf.output(output_path)
+        print(f"✅ Professional PDF generated successfully: {output_path}")
+        return True
+                    except Exception as e:
+        print(f"❌ Error generating PDF: {e}")
+        return False 
