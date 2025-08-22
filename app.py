@@ -16,6 +16,7 @@ from PIL import Image
 import io
 import re
 from dotenv import load_dotenv
+import uuid
 
 # Load environment variables from .env file
 load_dotenv()
@@ -467,6 +468,47 @@ def test_email():
     except Exception as e:
         print(f"❌ Email test error: {e}")
         return jsonify({"status": "error", "message": f"Email test failed: {str(e)}"}), 500
+
+# Test PDF generation endpoint for debugging
+@app.route('/api/test-pdf')
+def test_pdf():
+    """Test PDF generation functionality"""
+    try:
+        import tempfile
+        from services.pdf_generator import generate_professional_pdf
+        
+        # Create test data
+        test_data = {
+            'title': 'Test Property',
+            'description': 'Test description for PDF generation',
+            'pricing_analysis': 'This is a test pricing analysis to verify PDF generation is working.'
+        }
+        
+        # Generate test PDF
+        pdf_filename = f"test_pdf_{uuid.uuid4().hex[:8]}.pdf"
+        pdf_path = os.path.join(tempfile.gettempdir(), pdf_filename)
+        
+        success = generate_professional_pdf(test_data, pdf_path)
+        
+        if success and os.path.exists(pdf_path):
+            file_size = os.path.getsize(pdf_path)
+            return jsonify({
+                'status': 'success',
+                'message': 'PDF generation working',
+                'file_size': file_size,
+                'pdf_path': pdf_path
+            })
+        else:
+            return jsonify({
+                'status': 'error',
+                'message': 'PDF generation failed'
+            }), 500
+            
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': f'PDF test error: {str(e)}'
+        }), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5001))
