@@ -4,11 +4,11 @@ import os
 bind = f"0.0.0.0:{os.environ.get('PORT', 8080)}"
 backlog = 2048
 
-# Worker processes
+# Worker processes (optimized for Digital Ocean Basic plan)
 workers = 1  # Start with 1 worker for basic plan
 worker_class = "sync"
 worker_connections = 1000
-timeout = 30
+timeout = 120  # Increased timeout for PDF generation
 keepalive = 2
 
 # Restart workers after this many requests, to help prevent memory leaks
