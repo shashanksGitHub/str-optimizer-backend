@@ -8,6 +8,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 import os
 import tempfile
+import time
 import requests
 from bs4 import BeautifulSoup
 import base64
