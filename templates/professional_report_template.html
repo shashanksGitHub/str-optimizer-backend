@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Property Optimization Analysis</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #ffffff;
+        }
+        
+        .page {
+            width: 8.5in;
+            min-height: 11in;
+            margin: 0 auto;
+            padding: 0.75in;
+            background: white;
+            page-break-after: always;
+            position: relative;
+        }
+        
+        .header {
+            border-bottom: 3px solid #2563eb;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2563eb;
+            margin-bottom: 8px;
+        }
+        
+        .header .subtitle {
+            font-size: 16px;
+            color: #6b7280;
+            font-weight: 400;
+        }
+        
+        .property-info {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .property-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+        
+        .property-location {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 16px;
+        }
+        
+        .section {
+            margin-bottom: 32px;
+            break-inside: avoid;
+        }
+        
+        .section h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .recommendation-box {
+            background: #f0f9ff;
+            border: 1px solid #bfdbfe;
+            border-left: 4px solid #2563eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .recommendation-box h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 12px;
+        }
+        
+        .recommendation-box p {
+            font-size: 14px;
+            color: #374151;
+            line-height: 1.6;
+        }
+        
+        .title-options {
+            background: #fffbeb;
+            border: 1px solid #fed7aa;
+            border-left: 4px solid #f59e0b;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .title-option {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #374151;
+        }
+        
+        .title-option:last-child {
+            margin-bottom: 0;
+        }
+        
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .analysis-card {
+            background: #fafafa;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .analysis-card h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+        
+        .analysis-card p {
+            font-size: 14px;
+            color: #374151;
+            line-height: 1.6;
+        }
+        
+        .footer {
+            position: fixed;
+            bottom: 0.5in;
+            left: 0.75in;
+            right: 0.75in;
+            text-align: center;
+            font-size: 12px;
+            color: #6b7280;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 10px;
+        }
+        
+        @media print {
+            .page {
+                margin: 0;
+                padding: 0.75in;
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- Header -->
+        <div class="header">
+            <h1>AI Property Optimization Analysis</h1>
+            <div class="subtitle">Professional listing optimization report powered by artificial intelligence</div>
+        </div>
+
+        <!-- Property Information -->
+        <div class="property-info">
+            <div class="property-title">{{ title | default('Property Listing') }}</div>
+            <div class="property-location">{{ location | default('Location') }}</div>
+            {% if description %}
+            <p style="font-size: 14px; color: #6b7280;">{{ description[:200] }}{% if description|length > 200 %}...{% endif %}</p>
+            {% endif %}
+        </div>
+
+        <!-- Title Suggestions -->
+        {% if title_suggestions %}
+        <div class="section">
+            <h2>🎯 Optimized Title Options</h2>
+            <div class="title-options">
+                <h3>Recommended title variations for maximum visibility:</h3>
+                {% for suggestion in title_suggestions[:3] %}
+                <div class="title-option">
+                    <strong>Option {{ loop.index }}:</strong> {{ suggestion }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Description Optimization -->
+        {% if optimized_description %}
+        <div class="section">
+            <h2>✍️ Enhanced Description</h2>
+            <div class="recommendation-box">
+                <h3>AI-Optimized Description</h3>
+                <p>{{ optimized_description }}</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Amenities -->
+        {% if amenities %}
+        <div class="section">
+            <h2>🏠 Suggested Amenities</h2>
+            <div class="recommendation-box">
+                <h3>Recommended Amenity Enhancements</h3>
+                <p>{{ amenities }}</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Analysis Grid -->
+        <div class="analysis-grid">
+            {% if review_sentiment_analysis %}
+            <div class="analysis-card">
+                <h4>📊 Review Analysis</h4>
+                <p>{{ review_sentiment_analysis[:300] }}{% if review_sentiment_analysis|length > 300 %}...{% endif %}</p>
+            </div>
+            {% endif %}
+
+            {% if booking_gap_analysis %}
+            <div class="analysis-card">
+                <h4>📅 Booking Optimization</h4>
+                <p>{{ booking_gap_analysis[:300] }}{% if booking_gap_analysis|length > 300 %}...{% endif %}</p>
+            </div>
+            {% endif %}
+
+            {% if guest_profile_analysis %}
+            <div class="analysis-card">
+                <h4>👥 Guest Profile Insights</h4>
+                <p>{{ guest_profile_analysis[:300] }}{% if guest_profile_analysis|length > 300 %}...{% endif %}</p>
+            </div>
+            {% endif %}
+
+            {% if pricing_analysis %}
+            <div class="analysis-card">
+                <h4>💰 Pricing Strategy</h4>
+                <p>{{ pricing_analysis[:300] }}{% if pricing_analysis|length > 300 %}...{% endif %}</p>
+            </div>
+            {% endif %}
+
+            {% if photo_audit %}
+            <div class="analysis-card">
+                <h4>📸 Photo Enhancement</h4>
+                <p>{{ photo_audit[:300] }}{% if photo_audit|length > 300 %}...{% endif %}</p>
+            </div>
+            {% endif %}
+
+            {% if performance_insights %}
+            <div class="analysis-card">
+                <h4>🚀 Performance Insights</h4>
+                <p>{{ performance_insights[:300] }}{% if performance_insights|length > 300 %}...{% endif %}</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            STR Optimizer - AI-Powered Property Analysis | Generated on {{ "now" | strftime("%B %d, %Y") }}
+        </div>
+    </div>
+</body>
+</html> 
