@@ -1,7 +1,8 @@
 import os
 import tempfile
 from jinja2 import Template
-from playwright.sync_api import sync_playwright
+import pdfkit
+import subprocess
 from datetime import datetime
 
 def calculate_content_sections(optimization_data):
@@ -975,43 +976,20 @@ def generate_html_pdf(optimization_data, output_path):
 </html>'''
     
     try:
-        # Find Chrome in multiple possible locations
-        print("🔍 Detecting Chrome/Chromium installation...")
+        # Check if wkhtmltopdf is available
+        print("🔍 Checking wkhtmltopdf availability...")
         
-        # Multiple possible Chrome locations
-        possible_chrome_paths = [
-            '/usr/bin/google-chrome',           # browserless/chrome
-            '/usr/bin/google-chrome-stable',   # some Ubuntu images  
-            '/usr/bin/chromium-browser',        # Chromium installs
-            '/usr/bin/chromium',                # Alternative Chromium
-            '/opt/google/chrome/chrome',        # Alternative location
-        ]
-        
-        chrome_path = None
-        for path in possible_chrome_paths:
-            if os.path.exists(path):
-                chrome_path = path
-                print(f"✅ Chrome found at: {chrome_path}")
-                break
-        
-        if not chrome_path:
-            print("❌ Chrome/Chromium not found in any expected location")
-            print("🔍 Available paths checked:")
-            for path in possible_chrome_paths:
-                print(f"   - {path}: {'✅' if os.path.exists(path) else '❌'}")
-            
-            # Try using Playwright's default detection as fallback
-            print("🔄 Falling back to Playwright default Chrome detection...")
-            try:
-                with sync_playwright() as p:
-                    # Let Playwright find Chrome automatically
-                    test_browser = p.chromium.launch(headless=True, args=['--no-sandbox'])
-                    test_browser.close()
-                    chrome_path = None  # Will use Playwright default
-                    print("✅ Playwright default Chrome detection successful")
-            except Exception as e:
-                print(f"❌ Playwright default detection failed: {e}")
+        try:
+            result = subprocess.run(['wkhtmltopdf', '--version'], capture_output=True, text=True, timeout=10)
+            if result.returncode == 0:
+                print("✅ wkhtmltopdf found and working")
+                print(f"   Version: {result.stdout.strip()}")
+            else:
+                print("❌ wkhtmltopdf not working properly")
                 return False
+        except Exception as e:
+            print(f"❌ wkhtmltopdf check failed: {e}")
+            return False
         
         # Render template with data
         print("📄 Rendering HTML template...")
@@ -1023,76 +1001,78 @@ def generate_html_pdf(optimization_data, output_path):
             temp_html.write(rendered_html)
             temp_html_path = temp_html.name
         
-        print("🎭 Starting Playwright PDF generation...")
-        # Generate PDF using Playwright with detected Chrome
-        with sync_playwright() as p:
-            # Launch Chrome with detected path (or Playwright default)
-            launch_options = {
-                'headless': True,
-                'args': [
-                    '--no-sandbox',
-                    '--disable-dev-shm-usage',
-                    '--disable-gpu',
-                    '--disable-web-security',
-                    '--disable-features=VizDisplayCompositor',
-                    '--font-render-hinting=none',
-                    '--disable-background-timer-throttling',
-                    '--disable-renderer-backgrounding',
-                    '--disable-backgrounding-occluded-windows'
-                ]
-            }
+        print("🎭 Starting wkhtmltopdf PDF generation...")
+        
+        # Configure wkhtmltopdf options for high-quality output
+        options = {
+            'page-size': 'A4',
+            'margin-top': '0.75in',
+            'margin-right': '0.75in', 
+            'margin-bottom': '0.75in',
+            'margin-left': '0.75in',
+            'encoding': "UTF-8",
+            'no-outline': None,
+            'enable-local-file-access': None,
+            'print-media-type': None,
+            'disable-smart-shrinking': None,
+            'zoom': 1.0,
+        }
+        
+        # Use xvfb-run for headless operation (required for wkhtmltopdf in Docker)
+        config = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
+        
+        # Generate PDF
+        try:
+            # Use xvfb-run for virtual display (required in Docker)
+            cmd = [
+                'xvfb-run', '-a', '--server-args=-screen 0 1024x768x24',
+                'wkhtmltopdf',
+                '--page-size', 'A4',
+                '--margin-top', '0.75in',
+                '--margin-right', '0.75in',
+                '--margin-bottom', '0.75in', 
+                '--margin-left', '0.75in',
+                '--encoding', 'UTF-8',
+                '--no-outline',
+                '--enable-local-file-access',
+                '--print-media-type',
+                '--disable-smart-shrinking',
+                '--zoom', '1.0',
+                temp_html_path,
+                output_path
+            ]
             
-            # Add executable path if we found a specific Chrome location
-            if chrome_path:
-                launch_options['executable_path'] = chrome_path
-                print(f"🚀 Using Chrome at: {chrome_path}")
-            else:
-                print("🚀 Using Playwright default Chrome detection")
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
             
-            browser = p.chromium.launch(**launch_options)
-            
-            try:
-                page = browser.new_page()
-                
-                # Navigate to HTML file
-                page.goto(f'file://{temp_html_path}', wait_until='networkidle')
-                
-                # Wait for fonts and content to fully render
-                page.wait_for_timeout(2000)
-                
-                # Add CSS for print media
-                page.add_style_tag(content='''
-                    @media print {
-                        * { 
-                            -webkit-print-color-adjust: exact !important; 
-                            color-adjust: exact !important;
-                        }
-                    }
-                ''')
-                
-                # Generate PDF with optimized settings
-                page.pdf(
-                    path=output_path,
-                    format='A4',
-                    margin={'top': '0.3in', 'right': '0.3in', 'bottom': '0.3in', 'left': '0.3in'},
-                    print_background=True,
-                    prefer_css_page_size=False,
-                    display_header_footer=False,
-                    scale=1.0,
-                    page_ranges='',  # Print all pages
-                    tagged=False,  # Disable PDF tagging for faster generation
-                    outline=False  # Disable outline generation
-                )
-                
+            if result.returncode == 0:
                 print(f"✅ PDF generated successfully: {output_path}")
                 
-            finally:
-                browser.close()
+                # Verify PDF was created and has reasonable size
+                if os.path.exists(output_path):
+                    file_size = os.path.getsize(output_path)
+                    print(f"   PDF size: {file_size:,} bytes")
+                    
+                    if file_size < 1000:
+                        print("⚠️  Warning: PDF file is very small")
+                    
+                else:
+                    print("❌ PDF file was not created")
+                    return False
+            else:
+                print(f"❌ wkhtmltopdf failed: {result.stderr}")
+                return False
+                
+        except subprocess.TimeoutExpired:
+            print("❌ wkhtmltopdf timed out")
+            return False
+        except Exception as e:
+            print(f"❌ wkhtmltopdf execution failed: {e}")
+            return False
         
         # Clean up temporary file
         os.unlink(temp_html_path)
         
-        print(f"✅ HTML-to-PDF generated successfully: {output_path}")
+        print(f"✅ wkhtmltopdf generated successfully: {output_path}")
         return True
         
     except Exception as e:
