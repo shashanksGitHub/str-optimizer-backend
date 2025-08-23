@@ -984,35 +984,62 @@ def generate_html_pdf(optimization_data, output_path):
             temp_html.write(rendered_html)
             temp_html_path = temp_html.name
         
-        # Generate PDF using Playwright
-        with sync_playwright() as p:
-            browser = p.chromium.launch()
-            page = browser.new_page()
-            page.goto(f'file://{temp_html_path}')
+        # Try Playwright first
+        try:
+            print("🎭 Attempting PDF generation with Playwright...")
+            # Generate PDF using Playwright
+            with sync_playwright() as p:
+                browser = p.chromium.launch()
+                page = browser.new_page()
+                page.goto(f'file://{temp_html_path}')
+                
+                # Wait for content to load and fonts to render
+                page.wait_for_timeout(1000)
+                
+                # Generate PDF with dynamic settings for content flow
+                page.pdf(
+                    path=output_path,
+                    format='A4',
+                    margin={'top': '0.2in', 'right': '0.2in', 'bottom': '0.2in', 'left': '0.2in'},
+                    print_background=True,
+                    prefer_css_page_size=False,
+                    display_header_footer=False,
+                    scale=1.0,
+                    page_ranges=''  # Print all pages dynamically
+                )
+                browser.close()
             
-            # Wait for content to load and fonts to render
-            page.wait_for_timeout(1000)
+            # Clean up temporary file
+            os.unlink(temp_html_path)
             
-            # Generate PDF with dynamic settings for content flow
-            page.pdf(
-                path=output_path,
-                format='A4',
-                margin={'top': '0.2in', 'right': '0.2in', 'bottom': '0.2in', 'left': '0.2in'},
-                print_background=True,
-                prefer_css_page_size=False,
-                display_header_footer=False,
-                scale=1.0,
-                page_ranges=''  # Print all pages dynamically
-            )
-            browser.close()
-        
-        # Clean up temporary file
-        os.unlink(temp_html_path)
-        
-        print(f"✅ HTML-to-PDF generated successfully: {output_path}")
-        return True
+            print(f"✅ HTML-to-PDF generated successfully with Playwright: {output_path}")
+            return True
+            
+        except Exception as playwright_error:
+            print(f"❌ Playwright PDF generation failed: {playwright_error}")
+            print("🔄 Falling back to basic PDF generation...")
+            
+            # Clean up temp file from failed attempt
+            try:
+                os.unlink(temp_html_path)
+            except:
+                pass
+            
+            # Fallback to basic PDF using FPDF
+            try:
+                from services.pdf_generator import generate_professional_pdf as fallback_pdf
+                success = fallback_pdf(optimization_data, output_path)
+                if success:
+                    print(f"✅ Fallback PDF generated successfully: {output_path}")
+                    return True
+                else:
+                    print("❌ Fallback PDF generation also failed")
+                    return False
+            except Exception as fallback_error:
+                print(f"❌ Fallback PDF generation failed: {fallback_error}")
+                return False
         
     except Exception as e:
-        print(f"❌ Error generating HTML-to-PDF: {e}")
+        print(f"❌ Error in PDF generation process: {e}")
         return False 
         return False 

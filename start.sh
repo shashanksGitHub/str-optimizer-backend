@@ -2,29 +2,56 @@
 
 echo "🎭 Installing Playwright browsers..."
 
-# Install system dependencies that might be needed
-apt-get update -y || echo "apt-get update failed, continuing..."
-apt-get install -y libnss3 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libxss1 libasound2 || echo "System deps install failed, continuing..."
+# Set environment variables for Playwright
+export PLAYWRIGHT_BROWSERS_PATH=/tmp/playwright-browsers
 
-# Install playwright browsers with verbose output
-echo "🎭 Installing Chromium browser..."
-python -m playwright install chromium --with-deps --verbose || echo "❌ Playwright install failed, continuing anyway..."
+# Create browsers directory
+mkdir -p $PLAYWRIGHT_BROWSERS_PATH
+
+# Install playwright browsers without system dependencies first
+echo "🎭 Installing Chromium browser (minimal)..."
+python -m playwright install chromium || echo "❌ Playwright install failed"
+
+# If that fails, try with --with-deps
+if [ ! -d "$PLAYWRIGHT_BROWSERS_PATH" ] || [ -z "$(ls -A $PLAYWRIGHT_BROWSERS_PATH 2>/dev/null)" ]; then
+    echo "🎭 Trying Chromium install with deps..."
+    python -m playwright install chromium --with-deps || echo "❌ Playwright with deps failed"
+fi
 
 # Verify installation
 echo "🔍 Checking Playwright installation..."
 python -m playwright --version || echo "❌ Playwright not available"
 
-# Check if chromium is installed
+# Check if chromium is installed and where
 echo "🔍 Checking Chromium installation..."
 python -c "
+import os
 try:
     from playwright.sync_api import sync_playwright
     with sync_playwright() as p:
-        browser_path = p.chromium.executable_path
-        print(f'✅ Chromium found at: {browser_path}')
+        try:
+            browser_path = p.chromium.executable_path
+            print(f'✅ Chromium found at: {browser_path}')
+            print(f'✅ File exists: {os.path.exists(browser_path)}')
+        except Exception as e:
+            print(f'❌ Chromium executable check failed: {e}')
+            
+        # Try to launch browser to test
+        try:
+            browser = p.chromium.launch()
+            print('✅ Chromium can be launched successfully')
+            browser.close()
+        except Exception as e:
+            print(f'❌ Chromium launch test failed: {e}')
+            
 except Exception as e:
-    print(f'❌ Chromium check failed: {e}')
-" || echo "❌ Chromium verification failed"
+    print(f'❌ Playwright import failed: {e}')
+" || echo "❌ Chromium verification script failed"
+
+# List what's in the playwright cache
+echo "🔍 Checking playwright cache contents..."
+ls -la /root/.cache/ms-playwright/ 2>/dev/null || echo "No playwright cache found"
+ls -la /tmp/playwright-browsers/ 2>/dev/null || echo "No tmp playwright browsers found"
 
 echo "🚀 Starting application..."
 # Start the application
