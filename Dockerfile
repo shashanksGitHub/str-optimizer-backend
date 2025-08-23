@@ -1,35 +1,10 @@
-FROM python:3.11-slim
+# Use official Microsoft Playwright image with Chromium pre-installed
+FROM mcr.microsoft.com/playwright/python:v1.40.0-focal
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
-ENV PLAYWRIGHT_BROWSERS_PATH=/app/.cache/ms-playwright
-ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=0
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Install system dependencies
-RUN apt-get update -qq && apt-get install -y -qq \
-    wget \
-    curl \
-    unzip \
-    ca-certificates \
-    fonts-liberation \
-    libasound2 \
-    libatk-bridge2.0-0 \
-    libatk1.0-0 \
-    libatspi2.0-0 \
-    libdrm2 \
-    libgtk-3-0 \
-    libnspr4 \
-    libnss3 \
-    libx11-xcb1 \
-    libxcomposite1 \
-    libxdamage1 \
-    libxrandr2 \
-    libxss1 \
-    libxtst6 \
-    xvfb \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms/playwright
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 
 # Set working directory
 WORKDIR /app
@@ -38,17 +13,28 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Playwright browsers during build
-RUN python -m playwright install chromium --with-deps
-
 # Copy application code
 COPY . .
 
-# Create necessary directories
-RUN mkdir -p /app/.cache/ms-playwright && chmod 755 /app/.cache/ms-playwright
+# Verify Chromium is available
+RUN python -c "
+from playwright.sync_api import sync_playwright
+import os
+try:
+    with sync_playwright() as p:
+        browser_path = p.chromium.executable_path
+        print(f'✅ Chromium found at: {browser_path}')
+        print(f'✅ File exists: {os.path.exists(browser_path)}')
+        if os.path.exists(browser_path):
+            print(f'✅ File size: {os.path.getsize(browser_path)} bytes')
+        print('🎉 CHROMIUM READY IN DOCKER IMAGE!')
+except Exception as e:
+    print(f'❌ Chromium verification failed: {e}')
+    exit(1)
+"
 
 # Expose port
 EXPOSE 8080
 
-# Start command
+# Start command - no need for complex startup script
 CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "1", "--timeout", "120", "wsgi:application"] 
