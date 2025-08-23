@@ -5,8 +5,7 @@ services:
   github:
     repo: shashanksGitHub/str-optimizer-backend
     branch: main
-  run_command: bash start.sh
-  environment_slug: python
+  dockerfile_path: Dockerfile
   instance_count: 1
   instance_size_slug: basic-xxs
   http_port: 8080
@@ -18,4 +17,6 @@ services:
   - key: PORT
     value: "8080"
   - key: HOST
-    value: "0.0.0.0" 
+    value: "0.0.0.0"
+  - key: PLAYWRIGHT_BROWSERS_PATH
+    value: "/app/.cache/ms-playwright" 
