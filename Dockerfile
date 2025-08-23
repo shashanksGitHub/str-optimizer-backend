@@ -1,5 +1,5 @@
 # CACHE BUSTER - Forces DO to rebuild everything
-ARG CACHE_BUST=2
+ARG CACHE_BUST=3
 ENV CACHE_BUST=${CACHE_BUST}
 
 # CORRECTED NUCLEAR OPTION - Fixed Alpine image paths
