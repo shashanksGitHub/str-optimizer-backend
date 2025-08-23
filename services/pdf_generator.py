@@ -446,5 +446,5 @@ class ModernPDF(FPDF):
 def generate_professional_pdf(optimization_data, output_path):
     """Generate professional PDF using HTML-to-PDF for pixel-perfect results"""
     
-    # Use the new HTML-to-PDF system for 100% replica
+    # Use the HTML-to-PDF system for 100% replica - NO FALLBACK
     return generate_html_pdf(optimization_data, output_path) 
