@@ -1,21 +1,15 @@
 # CACHE BUSTER - Forces DO to rebuild everything
-ARG CACHE_BUST=5
+ARG CACHE_BUST=6
 ENV CACHE_BUST=${CACHE_BUST}
 
-# CORRECTED NUCLEAR OPTION - Fixed Alpine image paths
-FROM surnet/alpine-wkhtmltopdf:3.19.1-0.12.6-small as wkhtmltopdf
 FROM python:3.11-slim
 
 # Force cache invalidation with new number
 RUN echo "Cache bust: ${CACHE_BUST}"
 
-# CORRECTED PATHS - Copy from Alpine image (different paths than I thought)
-COPY --from=wkhtmltopdf /usr/local/bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
-COPY --from=wkhtmltopdf /usr/local/bin/wkhtmltoimage /usr/local/bin/wkhtmltoimage
-COPY --from=wkhtmltopdf /usr/local/lib/libwkhtmltox.so* /usr/local/lib/
-
-# Install system dependencies
+# SIMPLE DIRECT INSTALL - No multi-stage complexity
 RUN apt-get update && apt-get install -y \
+    wget \
     xvfb \
     fontconfig \
     fonts-liberation \
@@ -30,14 +24,21 @@ RUN apt-get update && apt-get install -y \
     libfontconfig1 \
     libfreetype6 \
     libxft2 \
+    libglib2.0-0 \
+    libxrandr2 \
+    libasound2 \
+    libpangocairo-1.0-0 \
+    libatk1.0-0 \
+    libcairo-gobject2 \
+    libgtk-3-0 \
+    libgdk-pixbuf2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Make wkhtmltopdf executable
-RUN chmod +x /usr/local/bin/wkhtmltopdf && \
-    chmod +x /usr/local/bin/wkhtmltoimage
-
-# Update library cache
-RUN ldconfig
+# Download and install wkhtmltopdf directly
+RUN wget -q -O wkhtmltox.deb https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.bullseye_amd64.deb && \
+    dpkg -i wkhtmltox.deb || apt-get -f install -y && \
+    apt-get -f install -y && \
+    rm wkhtmltox.deb
 
 # ENHANCED VERIFICATION - More detailed testing
 RUN echo "🧪 ENHANCED NUCLEAR TEST - VERIFYING WKHTMLTOPDF" && \
