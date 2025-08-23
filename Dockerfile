@@ -34,11 +34,8 @@ RUN apt-get update && apt-get install -y \
     libgdk-pixbuf2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Download and install wkhtmltopdf directly
-RUN wget -q -O wkhtmltox.deb https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.bullseye_amd64.deb && \
-    dpkg -i wkhtmltox.deb || apt-get -f install -y && \
-    apt-get -f install -y && \
-    rm wkhtmltox.deb
+# Install wkhtmltopdf using system package manager (simple and reliable)
+RUN apt-get update && apt-get install -y wkhtmltopdf && rm -rf /var/lib/apt/lists/*
 
 # ENHANCED VERIFICATION - More detailed testing
 RUN echo "🧪 ENHANCED NUCLEAR TEST - VERIFYING WKHTMLTOPDF" && \
