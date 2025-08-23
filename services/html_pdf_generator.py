@@ -985,63 +985,90 @@ def generate_html_pdf(optimization_data, output_path):
                 browser_path = p.chromium.executable_path
                 print(f"🔍 Expected Chromium path: {browser_path}")
                 
-                # Check multiple possible locations
-                possible_paths = [
-                    browser_path,
-                    "/ms/playwright/chromium-1091/chrome-linux/chrome",
-                    "/ms/playwright/chromium/chrome-linux/chrome",
-                    "/opt/ms/playwright/chromium-1091/chrome-linux/chrome"
-                ]
-                
-                chromium_found = False
-                actual_path = None
-                
-                for path in possible_paths:
-                    print(f"🔍 Checking path: {path}")
-                    if os.path.exists(path):
-                        print(f"✅ Chromium found at: {path}")
-                        chromium_found = True
-                        actual_path = path
-                        break
-                    else:
-                        print(f"❌ Not found at: {path}")
-                
-                if not chromium_found:
-                    print("❌ Chromium not found in any expected location")
+                # Enhanced Chromium detection and setup
+                if not os.path.exists(browser_path):
+                    print("🔄 Chromium not found, attempting automatic installation...")
                     
-                    # List what's actually in potential playwright directories
-                    potential_dirs = ["/ms/playwright", "/workspace/.cache/ms-playwright", "/root/.cache/ms-playwright", "/usr/local/share/playwright"]
+                    # Set proper environment for installation
+                    env = os.environ.copy()
+                    env['PLAYWRIGHT_BROWSERS_PATH'] = '/ms/playwright'
                     
-                    for playwright_base in potential_dirs:
-                        if os.path.exists(playwright_base):
-                            print(f"🔍 Contents of {playwright_base}:")
-                            try:
-                                for item in os.listdir(playwright_base):
-                                    item_path = os.path.join(playwright_base, item)
-                                    if os.path.isdir(item_path):
-                                        print(f"  📁 {item}/")
-                                        try:
-                                            for subitem in os.listdir(item_path)[:5]:
-                                                subitem_path = os.path.join(item_path, subitem)
-                                                if os.path.isdir(subitem_path):
-                                                    print(f"    📁 {subitem}/")
-                                                else:
-                                                    print(f"    📄 {subitem}")
-                                        except Exception as e:
-                                            print(f"    ❌ Error listing {item}: {e}")
-                                    else:
-                                        print(f"  📄 {item}")
-                            except Exception as e:
-                                print(f"  ❌ Error listing {playwright_base}: {e}")
+                    try:
+                        import subprocess
+                        # Install Chromium with dependencies
+                        result = subprocess.run([
+                            'python', '-m', 'playwright', 'install', 'chromium', '--with-deps'
+                        ], capture_output=True, text=True, timeout=120, env=env)
+                        
+                        print(f"📋 Installation output: {result.stdout}")
+                        if result.stderr:
+                            print(f"⚠️  Installation warnings: {result.stderr}")
+                        
+                        if result.returncode == 0:
+                            print("✅ Chromium installation completed successfully")
                         else:
-                            print(f"❌ Directory not found: {playwright_base}")
+                            print(f"⚠️  Installation exit code: {result.returncode}")
+                        
+                        # Refresh playwright context to pick up new installation
+                        browser_path = p.chromium.executable_path
+                        print(f"🔍 Updated Chromium path: {browser_path}")
+                        
+                    except Exception as install_error:
+                        print(f"⚠️  Installation error: {install_error}")
+                
+                # Verify Chromium is accessible
+                if os.path.exists(browser_path):
+                    print(f"✅ Chromium found at: {browser_path}")
                     
-                    print("❌ PDF generation aborted - Chromium not available")
+                    # Test browser launch
+                    try:
+                        print("🧪 Testing Chromium launch...")
+                        browser = p.chromium.launch(
+                            headless=True,
+                            args=[
+                                '--no-sandbox',
+                                '--disable-dev-shm-usage',
+                                '--disable-gpu',
+                                '--disable-web-security',
+                                '--disable-features=VizDisplayCompositor'
+                            ]
+                        )
+                        browser.close()
+                        print("✅ Chromium launch test successful")
+                    except Exception as launch_error:
+                        print(f"❌ Chromium launch failed: {launch_error}")
+                        # Try alternative launch options
+                        try:
+                            print("🔄 Trying alternative browser configuration...")
+                            browser = p.chromium.launch(
+                                headless=True,
+                                args=['--no-sandbox', '--disable-dev-shm-usage']
+                            )
+                            browser.close()
+                            print("✅ Alternative configuration successful")
+                        except Exception as alt_error:
+                            print(f"❌ Alternative configuration failed: {alt_error}")
+                            return False
+                else:
+                    print(f"❌ Chromium still not accessible at: {browser_path}")
+                    
+                    # List available browsers for debugging
+                    try:
+                        playwright_dirs = ['/ms/playwright', '/workspace/.cache/ms-playwright', '/root/.cache/ms-playwright']
+                        for playwright_dir in playwright_dirs:
+                            if os.path.exists(playwright_dir):
+                                print(f"📁 Found Playwright directory: {playwright_dir}")
+                                for item in os.listdir(playwright_dir):
+                                    if 'chromium' in item.lower():
+                                        print(f"  🔍 Chromium directory: {item}")
+                                break
+                    except Exception:
+                        pass
+                    
                     return False
                     
             except Exception as check_error:
                 print(f"❌ Chromium check failed: {check_error}")
-                print("❌ PDF generation aborted - Chromium not available")
                 return False
         
         # Render template with data
@@ -1055,27 +1082,61 @@ def generate_html_pdf(optimization_data, output_path):
             temp_html_path = temp_html.name
         
         print("🎭 Starting Playwright PDF generation...")
-        # Generate PDF using Playwright
+        # Generate PDF using Playwright with enhanced configuration
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            page = browser.new_page()
-            page.goto(f'file://{temp_html_path}')
-            
-            # Wait for content to load and fonts to render
-            page.wait_for_timeout(1000)
-            
-            # Generate PDF with dynamic settings for content flow
-            page.pdf(
-                path=output_path,
-                format='A4',
-                margin={'top': '0.2in', 'right': '0.2in', 'bottom': '0.2in', 'left': '0.2in'},
-                print_background=True,
-                prefer_css_page_size=False,
-                display_header_footer=False,
-                scale=1.0,
-                page_ranges=''  # Print all pages dynamically
+            # Launch browser with production-ready settings
+            browser = p.chromium.launch(
+                headless=True,
+                args=[
+                    '--no-sandbox',
+                    '--disable-dev-shm-usage',
+                    '--disable-gpu',
+                    '--disable-web-security',
+                    '--disable-features=VizDisplayCompositor',
+                    '--font-render-hinting=none',
+                    '--disable-background-timer-throttling',
+                    '--disable-renderer-backgrounding',
+                    '--disable-backgrounding-occluded-windows'
+                ]
             )
-            browser.close()
+            
+            try:
+                page = browser.new_page()
+                
+                # Navigate to HTML file
+                page.goto(f'file://{temp_html_path}', wait_until='networkidle')
+                
+                # Wait for fonts and content to fully render
+                page.wait_for_timeout(2000)
+                
+                # Add CSS for print media
+                page.add_style_tag(content='''
+                    @media print {
+                        * { 
+                            -webkit-print-color-adjust: exact !important; 
+                            color-adjust: exact !important;
+                        }
+                    }
+                ''')
+                
+                # Generate PDF with optimized settings
+                page.pdf(
+                    path=output_path,
+                    format='A4',
+                    margin={'top': '0.3in', 'right': '0.3in', 'bottom': '0.3in', 'left': '0.3in'},
+                    print_background=True,
+                    prefer_css_page_size=False,
+                    display_header_footer=False,
+                    scale=1.0,
+                    page_ranges='',  # Print all pages
+                    tagged=False,  # Disable PDF tagging for faster generation
+                    outline=False  # Disable outline generation
+                )
+                
+                print(f"✅ PDF generated successfully: {output_path}")
+                
+            finally:
+                browser.close()
         
         # Clean up temporary file
         os.unlink(temp_html_path)

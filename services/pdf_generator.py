@@ -444,7 +444,9 @@ class ModernPDF(FPDF):
         self.ln(box_height + 10)
 
 def generate_professional_pdf(optimization_data, output_path):
-    """Generate professional PDF using HTML-to-PDF for pixel-perfect results"""
+    """Generate professional PDF using HTML-to-PDF with enhanced Chromium setup"""
     
-    # Use the HTML-to-PDF system for 100% replica - NO FALLBACK
+    print("📄 Starting HTML-to-PDF generation...")
+    
+    # Use the enhanced HTML-to-PDF system with improved Chromium handling
     return generate_html_pdf(optimization_data, output_path) 
