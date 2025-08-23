@@ -1,23 +1,26 @@
-# Use Ubuntu base image for reliable wkhtmltopdf installation
-FROM ubuntu:22.04
+# Use proven wkhtmltopdf image - guaranteed to work
+FROM surnet/alpine-wkhtmltopdf:3.19.1-0.12.6-small as wkhtmltopdf
+FROM python:3.11-slim
 
-# Install Python, wkhtmltopdf, and dependencies
-ENV DEBIAN_FRONTEND=noninteractive
+# Copy wkhtmltopdf from proven image
+COPY --from=wkhtmltopdf /bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
+
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip \
-    python3-dev \
-    wkhtmltopdf \
     xvfb \
     fonts-liberation \
     fonts-noto-color-emoji \
     fonts-noto-cjk \
     fontconfig \
+    libx11-6 \
+    libxext6 \
+    libxrender1 \
+    libjpeg62-turbo \
+    libpng16-16 \
+    libssl3 \
     && rm -rf /var/lib/apt/lists/*
 
-# Set up Python environment
-RUN ln -sf /usr/bin/python3 /usr/bin/python && \
-    ln -sf /usr/bin/pip3 /usr/bin/pip
+# Python is already properly configured in python:3.11-slim
 
 # Set working directory
 WORKDIR /workspace
@@ -40,7 +43,7 @@ print('=== WKHTMLTOPDF VERIFICATION ===')
 
 # Test wkhtmltopdf availability
 try:
-    result = subprocess.run(['wkhtmltopdf', '--version'], capture_output=True, text=True, timeout=10)
+    result = subprocess.run(['/usr/local/bin/wkhtmltopdf', '--version'], capture_output=True, text=True, timeout=10)
     if result.returncode == 0:
         print(f'✅ wkhtmltopdf found: {result.stdout.strip()}')
     else:
@@ -76,15 +79,15 @@ try:
     with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as pdf_file:
         pdf_path = pdf_file.name
     
-    # Test PDF generation
-    cmd = [
-        'xvfb-run', '-a', '--server-args=-screen 0 1024x768x24',
-        'wkhtmltopdf', 
-        '--page-size', 'A4',
-        '--margin-top', '0.75in',
-        html_path,
-        pdf_path
-    ]
+         # Test PDF generation
+     cmd = [
+         'xvfb-run', '-a', '--server-args=-screen 0 1024x768x24',
+         '/usr/local/bin/wkhtmltopdf', 
+         '--page-size', 'A4',
+         '--margin-top', '0.75in',
+         html_path,
+         pdf_path
+     ]
     
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
     

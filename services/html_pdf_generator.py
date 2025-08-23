@@ -980,7 +980,7 @@ def generate_html_pdf(optimization_data, output_path):
         print("🔍 Checking wkhtmltopdf availability...")
         
         try:
-            result = subprocess.run(['wkhtmltopdf', '--version'], capture_output=True, text=True, timeout=10)
+            result = subprocess.run(['/usr/local/bin/wkhtmltopdf', '--version'], capture_output=True, text=True, timeout=10)
             if result.returncode == 0:
                 print("✅ wkhtmltopdf found and working")
                 print(f"   Version: {result.stdout.strip()}")
@@ -1019,14 +1019,14 @@ def generate_html_pdf(optimization_data, output_path):
         }
         
         # Use xvfb-run for headless operation (required for wkhtmltopdf in Docker)
-        config = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
+        config = pdfkit.configuration(wkhtmltopdf='/usr/local/bin/wkhtmltopdf')
         
         # Generate PDF
         try:
             # Use xvfb-run for virtual display (required in Docker)
             cmd = [
                 'xvfb-run', '-a', '--server-args=-screen 0 1024x768x24',
-                'wkhtmltopdf',
+                '/usr/local/bin/wkhtmltopdf',
                 '--page-size', 'A4',
                 '--margin-top', '0.75in',
                 '--margin-right', '0.75in',
