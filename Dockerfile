@@ -6,6 +6,10 @@ ENV PYTHONUNBUFFERED=1
 ENV PLAYWRIGHT_BROWSERS_PATH=/ms/playwright
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 
+# Ensure environment variables are available at runtime
+RUN echo 'export PLAYWRIGHT_BROWSERS_PATH=/ms/playwright' >> /etc/environment
+RUN echo 'export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1' >> /etc/environment
+
 # Set working directory
 WORKDIR /app
 

@@ -1008,21 +1008,34 @@ def generate_html_pdf(optimization_data, output_path):
                 
                 if not chromium_found:
                     print("❌ Chromium not found in any expected location")
-                    # List what's actually in the playwright directory
-                    playwright_base = "/ms/playwright"
-                    if os.path.exists(playwright_base):
-                        print(f"🔍 Contents of {playwright_base}:")
-                        for item in os.listdir(playwright_base):
-                            item_path = os.path.join(playwright_base, item)
-                            if os.path.isdir(item_path):
-                                print(f"  📁 {item}/")
-                                try:
-                                    for subitem in os.listdir(item_path)[:5]:
-                                        print(f"    📄 {subitem}")
-                                except:
-                                    pass
-                            else:
-                                print(f"  📄 {item}")
+                    
+                    # List what's actually in potential playwright directories
+                    potential_dirs = ["/ms/playwright", "/workspace/.cache/ms-playwright", "/root/.cache/ms-playwright", "/usr/local/share/playwright"]
+                    
+                    for playwright_base in potential_dirs:
+                        if os.path.exists(playwright_base):
+                            print(f"🔍 Contents of {playwright_base}:")
+                            try:
+                                for item in os.listdir(playwright_base):
+                                    item_path = os.path.join(playwright_base, item)
+                                    if os.path.isdir(item_path):
+                                        print(f"  📁 {item}/")
+                                        try:
+                                            for subitem in os.listdir(item_path)[:5]:
+                                                subitem_path = os.path.join(item_path, subitem)
+                                                if os.path.isdir(subitem_path):
+                                                    print(f"    📁 {subitem}/")
+                                                else:
+                                                    print(f"    📄 {subitem}")
+                                        except Exception as e:
+                                            print(f"    ❌ Error listing {item}: {e}")
+                                    else:
+                                        print(f"  📄 {item}")
+                            except Exception as e:
+                                print(f"  ❌ Error listing {playwright_base}: {e}")
+                        else:
+                            print(f"❌ Directory not found: {playwright_base}")
+                    
                     print("❌ PDF generation aborted - Chromium not available")
                     return False
                     

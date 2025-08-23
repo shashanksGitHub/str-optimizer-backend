@@ -20,5 +20,7 @@ services:
     value: "0.0.0.0"
   - key: PLAYWRIGHT_BROWSERS_PATH
     value: "/ms/playwright"
+    scope: RUN_TIME
   - key: PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD
-    value: "1" 
+    value: "1"
+    scope: RUN_TIME 
