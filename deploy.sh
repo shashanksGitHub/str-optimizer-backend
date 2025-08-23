@@ -4,7 +4,7 @@
 set -e
 
 # Configuration
-DROPLET_IP="YOUR_NEW_DROPLET_IP"  # Update this with your new droplet IP
+DROPLET_IP="159.203.166.39"  # DigitalOcean droplet IP
 DROPLET_USER="root"  # Change this if you use a different user
 APP_NAME="str-optimizer-backend"
 REMOTE_DIR="/var/www/$APP_NAME"
