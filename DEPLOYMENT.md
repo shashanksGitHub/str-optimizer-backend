@@ -1,117 +1,202 @@
-# DigitalOcean Deployment Guide
+# Heroku Deployment Guide
 
-## 🚀 Deploy STR Optimizer Backend to DigitalOcean
+## 🚀 Deploy STR Optimizer Backend to Heroku
 
-This guide will help you deploy your Flask backend to your DigitalOcean droplet.
+This guide will help you deploy your Flask backend to Heroku with wkhtmltopdf support.
 
 ### Prerequisites
-- DigitalOcean droplet running Ubuntu 22.04
-- SSH access to your droplet
+- Heroku CLI installed ([install here](https://devcenter.heroku.com/articles/heroku-cli))
+- Git repository with your backend code
 - Your API keys and configuration ready
 
-### Droplet Information
-- **IP Address**: 159.203.166.39
-- **OS**: Ubuntu 22.04
-- **Droplet Name**: django-s-1vcpu-1gb-nyc3-01
-
-## Step 1: Deploy Files to Droplet
-
-Run the deployment script from your local machine:
+## Step 1: Create Heroku App
 
 ```bash
-./deploy.sh
+# Login to Heroku
+heroku login
+
+# Create new app (replace with your app name)
+heroku create str-optimizer-backend
+
+# Or use existing app
+# heroku git:remote -a your-existing-app-name
 ```
 
-This will:
-- Copy all backend files to `/var/www/str-optimizer-backend/`
-- Create initial environment file from template
-
-## Step 2: SSH into Your Droplet
+## Step 2: Add Buildpacks (Order Matters!)
 
 ```bash
-ssh root@159.203.166.39
+# 1. Add apt buildpack for system dependencies (FIRST)
+heroku buildpacks:add --index 1 heroku-community/apt
+
+# 2. Add wkhtmltopdf buildpack (SECOND) 
+heroku buildpacks:add --index 2 https://github.com/dscout/wkhtmltopdf-buildpack.git
+
+# 3. Add Python buildpack (THIRD)
+heroku buildpacks:add --index 3 heroku/python
+
+# Verify buildpacks are in correct order
+heroku buildpacks
 ```
 
-## Step 3: Navigate to App Directory
+## Step 3: Configure Environment Variables
+
+Set all your API keys and configuration:
 
 ```bash
-cd /var/www/str-optimizer-backend
+# Required API Keys
+heroku config:set FLASK_SECRET_KEY="your-secret-key-here"
+heroku config:set OPENAI_API_KEY="your-openai-key"
+heroku config:set STRIPE_SECRET_KEY="sk_test_your-stripe-key"
+heroku config:set STRIPE_WEBHOOK_SECRET="whsec_your-webhook-secret"
+heroku config:set STRIPE_PUBLISHABLE_KEY="pk_test_your-publishable-key"
+
+# Email Configuration
+heroku config:set GMAIL_EMAIL="your-gmail@gmail.com"
+heroku config:set GMAIL_APP_PASSWORD="your-app-specific-password"
+heroku config:set SENDGRID_API_KEY="SG.your-sendgrid-key"
+
+# Optional: Set wkhtmltopdf version (defaults to 0.12.3)
+heroku config:set WKHTMLTOPDF_VERSION="0.12.6"
 ```
 
-## Step 4: Configure Environment Variables
-
-Edit the `.env` file with your actual values:
+## Step 4: Deploy to Heroku
 
 ```bash
-nano .env
+# Deploy your code
+git push heroku main
+
+# Check deployment logs
+heroku logs --tail
 ```
 
-Update these required values:
-- `FLASK_SECRET_KEY`: Generate a secure random key
-- `OPENAI_API_KEY`: Your OpenAI API key
-- `STRIPE_SECRET_KEY`: Your Stripe secret key
-- `STRIPE_PUBLISHABLE_KEY`: Your Stripe publishable key
-- `EMAIL_USERNAME`: Your Gmail address
-- `EMAIL_PASSWORD`: Your Gmail app password
-
-## Step 5: Run Server Setup
+## Step 5: Verify Deployment
 
 ```bash
-./setup-server.sh
+# Open your app
+heroku open
+
+# Test the debug endpoint
+curl https://your-app-name.herokuapp.com/debug/wkhtmltopdf
+
+# Check app status
+heroku ps:scale web=1
+heroku ps
 ```
 
-This will:
-- Install Python 3.11, Nginx, and dependencies
-- Create virtual environment and install packages
-- Configure Gunicorn and systemd service
-- Set up Nginx reverse proxy
-- Start all services
+## Step 6: Update Frontend Configuration
 
-## Step 6: Verify Deployment
-
-Your app should now be accessible at: **http://159.203.166.39**
-
-### Useful Commands
-
-Check service status:
-```bash
-systemctl status str-optimizer
-systemctl status nginx
-```
-
-View logs:
-```bash
-journalctl -u str-optimizer -f
-```
-
-Restart services:
-```bash
-systemctl restart str-optimizer
-systemctl restart nginx
-```
-
-## Step 7: Update Frontend Configuration
-
-Update your frontend's API URL to point to your droplet:
+Update your frontend's API URL to point to Heroku:
 
 In `str-optimizer-react/.env`:
 ```
-REACT_APP_API_URL=http://159.203.166.39
+REACT_APP_API_URL=https://your-app-name.herokuapp.com
 ```
 
 Then redeploy your frontend to Firebase.
 
-## 🔒 Security Notes
+## 📋 File Structure
 
-- Consider setting up SSL/HTTPS with Let's Encrypt
-- Change default SSH port for security
-- Set up firewall rules
-- Use environment-specific secrets
+Your app should have these Heroku-specific files:
 
-## Troubleshooting
+```
+backend/
+├── Procfile              # Defines how to start your app
+├── runtime.txt           # Python version specification  
+├── requirements.txt      # Python dependencies
+├── Aptfile              # System packages for apt buildpack
+├── gunicorn_config.py   # Gunicorn server configuration
+└── app.py              # Your main Flask app
+```
 
-If something goes wrong:
-1. Check logs: `journalctl -u str-optimizer -f`
-2. Check Nginx logs: `tail -f /var/log/nginx/error.log`
-3. Verify services are running: `systemctl status str-optimizer nginx`
-4. Test connectivity: `curl http://localhost:5001` 
+## 🔧 Configuration Files
+
+**Procfile:**
+```
+web: gunicorn --config gunicorn_config.py app:app
+```
+
+**Aptfile:**
+```
+xvfb
+fontconfig
+fonts-liberation
+fonts-dejavu-core
+```
+
+**runtime.txt:**
+```
+python-3.11.0
+```
+
+## 🎯 Expected Results
+
+After successful deployment, the debug endpoint should show:
+
+```json
+{
+  "path_checks": {
+    "/app/bin/wkhtmltopdf": true
+  },
+  "which_wkhtmltopdf": "/app/bin/wkhtmltopdf",
+  "wkhtmltopdf_version": "wkhtmltopdf 0.12.6",
+  "xvfb_available": "/usr/bin/xvfb-run",
+  "app_bin_contents": ["wkhtmltopdf", "wkhtmltoimage"]
+}
+```
+
+## 💰 Pricing
+
+- **Eco Dynos**: $5/month (perfect for development/staging)
+- **Basic Dynos**: $7/month (recommended for production)
+- **Standard Dynos**: $25+/month (for high-traffic applications)
+
+## 🔧 Useful Heroku Commands
+
+```bash
+# View logs
+heroku logs --tail
+
+# Restart app
+heroku ps:restart
+
+# Run commands on server
+heroku run python
+
+# Scale dynos
+heroku ps:scale web=1
+
+# Access PostgreSQL (if using)
+heroku pg:psql
+
+# Config management
+heroku config
+heroku config:set KEY=value
+heroku config:unset KEY
+```
+
+## 🚨 Troubleshooting
+
+**PDF Generation Fails:**
+1. Check buildpacks are in correct order: `heroku buildpacks`
+2. Verify debug endpoint shows wkhtmltopdf installed
+3. Check logs: `heroku logs --tail`
+
+**App Won't Start:**
+1. Check Procfile syntax
+2. Verify requirements.txt includes all dependencies  
+3. Check runtime.txt specifies supported Python version
+
+**Environment Variables:**
+1. Verify all required config vars are set: `heroku config`
+2. Check for typos in variable names
+3. Ensure sensitive values are properly quoted
+
+## ✅ Success Checklist
+
+- [ ] Heroku app created
+- [ ] Buildpacks added in correct order  
+- [ ] All environment variables configured
+- [ ] Code deployed successfully
+- [ ] Debug endpoint shows wkhtmltopdf installed
+- [ ] PDF generation works
+- [ ] Frontend updated with new API URL 

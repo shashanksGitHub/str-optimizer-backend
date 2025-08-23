@@ -537,10 +537,11 @@ def debug_wkhtmltopdf():
         'system': {}
     }
     
-    # Check multiple possible locations for wkhtmltopdf
+    # Check Heroku and local possible locations for wkhtmltopdf
     possible_paths = [
-        '/usr/local/bin/wkhtmltopdf',
-        '/usr/bin/wkhtmltopdf', 
+        '/app/bin/wkhtmltopdf',           # Heroku buildpack location
+        '/usr/local/bin/wkhtmltopdf',     # Local development
+        '/usr/bin/wkhtmltopdf',           # Local system package
         '/bin/wkhtmltopdf',
         '/opt/wkhtmltopdf/bin/wkhtmltopdf'
     ]
@@ -589,6 +590,12 @@ def debug_wkhtmltopdf():
         debug_info['xvfb_available'] = result.stdout.strip() if result.returncode == 0 else 'Not found'
     except:
         debug_info['xvfb_available'] = 'Command failed'
+    
+    # Check Heroku-specific paths
+    try:
+        debug_info['app_bin_contents'] = [f for f in os.listdir('/app/bin/') if 'wk' in f.lower()][:10] if os.path.exists('/app/bin/') else 'No /app/bin/ directory'
+    except:
+        debug_info['app_bin_contents'] = 'Cannot access /app/bin/'
     
     return jsonify(debug_info)
 

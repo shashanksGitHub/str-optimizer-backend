@@ -1,11 +1,11 @@
 import os
 
-# Server socket
-bind = f"0.0.0.0:{os.environ.get('PORT', 8080)}"
+# Server socket - Heroku provides PORT environment variable
+bind = f"0.0.0.0:{os.environ.get('PORT', 5000)}"
 backlog = 2048
 
-# Worker processes (optimized for Digital Ocean Basic plan)
-workers = 1  # Start with 1 worker for basic plan
+# Worker processes (optimized for Heroku dynos)
+workers = 1  # Start with 1 worker for Eco/Basic dynos
 worker_class = "sync"
 worker_connections = 1000
 timeout = 120  # Increased timeout for PDF generation
@@ -15,7 +15,7 @@ keepalive = 2
 max_requests = 1000
 max_requests_jitter = 50
 
-# Logging
+# Logging (Heroku captures stdout/stderr)
 loglevel = "info"
 accesslog = "-"
 errorlog = "-"
@@ -32,8 +32,9 @@ user = None
 group = None
 tmp_upload_dir = None
 
-# SSL (handled by DO App Platform)
+# SSL (handled by Heroku)
 forwarded_allow_ips = "*"
 secure_scheme_headers = {
     'X-FORWARDED-PROTO': 'https',
+    'X-FORWARDED-FOR': '*',
 } 

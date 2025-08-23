@@ -11,17 +11,22 @@ def generate_html_pdf(optimization_data, output_path):
     """
     print("🔥 NUCLEAR OPTION - STARTING PDF GENERATION...")
     
-    # Check system package location first, then fallback to compiled version
-    possible_paths = ['/usr/bin/wkhtmltopdf', '/usr/local/bin/wkhtmltopdf']
-    wkhtmltopdf_cmd = None
+    # Heroku buildpack installs wkhtmltopdf at /app/bin/wkhtmltopdf
+    heroku_path = '/app/bin/wkhtmltopdf'
+    local_paths = ['/usr/bin/wkhtmltopdf', '/usr/local/bin/wkhtmltopdf']
     
-    for path in possible_paths:
-        if os.path.exists(path):
-            wkhtmltopdf_cmd = path
-            break
-    
-    if not wkhtmltopdf_cmd:
-        wkhtmltopdf_cmd = '/usr/bin/wkhtmltopdf'  # Default to system package location
+    # Check Heroku path first, then local development paths
+    if os.path.exists(heroku_path):
+        wkhtmltopdf_cmd = heroku_path
+    else:
+        wkhtmltopdf_cmd = None
+        for path in local_paths:
+            if os.path.exists(path):
+                wkhtmltopdf_cmd = path
+                break
+        
+        if not wkhtmltopdf_cmd:
+            wkhtmltopdf_cmd = heroku_path  # Default to Heroku path for production
     
     print(f"🎯 Using NUCLEAR wkhtmltopdf: {wkhtmltopdf_cmd}")
     

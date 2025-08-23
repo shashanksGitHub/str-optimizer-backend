@@ -1,0 +1,5 @@
+# System dependencies for wkhtmltopdf on Heroku
+xvfb
+fontconfig
+fonts-liberation
+fonts-dejavu-core 
