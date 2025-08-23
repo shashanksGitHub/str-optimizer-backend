@@ -474,6 +474,23 @@ def test_pdf_generation():
     try:
         print("🧪 Testing PDF generation...")
         
+        # Check Playwright installation
+        import subprocess
+        try:
+            playwright_check = subprocess.run(['python', '-m', 'playwright', '--version'], 
+                                            capture_output=True, text=True, timeout=10)
+            print(f"🧪 Playwright version: {playwright_check.stdout.strip()}")
+        except Exception as e:
+            print(f"❌ Playwright check failed: {e}")
+        
+        # Check if chromium is available
+        try:
+            chromium_check = subprocess.run(['python', '-m', 'playwright', 'install', '--dry-run'], 
+                                          capture_output=True, text=True, timeout=10)
+            print(f"🧪 Playwright install check: {chromium_check.stdout.strip()}")
+        except Exception as e:
+            print(f"❌ Chromium check failed: {e}")
+        
         # Create test form data with premium settings
         form_data = {
             'url': 'https://www.airbnb.com/rooms/test',
@@ -494,14 +511,18 @@ def test_pdf_generation():
             'success': True,
             'pdf_generated': bool(result.get('pdf_download_url')),
             'pdf_url': result.get('pdf_download_url'),
-            'test_data': 'PDF generation test completed'
+            'test_data': 'PDF generation test completed',
+            'playwright_available': True  # If we get here, import worked
         })
         
     except Exception as e:
         print(f"❌ PDF test error: {e}")
+        import traceback
+        traceback.print_exc()
         return jsonify({
             'success': False,
-            'error': str(e)
+            'error': str(e),
+            'traceback': traceback.format_exc()
         }), 500
 
 if __name__ == '__main__':
