@@ -127,18 +127,35 @@ def generate_html_pdf(optimization_data, output_path):
         if result.stderr:
             print(f"📤 STDERR: {result.stderr}")
         
-        if result.returncode == 0:
-            if os.path.exists(output_path):
-                pdf_size = os.path.getsize(output_path)
-                if pdf_size > 5000:
-                    print(f"🎉 NUCLEAR SUCCESS! PDF: {pdf_size:,} bytes")
-                    return True
-                else:
-                    print(f"❌ PDF too small: {pdf_size} bytes")
+        # Check if PDF was created successfully regardless of exit code
+        pdf_created = os.path.exists(output_path)
+        pdf_size = os.path.getsize(output_path) if pdf_created else 0
+        
+        # Handle successful creation
+        if pdf_created and pdf_size > 100000:  # 100KB minimum for valid PDF
+            if result.returncode == 0:
+                print(f"🎉 PERFECT SUCCESS! PDF: {pdf_size:,} bytes")
+                return True
+            elif result.returncode == 1 and result.stdout and "network error" in result.stdout.lower():
+                print(f"🎉 SUCCESS WITH NETWORK WARNINGS! PDF: {pdf_size:,} bytes")
+                print("💡 wkhtmltopdf completed PDF generation but had network issues loading remote images")
+                return True
             else:
-                print("❌ PDF not created")
+                print(f"🎉 PDF GENERATED SUCCESSFULLY! PDF: {pdf_size:,} bytes (exit code: {result.returncode})")
+                return True
+        
+        # Handle failures
+        if result.returncode == 0:
+            if not pdf_created:
+                print("❌ PDF not created despite success code")
+            else:
+                print(f"❌ PDF too small: {pdf_size} bytes")
         else:
             print(f"❌ wkhtmltopdf failed with exit code: {result.returncode}")
+            if not pdf_created:
+                print("❌ No PDF file was created")
+            else:
+                print(f"❌ PDF created but too small: {pdf_size} bytes")
         
         return False
         
