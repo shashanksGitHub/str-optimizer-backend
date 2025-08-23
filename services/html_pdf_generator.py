@@ -11,8 +11,17 @@ def generate_html_pdf(optimization_data, output_path):
     """
     print("🔥 NUCLEAR OPTION - STARTING PDF GENERATION...")
     
-    # DIRECT PATH - No searching needed, we know exactly where it is!
-    wkhtmltopdf_cmd = '/usr/local/bin/wkhtmltopdf'
+    # Check system package location first, then fallback to compiled version
+    possible_paths = ['/usr/bin/wkhtmltopdf', '/usr/local/bin/wkhtmltopdf']
+    wkhtmltopdf_cmd = None
+    
+    for path in possible_paths:
+        if os.path.exists(path):
+            wkhtmltopdf_cmd = path
+            break
+    
+    if not wkhtmltopdf_cmd:
+        wkhtmltopdf_cmd = '/usr/bin/wkhtmltopdf'  # Default to system package location
     
     print(f"🎯 Using NUCLEAR wkhtmltopdf: {wkhtmltopdf_cmd}")
     
