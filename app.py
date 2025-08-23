@@ -468,6 +468,42 @@ def test_email():
         print(f"❌ Email test error: {e}")
         return jsonify({"status": "error", "message": f"Email test failed: {str(e)}"}), 500
 
+# Test endpoint for PDF generation debugging
+@app.route('/api/test-pdf-generation')
+def test_pdf_generation():
+    try:
+        print("🧪 Testing PDF generation...")
+        
+        # Create test form data with premium settings
+        form_data = {
+            'url': 'https://www.airbnb.com/rooms/test',
+            'email': 'test@example.com',
+            'title': 'Test Listing',
+            'description': 'Test description for PDF generation',
+            'wants_pdf': True,
+            'wants_email': False
+        }
+        
+        print("🧪 Calling optimize_listing with test data...")
+        result = optimize_listing(form_data)
+        
+        print(f"🧪 Result keys: {list(result.keys())}")
+        print(f"🧪 PDF download URL: {result.get('pdf_download_url', 'NOT FOUND')}")
+        
+        return jsonify({
+            'success': True,
+            'pdf_generated': bool(result.get('pdf_download_url')),
+            'pdf_url': result.get('pdf_download_url'),
+            'test_data': 'PDF generation test completed'
+        })
+        
+    except Exception as e:
+        print(f"❌ PDF test error: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5001))
     app.run(host='0.0.0.0', port=port, debug=True) 
