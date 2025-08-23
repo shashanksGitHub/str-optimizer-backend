@@ -114,7 +114,19 @@ def generate_html_pdf(optimization_data, output_path):
         execution_time = time.time() - start_time
         print(f"⏱️ Completed in {execution_time:.2f} seconds")
         
-        # Check results
+        # Check results with enhanced debugging
+        print(f"🔍 Return code: {result.returncode}")
+        print(f"🔍 PDF file exists: {os.path.exists(output_path)}")
+        if os.path.exists(output_path):
+            pdf_size = os.path.getsize(output_path)
+            print(f"🔍 PDF size: {pdf_size} bytes")
+        
+        # Always show stdout and stderr for debugging
+        if result.stdout:
+            print(f"📤 STDOUT: {result.stdout}")
+        if result.stderr:
+            print(f"📤 STDERR: {result.stderr}")
+        
         if result.returncode == 0:
             if os.path.exists(output_path):
                 pdf_size = os.path.getsize(output_path)
@@ -126,9 +138,7 @@ def generate_html_pdf(optimization_data, output_path):
             else:
                 print("❌ PDF not created")
         else:
-            print(f"❌ wkhtmltopdf failed: {result.returncode}")
-            if result.stderr:
-                print(f"Error: {result.stderr}")
+            print(f"❌ wkhtmltopdf failed with exit code: {result.returncode}")
         
         return False
         
