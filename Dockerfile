@@ -1,7 +1,14 @@
+# CACHE BUSTER - Forces DO to rebuild everything
+ARG CACHE_BUST=1
+ENV CACHE_BUST=${CACHE_BUST}
+
 # NUCLEAR OPTION - USE IMAGE WITH WKHTMLTOPDF PRE-INSTALLED
 # This base image already has wkhtmltopdf working - CANNOT fail!
 FROM surnet/alpine-wkhtmltopdf:3.19.1-0.12.6-full as wkhtmltopdf
 FROM python:3.11-slim
+
+# Force cache invalidation at the very beginning
+RUN echo "Cache bust: ${CACHE_BUST}"
 
 # Copy WORKING wkhtmltopdf from specialized image
 COPY --from=wkhtmltopdf /bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
