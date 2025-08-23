@@ -975,17 +975,43 @@ def generate_html_pdf(optimization_data, output_path):
 </html>'''
     
     try:
-        # Use browserless/chrome with system Chrome
-        print("🔍 Using browserless/chrome with pre-installed Chrome...")
+        # Find Chrome in multiple possible locations
+        print("🔍 Detecting Chrome/Chromium installation...")
         
-        # Chrome path in browserless/chrome image
-        chrome_path = '/usr/bin/google-chrome'
+        # Multiple possible Chrome locations
+        possible_chrome_paths = [
+            '/usr/bin/google-chrome',           # browserless/chrome
+            '/usr/bin/google-chrome-stable',   # some Ubuntu images  
+            '/usr/bin/chromium-browser',        # Chromium installs
+            '/usr/bin/chromium',                # Alternative Chromium
+            '/opt/google/chrome/chrome',        # Alternative location
+        ]
         
-        if os.path.exists(chrome_path):
-            print(f"✅ Chrome found at: {chrome_path}")
-        else:
-            print(f"❌ Chrome not found at: {chrome_path}")
-            return False
+        chrome_path = None
+        for path in possible_chrome_paths:
+            if os.path.exists(path):
+                chrome_path = path
+                print(f"✅ Chrome found at: {chrome_path}")
+                break
+        
+        if not chrome_path:
+            print("❌ Chrome/Chromium not found in any expected location")
+            print("🔍 Available paths checked:")
+            for path in possible_chrome_paths:
+                print(f"   - {path}: {'✅' if os.path.exists(path) else '❌'}")
+            
+            # Try using Playwright's default detection as fallback
+            print("🔄 Falling back to Playwright default Chrome detection...")
+            try:
+                with sync_playwright() as p:
+                    # Let Playwright find Chrome automatically
+                    test_browser = p.chromium.launch(headless=True, args=['--no-sandbox'])
+                    test_browser.close()
+                    chrome_path = None  # Will use Playwright default
+                    print("✅ Playwright default Chrome detection successful")
+            except Exception as e:
+                print(f"❌ Playwright default detection failed: {e}")
+                return False
         
         # Render template with data
         print("📄 Rendering HTML template...")
@@ -998,13 +1024,12 @@ def generate_html_pdf(optimization_data, output_path):
             temp_html_path = temp_html.name
         
         print("🎭 Starting Playwright PDF generation...")
-        # Generate PDF using Playwright with browserless/chrome
+        # Generate PDF using Playwright with detected Chrome
         with sync_playwright() as p:
-            # Launch Chrome with explicit path and production settings
-            browser = p.chromium.launch(
-                headless=True,
-                executable_path=chrome_path,
-                args=[
+            # Launch Chrome with detected path (or Playwright default)
+            launch_options = {
+                'headless': True,
+                'args': [
                     '--no-sandbox',
                     '--disable-dev-shm-usage',
                     '--disable-gpu',
@@ -1015,7 +1040,16 @@ def generate_html_pdf(optimization_data, output_path):
                     '--disable-renderer-backgrounding',
                     '--disable-backgrounding-occluded-windows'
                 ]
-            )
+            }
+            
+            # Add executable path if we found a specific Chrome location
+            if chrome_path:
+                launch_options['executable_path'] = chrome_path
+                print(f"🚀 Using Chrome at: {chrome_path}")
+            else:
+                print("🚀 Using Playwright default Chrome detection")
+            
+            browser = p.chromium.launch(**launch_options)
             
             try:
                 page = browser.new_page()

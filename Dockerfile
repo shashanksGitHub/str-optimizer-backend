@@ -1,12 +1,13 @@
 # Use browserless/chrome image with Chromium pre-installed
 FROM browserless/chrome:latest
 
-# Install Python and pip
+# Install Python, pip, and additional Chrome/Chromium as backup
 USER root
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
     python3-dev \
+    chromium-browser \
     fonts-liberation \
     fonts-noto-color-emoji \
     fonts-noto-cjk \
@@ -40,28 +41,46 @@ import os
 import sys
 from playwright.sync_api import sync_playwright
 
-print('=== BROWSERLESS/CHROME VERIFICATION ===')
-print(f'PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH: {os.environ.get(\"PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH\")}')
+print('=== CHROME/CHROMIUM VERIFICATION ===')
 
-# Test Chrome availability
-chrome_path = '/usr/bin/google-chrome'
-if os.path.exists(chrome_path):
-    print(f'✅ Chrome found at: {chrome_path}')
-    print(f'✅ Chrome exists ({os.path.getsize(chrome_path):,} bytes)')
-else:
-    print('❌ Chrome not found at expected path')
-    sys.exit(1)
+# Test multiple Chrome locations
+possible_chrome_paths = [
+    '/usr/bin/google-chrome',
+    '/usr/bin/google-chrome-stable', 
+    '/usr/bin/chromium-browser',
+    '/usr/bin/chromium',
+    '/opt/google/chrome/chrome'
+]
+
+chrome_found = False
+working_chrome_path = None
+
+for chrome_path in possible_chrome_paths:
+    if os.path.exists(chrome_path):
+        print(f'✅ Chrome found at: {chrome_path} ({os.path.getsize(chrome_path):,} bytes)')
+        working_chrome_path = chrome_path
+        chrome_found = True
+        break
+    else:
+        print(f'❌ Chrome not found at: {chrome_path}')
+
+if not chrome_found:
+    print('⚠️  No Chrome found at standard locations, testing Playwright default...')
 
 try:
     with sync_playwright() as p:
-        # Launch Chrome with explicit path
-        browser = p.chromium.launch(
-            headless=True,
-            executable_path=chrome_path,
-            args=['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu']
-        )
+        # Test Chrome launch
+        launch_options = {
+            'headless': True,
+            'args': ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu']
+        }
+        
+        if working_chrome_path:
+            launch_options['executable_path'] = working_chrome_path
+            
+        browser = p.chromium.launch(**launch_options)
         page = browser.new_page()
-        page.set_content('<html><body><h1>PDF Test</h1><p>Browserless Chrome is ready!</p></body></html>')
+        page.set_content('<html><body><h1>PDF Test</h1><p>Chrome PDF system ready!</p></body></html>')
         
         # Test PDF generation capability
         import tempfile
@@ -75,7 +94,7 @@ except Exception as e:
     print(f'❌ Chrome verification failed: {e}')
     sys.exit(1)
 
-print('🎉 BROWSERLESS CHROME PDF SYSTEM READY!')
+print('🎉 CHROME PDF SYSTEM READY!')
 "
 
 # Expose port
