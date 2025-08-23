@@ -525,6 +525,56 @@ def test_pdf_generation():
             'traceback': traceback.format_exc()
         }), 500
 
+@app.route('/debug/wkhtmltopdf', methods=['GET'])
+def debug_wkhtmltopdf():
+    """Debug endpoint to check wkhtmltopdf installation"""
+    import subprocess
+    import glob
+    
+    debug_info = {
+        'timestamp': time.time(),
+        'system': {}
+    }
+    
+    # Check if wkhtmltopdf exists at expected location
+    wkhtmltopdf_path = '/usr/local/bin/wkhtmltopdf'
+    debug_info['wkhtmltopdf_exists'] = os.path.exists(wkhtmltopdf_path)
+    
+    # Check permissions
+    if os.path.exists(wkhtmltopdf_path):
+        stat = os.stat(wkhtmltopdf_path)
+        debug_info['wkhtmltopdf_permissions'] = oct(stat.st_mode)[-3:]
+        debug_info['wkhtmltopdf_size'] = stat.st_size
+    
+    # Find wkhtmltopdf anywhere on system
+    try:
+        result = subprocess.run(['which', 'wkhtmltopdf'], capture_output=True, text=True)
+        debug_info['which_wkhtmltopdf'] = result.stdout.strip() if result.returncode == 0 else 'Not found'
+    except:
+        debug_info['which_wkhtmltopdf'] = 'Command failed'
+    
+    # Check version if exists
+    try:
+        result = subprocess.run([wkhtmltopdf_path, '--version'], capture_output=True, text=True, timeout=10)
+        debug_info['wkhtmltopdf_version'] = result.stdout.strip() if result.returncode == 0 else result.stderr.strip()
+    except Exception as e:
+        debug_info['wkhtmltopdf_version'] = str(e)
+    
+    # Check /usr/local/bin contents
+    try:
+        debug_info['usr_local_bin_contents'] = os.listdir('/usr/local/bin/')
+    except:
+        debug_info['usr_local_bin_contents'] = 'Cannot access'
+    
+    # Check for xvfb (needed for wkhtmltopdf)
+    try:
+        result = subprocess.run(['which', 'xvfb-run'], capture_output=True, text=True)
+        debug_info['xvfb_available'] = result.stdout.strip() if result.returncode == 0 else 'Not found'
+    except:
+        debug_info['xvfb_available'] = 'Command failed'
+    
+    return jsonify(debug_info)
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5001))
     app.run(host='0.0.0.0', port=port, debug=True) 
