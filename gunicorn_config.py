@@ -36,5 +36,4 @@ tmp_upload_dir = None
 forwarded_allow_ips = "*"
 secure_scheme_headers = {
     'X-FORWARDED-PROTO': 'https',
-    'X-FORWARDED-FOR': '*',
 } 
