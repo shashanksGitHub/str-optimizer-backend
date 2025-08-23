@@ -537,22 +537,38 @@ def debug_wkhtmltopdf():
         'system': {}
     }
     
-    # Check if wkhtmltopdf exists at expected location
+    # Check multiple possible locations for wkhtmltopdf
+    possible_paths = [
+        '/usr/local/bin/wkhtmltopdf',
+        '/usr/bin/wkhtmltopdf', 
+        '/bin/wkhtmltopdf',
+        '/opt/wkhtmltopdf/bin/wkhtmltopdf'
+    ]
+    
+    debug_info['path_checks'] = {}
+    for path in possible_paths:
+        debug_info['path_checks'][path] = os.path.exists(path)
+        if os.path.exists(path):
+            stat = os.stat(path)
+            debug_info['path_checks'][path + '_permissions'] = oct(stat.st_mode)[-3:]
+            debug_info['path_checks'][path + '_size'] = stat.st_size
+    
+    # Legacy check
     wkhtmltopdf_path = '/usr/local/bin/wkhtmltopdf'
     debug_info['wkhtmltopdf_exists'] = os.path.exists(wkhtmltopdf_path)
     
-    # Check permissions
-    if os.path.exists(wkhtmltopdf_path):
-        stat = os.stat(wkhtmltopdf_path)
-        debug_info['wkhtmltopdf_permissions'] = oct(stat.st_mode)[-3:]
-        debug_info['wkhtmltopdf_size'] = stat.st_size
-    
-    # Find wkhtmltopdf anywhere on system
+    # Find wkhtmltopdf anywhere on system  
     try:
         result = subprocess.run(['which', 'wkhtmltopdf'], capture_output=True, text=True)
         debug_info['which_wkhtmltopdf'] = result.stdout.strip() if result.returncode == 0 else 'Not found'
     except:
         debug_info['which_wkhtmltopdf'] = 'Command failed'
+        
+    # Check all bin directories
+    try:
+        debug_info['usr_bin_contents'] = [f for f in os.listdir('/usr/bin/') if 'wk' in f.lower()][:10]
+    except:
+        debug_info['usr_bin_contents'] = 'Cannot access'
     
     # Check version if exists
     try:
