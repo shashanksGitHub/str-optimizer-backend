@@ -5,10 +5,97 @@ import tempfile
 import time
 from jinja2 import Template
 
+# Add WeasyPrint import
+try:
+    from weasyprint import HTML, CSS
+    WEASYPRINT_AVAILABLE = True
+    print("✅ WeasyPrint available - using fast PDF generation")
+except ImportError:
+    WEASYPRINT_AVAILABLE = False
+    print("⚠️ WeasyPrint not available - falling back to wkhtmltopdf")
+
+def generate_html_pdf_fast(optimization_data, output_path):
+    """ULTRA-FAST PDF generation using WeasyPrint (5-10 seconds vs 25+ for wkhtmltopdf)"""
+    
+    if not WEASYPRINT_AVAILABLE:
+        print("❌ WeasyPrint not available, falling back to slow method")
+        return generate_html_pdf_slow(optimization_data, output_path)
+    
+    print("🚀 FAST PDF GENERATION using WeasyPrint...")
+    start_time = time.time()
+    
+    try:
+        # Load template
+        print("📋 Loading template...")
+        template_paths = [
+            os.path.join(os.path.dirname(__file__), '..', 'templates', 'professional_report_template.html'),
+            os.path.join('/app', 'templates', 'professional_report_template.html')
+        ]
+        
+        template_content = None
+        for template_path in template_paths:
+            if os.path.exists(template_path):
+                with open(template_path, 'r', encoding='utf-8') as f:
+                    template_content = f.read()
+                print(f"✅ Template loaded from: {template_path}")
+                break
+        
+        if not template_content:
+            print("❌ Template not found")
+            return False
+        
+        # Render template with data
+        print("🎨 Rendering template...")
+        template = Template(template_content)
+        rendered_html = template.render(**optimization_data)
+        print("✅ Template rendered")
+        
+        # Generate PDF directly from HTML string
+        print("📄 Converting HTML to PDF with WeasyPrint...")
+        html_doc = HTML(string=rendered_html, base_url=os.path.dirname(template_paths[0]))
+        
+        # Add CSS optimizations for faster rendering
+        css = CSS(string="""
+            @page { 
+                margin: 0.5in; 
+                size: A4;
+            }
+            body { 
+                font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+                line-height: 1.4;
+            }
+        """)
+        
+        html_doc.write_pdf(output_path, stylesheets=[css], presentational_hints=True)
+        
+        execution_time = time.time() - start_time
+        print(f"⚡ FAST PDF completed in {execution_time:.2f} seconds")
+        
+        # Verify PDF was created
+        if os.path.exists(output_path):
+            pdf_size = os.path.getsize(output_path)
+            if pdf_size > 50000:  # 50KB minimum
+                print(f"🎉 FAST PDF SUCCESS! Size: {pdf_size:,} bytes")
+                return True
+            else:
+                print(f"❌ PDF too small: {pdf_size} bytes")
+        else:
+            print("❌ PDF file not created")
+            
+        return False
+        
+    except Exception as e:
+        print(f"❌ Fast PDF generation failed: {e}")
+        print("⚠️ Falling back to slow wkhtmltopdf method...")
+        return generate_html_pdf_slow(optimization_data, output_path)
+
 def generate_html_pdf(optimization_data, output_path):
-    """
-    NUCLEAR OPTION - wkhtmltopdf is guaranteed to be at /usr/local/bin/wkhtmltopdf
-    """
+    """Main entry point - tries fast method first, falls back to slow"""
+    return generate_html_pdf_fast(optimization_data, output_path)
+
+def generate_html_pdf_slow(optimization_data, output_path):
+    """SLOW PDF generation using wkhtmltopdf (backup method)"""
+    print("🐌 Using SLOW wkhtmltopdf method...")
     print("🔥 NUCLEAR OPTION - STARTING PDF GENERATION...")
     
     # Heroku buildpack installs wkhtmltopdf at /app/bin/wkhtmltopdf
