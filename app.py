@@ -37,8 +37,7 @@ allowed_origins = [
     "http://localhost:3000", 
     "http://localhost:3001",
     "https://str-optimizer.web.app",  # Firebase hosting
-    "http://159.203.166.39",  # Allow backend to call itself
-    "https://159-203-166-39.nip.io"  # HTTPS domain with SSL
+    "https://str-optimizer-backend-7d9de05e5c57.herokuapp.com",  # Heroku backend URL
 ]
 
 # Add ngrok URLs if specified in environment
@@ -167,8 +166,8 @@ def create_checkout_session():
 
         print(f"Product: {product_name}, Price: ${unit_amount/100}")
 
-        # Get the server URL from environment variables
-        server_url = os.getenv('SERVER_URL', 'https://159-203-166-39.nip.io')
+        # Get the server URL from environment variables - Updated fallback for Heroku
+        server_url = os.getenv('SERVER_URL', 'https://str-optimizer-backend-7d9de05e5c57.herokuapp.com')
         success_url = server_url + '/api/payment-success?session_id={CHECKOUT_SESSION_ID}'
         cancel_url = server_url + '/api/payment-cancel'
 
