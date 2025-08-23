@@ -1,19 +1,18 @@
 # CACHE BUSTER - Forces DO to rebuild everything
-ARG CACHE_BUST=1
+ARG CACHE_BUST=2
 ENV CACHE_BUST=${CACHE_BUST}
 
-# NUCLEAR OPTION - USE IMAGE WITH WKHTMLTOPDF PRE-INSTALLED
-# This base image already has wkhtmltopdf working - CANNOT fail!
-FROM surnet/alpine-wkhtmltopdf:3.19.1-0.12.6-full as wkhtmltopdf
+# CORRECTED NUCLEAR OPTION - Fixed Alpine image paths
+FROM surnet/alpine-wkhtmltopdf:3.19.1-0.12.6-small as wkhtmltopdf
 FROM python:3.11-slim
 
-# Force cache invalidation at the very beginning
+# Force cache invalidation with new number
 RUN echo "Cache bust: ${CACHE_BUST}"
 
-# Copy WORKING wkhtmltopdf from specialized image
-COPY --from=wkhtmltopdf /bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
-COPY --from=wkhtmltopdf /bin/wkhtmltoimage /usr/local/bin/wkhtmltoimage
-COPY --from=wkhtmltopdf /lib/libwkhtmltox* /usr/local/lib/
+# CORRECTED PATHS - Copy from Alpine image (different paths than I thought)
+COPY --from=wkhtmltopdf /usr/local/bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
+COPY --from=wkhtmltopdf /usr/local/bin/wkhtmltoimage /usr/local/bin/wkhtmltoimage
+COPY --from=wkhtmltopdf /usr/local/lib/libwkhtmltox.so* /usr/local/lib/
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -40,15 +39,21 @@ RUN chmod +x /usr/local/bin/wkhtmltopdf && \
 # Update library cache
 RUN ldconfig
 
-# VERIFY IT WORKS - Build fails if not working
-RUN echo "🧪 NUCLEAR TEST - VERIFYING WKHTMLTOPDF WORKS" && \
+# ENHANCED VERIFICATION - More detailed testing
+RUN echo "🧪 ENHANCED NUCLEAR TEST - VERIFYING WKHTMLTOPDF" && \
+    echo "📍 Checking if files exist..." && \
+    ls -la /usr/local/bin/wkhtmltopdf && \
+    ls -la /usr/local/bin/wkhtmltoimage && \
+    echo "📋 Testing version..." && \
     /usr/local/bin/wkhtmltopdf --version && \
     echo "✅ wkhtmltopdf version check passed" && \
-    echo '<html><body><h1>TEST PDF</h1><p>This is a nuclear test!</p></body></html>' > /tmp/test.html && \
-    xvfb-run -a /usr/local/bin/wkhtmltopdf /tmp/test.html /tmp/test.pdf && \
+    echo "🧪 Testing PDF generation..." && \
+    echo '<html><head><title>Nuclear Test</title></head><body><h1>NUCLEAR PDF TEST</h1><p>Cache bust: ${CACHE_BUST}</p><p>This PDF generation test must work!</p></body></html>' > /tmp/test.html && \
+    xvfb-run -a --server-args="-screen 0 1024x768x24" /usr/local/bin/wkhtmltopdf --page-size A4 /tmp/test.html /tmp/test.pdf && \
     test -f /tmp/test.pdf && \
+    echo "📊 PDF size: $(stat -c%s /tmp/test.pdf) bytes" && \
     test $(stat -c%s /tmp/test.pdf) -gt 1000 && \
-    echo "🎉 NUCLEAR OPTION SUCCESS - PDF GENERATION VERIFIED!" && \
+    echo "🎉 ENHANCED NUCLEAR SUCCESS - PDF GENERATION FULLY VERIFIED!" && \
     rm -f /tmp/test.html /tmp/test.pdf
 
 # Set working directory
