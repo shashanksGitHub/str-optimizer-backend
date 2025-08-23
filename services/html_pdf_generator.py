@@ -975,101 +975,17 @@ def generate_html_pdf(optimization_data, output_path):
 </html>'''
     
     try:
-        # FIRST: Check if Chromium is available before attempting PDF generation
-        print("🔍 Checking Chromium availability...")
-        print(f"🔍 PLAYWRIGHT_BROWSERS_PATH: {os.getenv('PLAYWRIGHT_BROWSERS_PATH', 'NOT_SET')}")
-        print(f"🔍 Working directory: {os.getcwd()}")
+        # Use browserless/chrome with system Chrome
+        print("🔍 Using browserless/chrome with pre-installed Chrome...")
         
-        with sync_playwright() as p:
-            try:
-                browser_path = p.chromium.executable_path
-                print(f"🔍 Expected Chromium path: {browser_path}")
-                
-                # Enhanced Chromium detection and setup
-                if not os.path.exists(browser_path):
-                    print("🔄 Chromium not found, attempting automatic installation...")
-                    
-                    # Set proper environment for installation
-                    env = os.environ.copy()
-                    env['PLAYWRIGHT_BROWSERS_PATH'] = '/ms/playwright'
-                    
-                    try:
-                        import subprocess
-                        # Install Chromium with dependencies
-                        result = subprocess.run([
-                            'python', '-m', 'playwright', 'install', 'chromium', '--with-deps'
-                        ], capture_output=True, text=True, timeout=120, env=env)
-                        
-                        print(f"📋 Installation output: {result.stdout}")
-                        if result.stderr:
-                            print(f"⚠️  Installation warnings: {result.stderr}")
-                        
-                        if result.returncode == 0:
-                            print("✅ Chromium installation completed successfully")
-                        else:
-                            print(f"⚠️  Installation exit code: {result.returncode}")
-                        
-                        # Refresh playwright context to pick up new installation
-                        browser_path = p.chromium.executable_path
-                        print(f"🔍 Updated Chromium path: {browser_path}")
-                        
-                    except Exception as install_error:
-                        print(f"⚠️  Installation error: {install_error}")
-                
-                # Verify Chromium is accessible
-                if os.path.exists(browser_path):
-                    print(f"✅ Chromium found at: {browser_path}")
-                    
-                    # Test browser launch
-                    try:
-                        print("🧪 Testing Chromium launch...")
-                        browser = p.chromium.launch(
-                            headless=True,
-                            args=[
-                                '--no-sandbox',
-                                '--disable-dev-shm-usage',
-                                '--disable-gpu',
-                                '--disable-web-security',
-                                '--disable-features=VizDisplayCompositor'
-                            ]
-                        )
-                        browser.close()
-                        print("✅ Chromium launch test successful")
-                    except Exception as launch_error:
-                        print(f"❌ Chromium launch failed: {launch_error}")
-                        # Try alternative launch options
-                        try:
-                            print("🔄 Trying alternative browser configuration...")
-                            browser = p.chromium.launch(
-                                headless=True,
-                                args=['--no-sandbox', '--disable-dev-shm-usage']
-                            )
-                            browser.close()
-                            print("✅ Alternative configuration successful")
-                        except Exception as alt_error:
-                            print(f"❌ Alternative configuration failed: {alt_error}")
-                            return False
-                else:
-                    print(f"❌ Chromium still not accessible at: {browser_path}")
-                    
-                    # List available browsers for debugging
-                    try:
-                        playwright_dirs = ['/ms/playwright', '/workspace/.cache/ms-playwright', '/root/.cache/ms-playwright']
-                        for playwright_dir in playwright_dirs:
-                            if os.path.exists(playwright_dir):
-                                print(f"📁 Found Playwright directory: {playwright_dir}")
-                                for item in os.listdir(playwright_dir):
-                                    if 'chromium' in item.lower():
-                                        print(f"  🔍 Chromium directory: {item}")
-                                break
-                    except Exception:
-                        pass
-                    
-                    return False
-                    
-            except Exception as check_error:
-                print(f"❌ Chromium check failed: {check_error}")
-                return False
+        # Chrome path in browserless/chrome image
+        chrome_path = '/usr/bin/google-chrome'
+        
+        if os.path.exists(chrome_path):
+            print(f"✅ Chrome found at: {chrome_path}")
+        else:
+            print(f"❌ Chrome not found at: {chrome_path}")
+            return False
         
         # Render template with data
         print("📄 Rendering HTML template...")
@@ -1082,11 +998,12 @@ def generate_html_pdf(optimization_data, output_path):
             temp_html_path = temp_html.name
         
         print("🎭 Starting Playwright PDF generation...")
-        # Generate PDF using Playwright with enhanced configuration
+        # Generate PDF using Playwright with browserless/chrome
         with sync_playwright() as p:
-            # Launch browser with production-ready settings
+            # Launch Chrome with explicit path and production settings
             browser = p.chromium.launch(
                 headless=True,
+                executable_path=chrome_path,
                 args=[
                     '--no-sandbox',
                     '--disable-dev-shm-usage',
