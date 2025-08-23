@@ -83,19 +83,26 @@ def generate_html_pdf(optimization_data, output_path):
     try:
         print("🚀 NUCLEAR PDF GENERATION...")
         
+        # SPEED-OPTIMIZED command to finish under 30 seconds
         cmd = [
-            'xvfb-run', '-a', '--server-args=-screen 0 1920x1080x24',
+            'xvfb-run', '-a', '--server-args=-screen 0 1024x768x24',  # Smaller screen = faster
             wkhtmltopdf_cmd,
             '--page-size', 'A4',
-            '--margin-top', '0.75in',
-            '--margin-right', '0.75in',
-            '--margin-bottom', '0.75in',
-            '--margin-left', '0.75in',
+            '--margin-top', '0.5in',        # Smaller margins = faster
+            '--margin-right', '0.5in', 
+            '--margin-bottom', '0.5in',
+            '--margin-left', '0.5in',
             '--encoding', 'UTF-8',
-            '--enable-local-file-access',
-            '--print-media-type',
-            '--disable-smart-shrinking',
-            '--zoom', '1.0',
+            '--disable-plugins',            # Speed optimizations
+            '--disable-javascript',         # No JS = much faster
+            '--disable-external-links',     # No external requests
+            '--disable-internal-links',
+            '--no-background',              # Skip background rendering
+            '--load-error-handling', 'ignore',  # Ignore any load errors
+            '--load-media-error-handling', 'ignore',
+            '--javascript-delay', '0',      # No JS delay
+            '--no-stop-slow-scripts',
+            '--zoom', '0.9',                # Slightly smaller = faster
             temp_html_path,
             output_path
         ]
@@ -107,7 +114,7 @@ def generate_html_pdf(optimization_data, output_path):
             cmd,
             capture_output=True,
             text=True,
-            timeout=60,
+            timeout=25,  # Must finish under Heroku's 30-second limit
             cwd='/tmp'
         )
         
