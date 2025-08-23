@@ -16,7 +16,6 @@ from PIL import Image
 import io
 import re
 from dotenv import load_dotenv
-import uuid
 
 # Load environment variables from .env file
 load_dotenv()
@@ -468,91 +467,6 @@ def test_email():
     except Exception as e:
         print(f"❌ Email test error: {e}")
         return jsonify({"status": "error", "message": f"Email test failed: {str(e)}"}), 500
-
-# Test PDF generation endpoint for debugging
-@app.route('/api/test-pdf')
-def test_pdf():
-    """Test PDF generation functionality"""
-    try:
-        import tempfile
-        from fpdf import FPDF
-        
-        # Create simple FPDF test
-        pdf = FPDF()
-        pdf.add_page()
-        pdf.set_font('Arial', 'B', 16)
-        pdf.cell(40, 10, 'Hello World - PDF Test')
-        
-        # Generate test PDF
-        pdf_filename = f"simple_test_{uuid.uuid4().hex[:8]}.pdf"
-        pdf_path = os.path.join(tempfile.gettempdir(), pdf_filename)
-        
-        pdf.output(pdf_path)
-        
-        if os.path.exists(pdf_path):
-            file_size = os.path.getsize(pdf_path)
-            return jsonify({
-                'status': 'success',
-                'message': 'Simple PDF generation working',
-                'file_size': file_size,
-                'pdf_path': pdf_path
-            })
-        else:
-            return jsonify({
-                'status': 'error',
-                'message': 'Simple PDF generation failed - file not created'
-            }), 500
-            
-    except Exception as e:
-        import traceback
-        return jsonify({
-            'status': 'error',
-            'message': f'PDF test error: {str(e)}',
-            'traceback': traceback.format_exc()
-        }), 500
-
-# Test premium PDF generation endpoint
-@app.route('/api/test-premium-pdf')
-def test_premium_pdf():
-    """Test premium PDF generation functionality"""
-    try:
-        import tempfile
-        from services.str_optimizer import optimize_listing
-        
-        # Create test data simulating a premium package
-        test_form_data = {
-            'url': 'https://www.airbnb.com/rooms/test',
-            'email': 'test@example.com',
-            'title': 'Beautiful Test Property',
-            'description': 'This is a test property description for PDF generation testing.',
-            'wants_pdf': True,  # This is the key - premium package
-            'wants_email': False
-        }
-        
-        # Process optimization with PDF generation
-        result = optimize_listing(test_form_data)
-        
-        if result.get('pdf_download_url'):
-            return jsonify({
-                'status': 'success',
-                'message': 'Premium PDF generation working!',
-                'pdf_download_url': result['pdf_download_url'],
-                'has_pdf': True
-            })
-        else:
-            return jsonify({
-                'status': 'error',
-                'message': 'Premium PDF generation failed - no download URL',
-                'has_pdf': False
-            }), 500
-            
-    except Exception as e:
-        import traceback
-        return jsonify({
-            'status': 'error',
-            'message': f'Premium PDF test error: {str(e)}',
-            'traceback': traceback.format_exc()
-        }), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5001))
