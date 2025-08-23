@@ -977,14 +977,55 @@ def generate_html_pdf(optimization_data, output_path):
     try:
         # FIRST: Check if Chromium is available before attempting PDF generation
         print("🔍 Checking Chromium availability...")
+        print(f"🔍 PLAYWRIGHT_BROWSERS_PATH: {os.getenv('PLAYWRIGHT_BROWSERS_PATH', 'NOT_SET')}")
+        print(f"🔍 Working directory: {os.getcwd()}")
+        
         with sync_playwright() as p:
             try:
                 browser_path = p.chromium.executable_path
-                if not os.path.exists(browser_path):
-                    print(f"❌ Chromium executable not found at: {browser_path}")
+                print(f"🔍 Expected Chromium path: {browser_path}")
+                
+                # Check multiple possible locations
+                possible_paths = [
+                    browser_path,
+                    "/ms/playwright/chromium-1091/chrome-linux/chrome",
+                    "/ms/playwright/chromium/chrome-linux/chrome",
+                    "/opt/ms/playwright/chromium-1091/chrome-linux/chrome"
+                ]
+                
+                chromium_found = False
+                actual_path = None
+                
+                for path in possible_paths:
+                    print(f"🔍 Checking path: {path}")
+                    if os.path.exists(path):
+                        print(f"✅ Chromium found at: {path}")
+                        chromium_found = True
+                        actual_path = path
+                        break
+                    else:
+                        print(f"❌ Not found at: {path}")
+                
+                if not chromium_found:
+                    print("❌ Chromium not found in any expected location")
+                    # List what's actually in the playwright directory
+                    playwright_base = "/ms/playwright"
+                    if os.path.exists(playwright_base):
+                        print(f"🔍 Contents of {playwright_base}:")
+                        for item in os.listdir(playwright_base):
+                            item_path = os.path.join(playwright_base, item)
+                            if os.path.isdir(item_path):
+                                print(f"  📁 {item}/")
+                                try:
+                                    for subitem in os.listdir(item_path)[:5]:
+                                        print(f"    📄 {subitem}")
+                                except:
+                                    pass
+                            else:
+                                print(f"  📄 {item}")
                     print("❌ PDF generation aborted - Chromium not available")
                     return False
-                print(f"✅ Chromium found at: {browser_path}")
+                    
             except Exception as check_error:
                 print(f"❌ Chromium check failed: {check_error}")
                 print("❌ PDF generation aborted - Chromium not available")
