@@ -88,28 +88,31 @@
             line-height: 1.5;
         }
         
-        /* Score Cards - FORCE SIDE BY SIDE LAYOUT */
+        /* Score Cards - COMPLETE ROW WIDTH USAGE */
         .score-grid {
             display: flex !important;
             flex-direction: row !important;
-            justify-content: space-between;
-            gap: 20px;
+            justify-content: space-around;
+            gap: 15px;
             margin-bottom: 40px;
             align-items: stretch;
             width: 100%;
             flex-wrap: nowrap !important;
+            padding: 0;
         }
         
         .score-card {
             background: #f8f9fa;
             border: 1px solid #dee2e6;
             border-radius: 8px;
-            padding: 25px 15px;
+            padding: 30px 20px;
             text-align: center;
-            flex: 1 1 0;
-            min-width: 150px;
-            max-width: 250px;
-            display: inline-block;
+            flex: 1;
+            min-width: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         
         .score-card.highlight {
@@ -118,16 +121,16 @@
         }
         
         .score-value {
-            font-size: 32px;
+            font-size: 36px;
             font-weight: bold;
             color: #4285f4;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             line-height: 1;
             display: block;
         }
         
         .score-label {
-            font-size: 12px;
+            font-size: 13px;
             color: #666;
             font-weight: normal;
             text-transform: uppercase;
@@ -176,23 +179,26 @@
         }
         
         .priority-badge {
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 10px;
+            padding: 6px 15px;
+            border-radius: 15px;
+            font-size: 11px;
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
             margin-left: 15px;
+            white-space: nowrap;
         }
         
         .priority-badge.high {
-            background: #f8d7da;
-            color: #dc3545;
+            background: #ffebee;
+            color: #d32f2f;
+            border: 1px solid #ffcdd2;
         }
         
         .priority-badge.medium {
-            background: #fff3cd;
-            color: #856404;
+            background: #fff8e1;
+            color: #f57c00;
+            border: 1px solid #ffcc02;
         }
         
         /* Content Sections */
