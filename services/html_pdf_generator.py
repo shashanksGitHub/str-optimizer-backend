@@ -146,7 +146,7 @@ def generate_html_pdf_ultra_fast(optimization_data, output_path):
     # Render template
     print("🎨 Rendering template...")
     template = Template(template_content)
-    rendered_html = template.render(data=optimization_data)
+    rendered_html = template.render(**optimization_data)  # Unpack dict as variables
     print("✅ Template rendered")
     
     # ULTRA-FAST HTML modifications for speed
