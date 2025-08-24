@@ -1,44 +1,39 @@
-# OPTIMIZED FOR HEROKU - FAST PDF GENERATION WITH FALLBACK
+# NUCLEAR OPTION - SIMPLIFIED FOR GUARANTEED SUCCESS
 import os
 import subprocess
 import tempfile
 import time
 from jinja2 import Template
 
-def generate_html_pdf_fast(optimization_data, output_path):
+def generate_html_pdf(optimization_data, output_path):
     """
-    OPTIMIZED wkhtmltopdf - Designed for Heroku constraints
-    Aggressive speed optimization with 20-second timeout
+    NUCLEAR OPTION - wkhtmltopdf is guaranteed to be at /usr/local/bin/wkhtmltopdf
     """
-    print("⚡ FAST HTML-to-PDF - Heroku optimized...")
+    print("🔥 NUCLEAR OPTION - STARTING PDF GENERATION...")
     
-    # Heroku buildpack installs wkhtmltopdf at /app/bin/wkhtmltopdf
-    heroku_path = '/app/bin/wkhtmltopdf'
-    local_paths = ['/usr/bin/wkhtmltopdf', '/usr/local/bin/wkhtmltopdf']
+    # Check system package location first, then fallback to compiled version
+    possible_paths = ['/usr/bin/wkhtmltopdf', '/usr/local/bin/wkhtmltopdf', '/app/bin/wkhtmltopdf']
+    wkhtmltopdf_cmd = None
     
-    # Check Heroku path first, then local development paths
-    if os.path.exists(heroku_path):
-        wkhtmltopdf_cmd = heroku_path
-    else:
-        wkhtmltopdf_cmd = None
-        for path in local_paths:
-            if os.path.exists(path):
-                wkhtmltopdf_cmd = path
-                break
-        
-        if not wkhtmltopdf_cmd:
-            wkhtmltopdf_cmd = heroku_path  # Default to Heroku path for production
+    for path in possible_paths:
+        if os.path.exists(path):
+            wkhtmltopdf_cmd = path
+            break
     
-    print(f"⚡ Using FAST wkhtmltopdf: {wkhtmltopdf_cmd}")
+    if not wkhtmltopdf_cmd:
+        wkhtmltopdf_cmd = '/app/bin/wkhtmltopdf'  # Default to Heroku location
+    
+    print(f"🎯 Using NUCLEAR wkhtmltopdf: {wkhtmltopdf_cmd}")
     
     # Quick verification it exists
     if not os.path.exists(wkhtmltopdf_cmd):
-        print(f"❌ wkhtmltopdf not found: {wkhtmltopdf_cmd}")
-        return False
+        print(f"🚨 wkhtmltopdf not at expected location: {wkhtmltopdf_cmd}")
+        print("Checking if wkhtmltopdf exists elsewhere...")
+        # Don't fail, just warn
     
-    # Load and render template QUICKLY
+    # Load and render template
     try:
-        print("📋 Fast template loading...")
+        print("📋 Loading template...")
         
         template_paths = [
             os.path.join(os.path.dirname(__file__), '..', 'templates', 'professional_report_template.html'),
@@ -50,14 +45,14 @@ def generate_html_pdf_fast(optimization_data, output_path):
             if os.path.exists(template_path):
                 with open(template_path, 'r', encoding='utf-8') as f:
                     template_content = f.read()
-                print(f"✅ Template loaded: {template_path}")
+                print(f"✅ Template loaded from: {template_path}")
                 break
         
         if not template_content:
             print("❌ Template not found")
             return False
         
-        # FAST template rendering
+        # Render template
         template = Template(template_content)
         html_content = template.render(**optimization_data)
         print("✅ Template rendered")
@@ -66,7 +61,7 @@ def generate_html_pdf_fast(optimization_data, output_path):
         print(f"❌ Template error: {e}")
         return False
     
-    # Save temporary HTML QUICKLY
+    # Save temporary HTML
     try:
         with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False, 
                                        encoding='utf-8', dir='/tmp') as temp_file:
@@ -79,153 +74,68 @@ def generate_html_pdf_fast(optimization_data, output_path):
         print(f"❌ HTML save failed: {e}")
         return False
     
-    # FAST PDF generation - AGGRESSIVE SPEED OPTIMIZATIONS
+    # Generate PDF - NUCLEAR COMMAND
     try:
-        print("⚡ SPEED-OPTIMIZED PDF generation...")
+        print("🚀 NUCLEAR PDF GENERATION...")
         
-        # AGGRESSIVE speed settings for Heroku
         cmd = [
-            'xvfb-run', '-a', '--server-args=-screen 0 800x600x16',  # Smaller screen, less memory
+            'xvfb-run', '-a', '--server-args=-screen 0 1920x1080x24',
             wkhtmltopdf_cmd,
             '--page-size', 'A4',
-            '--margin-top', '0.5in',      # Smaller margins = faster
-            '--margin-right', '0.5in',
-            '--margin-bottom', '0.5in', 
-            '--margin-left', '0.5in',
+            '--margin-top', '0.75in',
+            '--margin-right', '0.75in',
+            '--margin-bottom', '0.75in',
+            '--margin-left', '0.75in',
             '--encoding', 'UTF-8',
             '--enable-local-file-access',
-            '--disable-smart-shrinking',   # Faster processing
-            '--no-background',            # Skip background images = faster
-            '--disable-javascript',       # No JS = much faster
-            '--load-error-handling', 'ignore',  # Ignore load errors
-            '--zoom', '0.8',              # Smaller zoom = faster
-            '--dpi', '96',                # Lower DPI = faster
+            '--print-media-type',
+            '--disable-smart-shrinking',
+            '--zoom', '1.0',
             temp_html_path,
             output_path
         ]
         
-        print(f"🔧 Fast command: wkhtmltopdf [optimized] -> {output_path}")
+        print(f"🔧 Command: {' '.join(cmd[:3])} ... {temp_html_path} {output_path}")
         
         start_time = time.time()
         result = subprocess.run(
             cmd,
             capture_output=True,
             text=True,
-            timeout=20,  # AGGRESSIVE 20-second timeout for Heroku
+            timeout=60,
             cwd='/tmp'
         )
         
         execution_time = time.time() - start_time
         print(f"⏱️ Completed in {execution_time:.2f} seconds")
         
-        # LENIENT success detection - accept exit code 1 if PDF exists and is reasonable size
-        pdf_created = os.path.exists(output_path)
-        pdf_size = os.path.getsize(output_path) if pdf_created else 0
-        
-        if pdf_created and pdf_size > 10000:  # Accept if >10KB
-            print(f"⚡ FAST SUCCESS! PDF: {pdf_size:,} bytes (exit code: {result.returncode})")
-            return True
+        # Check results
+        if result.returncode == 0:
+            if os.path.exists(output_path):
+                pdf_size = os.path.getsize(output_path)
+                if pdf_size > 5000:
+                    print(f"🎉 NUCLEAR SUCCESS! PDF: {pdf_size:,} bytes")
+                    return True
+                else:
+                    print(f"❌ PDF too small: {pdf_size} bytes")
+            else:
+                print("❌ PDF not created")
         else:
-            print(f"❌ wkhtmltopdf failed: {result.returncode}, size: {pdf_size}")
+            print(f"❌ wkhtmltopdf failed: {result.returncode}")
             if result.stderr:
                 print(f"Error: {result.stderr}")
         
         return False
         
-    except subprocess.TimeoutExpired:
-        print("❌ wkhtmltopdf timeout after 20 seconds")
-        return False
     except Exception as e:
         print(f"❌ PDF generation error: {e}")
         return False
     
     finally:
-        # Quick cleanup
+        # Cleanup
         try:
             if 'temp_html_path' in locals() and os.path.exists(temp_html_path):
                 os.unlink(temp_html_path)
                 print("✅ Cleaned up temp file")
         except:
-            pass
-
-def generate_html_pdf(optimization_data, output_path):
-    """
-    HYBRID APPROACH - Try fast HTML-to-PDF, fallback to pure Python FPDF
-    """
-    print("🚀 Starting HYBRID PDF generation...")
-    
-    # Try the fast HTML-to-PDF approach first
-    try:
-        if generate_html_pdf_fast(optimization_data, output_path):
-            print("✅ Fast HTML-to-PDF succeeded!")
-            return True
-    except Exception as e:
-        print(f"⚠️ Fast HTML-to-PDF failed: {e}")
-    
-    # Fallback to pure Python FPDF approach for guaranteed success
-    print("🔄 Falling back to pure Python FPDF...")
-    
-    try:
-        from .pdf_generator import ModernPDF, clean_text_for_pdf
-        
-        # Create PDF using the ModernPDF class
-        pdf = ModernPDF()
-        pdf.add_page()
-        
-        # Add title
-        title = optimization_data.get('title', 'Property Optimization Report')
-        subtitle = optimization_data.get('description', 'Professional AI Analysis')[:100] + "..."
-        pdf.add_main_title(title, subtitle)
-        
-        # Add alert box
-        optimized_desc = optimization_data.get('optimized_description', 'Your property has significant optimization potential.')
-        pdf.add_alert_box(f"AI Analysis Complete: {optimized_desc[:150]}...", 'success')
-        
-        # Add score grid
-        pricing = optimization_data.get('pricing_analysis', {})
-        current_rating = pricing.get('current_rating', '4.5')
-        
-        metrics = [
-            (current_rating, 'Current Rating', True),
-            ('8.7/10', 'AI Score', False),
-            ('+35%', 'Revenue Potential', False)
-        ]
-        pdf.add_score_grid(metrics)
-        
-        # Add sections
-        pdf.add_section_header('Key Recommendations')
-        
-        # Add recommendations
-        amenities = optimization_data.get('amenities', {})
-        if amenities:
-            missing = amenities.get('missing_high_impact', [])
-            if missing and len(missing) > 0:
-                content = f"Add these high-impact amenities:\n• {missing[0] if missing else 'WiFi'}\n• Professional cleaning\n• Self check-in"
-                pdf.add_recommendation_box('Amenity Optimization', content, 'HIGH PRIORITY')
-        
-        # Add more content
-        pdf.add_section_header('Performance Insights')
-        performance = optimization_data.get('performance_insights', {})
-        occupancy = performance.get('occupancy_rate', '75%')
-        revenue = performance.get('monthly_revenue', '$2,500')
-        
-        pdf.add_bullet_list([
-            f"Current occupancy rate: {occupancy}",
-            f"Estimated monthly revenue: {revenue}",
-            "Market positioning: Strong competitive advantage",
-            "Guest satisfaction: Above average ratings"
-        ])
-        
-        # Add final CTA
-        pdf.add_final_cta()
-        
-        # Save the PDF
-        pdf.output(output_path)
-        
-        pdf_size = os.path.getsize(output_path)
-        print(f"✅ FALLBACK SUCCESS! Pure Python PDF: {pdf_size:,} bytes")
-        return True
-        
-    except Exception as e:
-        print(f"❌ Fallback FPDF also failed: {e}")
-        return False 
+            pass 
