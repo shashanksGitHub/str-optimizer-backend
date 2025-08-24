@@ -50,23 +50,27 @@ def generate_html_pdf_fast(optimization_data, output_path):
         rendered_html = template.render(**optimization_data)
         print("✅ Template rendered")
         
-        # Generate PDF directly from HTML string
+        # Generate PDF directly from HTML string (SIMPLIFIED)
         print("📄 Converting HTML to PDF with WeasyPrint...")
-        html_doc = HTML(string=rendered_html, base_url=os.path.dirname(template_paths[0]))
         
-        # Add CSS optimizations for faster rendering
-        css = CSS(string="""
-            @page { 
-                margin: 0.5in; 
-                size: A4;
-            }
-            body { 
-                font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-                line-height: 1.4;
-            }
-        """)
+        # Add CSS directly to HTML for faster processing
+        enhanced_html = f"""
+        <style>
+        @page {{ 
+            margin: 0.5in; 
+            size: A4;
+        }}
+        body {{ 
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif !important;
+            line-height: 1.4;
+        }}
+        </style>
+        {rendered_html}
+        """
         
-        html_doc.write_pdf(output_path, stylesheets=[css], presentational_hints=True)
+        # Simple WeasyPrint call without external CSS
+        html_doc = HTML(string=enhanced_html)
+        html_doc.write_pdf(output_path)
         
         execution_time = time.time() - start_time
         print(f"⚡ FAST PDF completed in {execution_time:.2f} seconds")
