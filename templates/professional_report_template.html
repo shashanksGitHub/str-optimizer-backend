@@ -88,31 +88,24 @@
             line-height: 1.5;
         }
         
-        /* Score Cards - COMPLETE ROW WIDTH USAGE */
+        /* Score Cards - PDF-FRIENDLY HORIZONTAL LAYOUT */
         .score-grid {
-            display: flex !important;
-            flex-direction: row !important;
-            justify-content: space-around;
-            gap: 15px;
-            margin-bottom: 40px;
-            align-items: stretch;
+            display: table;
             width: 100%;
-            flex-wrap: nowrap !important;
-            padding: 0;
+            table-layout: fixed;
+            border-spacing: 15px 0;
+            margin-bottom: 40px;
         }
         
         .score-card {
+            display: table-cell;
+            width: 33.33%;
             background: #f8f9fa;
             border: 1px solid #dee2e6;
             border-radius: 8px;
-            padding: 30px 20px;
+            padding: 25px 20px;
             text-align: center;
-            flex: 1;
-            min-width: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            vertical-align: top;
         }
         
         .score-card.highlight {
@@ -121,16 +114,16 @@
         }
         
         .score-value {
-            font-size: 36px;
+            font-size: 32px;
             font-weight: bold;
             color: #4285f4;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             line-height: 1;
             display: block;
         }
         
         .score-label {
-            font-size: 13px;
+            font-size: 12px;
             color: #666;
             font-weight: normal;
             text-transform: uppercase;
@@ -179,26 +172,23 @@
         }
         
         .priority-badge {
-            padding: 6px 15px;
-            border-radius: 15px;
-            font-size: 11px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 10px;
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 0.5px;
             margin-left: 15px;
-            white-space: nowrap;
         }
         
         .priority-badge.high {
-            background: #ffebee;
-            color: #d32f2f;
-            border: 1px solid #ffcdd2;
+            background: #f8d7da;
+            color: #dc3545;
         }
         
         .priority-badge.medium {
-            background: #fff8e1;
-            color: #f57c00;
-            border: 1px solid #ffcc02;
+            background: #fff3cd;
+            color: #856404;
         }
         
         /* Content Sections */
@@ -371,7 +361,7 @@
             <p><strong>AI Analysis Summary:</strong> {{ optimized_description[:200] | default("Expected booking improvement is estimated at 20% with enhanced title optimization and strategic amenity additions. The optimized listing positioning elevates this property as a premium retreat, offering unique value in the Central Pune, India market for increased revenue potential.") }}{% if optimized_description and optimized_description|length > 200 %}...{% endif %}</p>
         </div>
         
-        <!-- Score Cards - FIXED SINGLE ROW LAYOUT -->
+        <!-- Score Cards - PDF-FRIENDLY HORIZONTAL LAYOUT -->
         <div class="score-grid">
             <div class="score-card highlight">
                 <div class="score-value">{{ pricing_analysis.current_rating | default("3.9") }}</div>
