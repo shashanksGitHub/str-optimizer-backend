@@ -88,13 +88,16 @@
             line-height: 1.5;
         }
         
-        /* Score Cards - OPTIMIZED FOR PERFECT LAYOUT */
+        /* Score Cards - FORCE SIDE BY SIDE LAYOUT */
         .score-grid {
-            display: flex;
+            display: flex !important;
+            flex-direction: row !important;
             justify-content: space-between;
             gap: 20px;
             margin-bottom: 40px;
             align-items: stretch;
+            width: 100%;
+            flex-wrap: nowrap !important;
         }
         
         .score-card {
@@ -103,9 +106,10 @@
             border-radius: 8px;
             padding: 25px 15px;
             text-align: center;
-            flex: 1;
-            min-width: 0;
-            max-width: 200px;
+            flex: 1 1 0;
+            min-width: 150px;
+            max-width: 250px;
+            display: inline-block;
         }
         
         .score-card.highlight {
@@ -119,6 +123,7 @@
             color: #4285f4;
             margin-bottom: 8px;
             line-height: 1;
+            display: block;
         }
         
         .score-label {
@@ -128,6 +133,7 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             line-height: 1.2;
+            display: block;
         }
         
         /* Section Headers */
