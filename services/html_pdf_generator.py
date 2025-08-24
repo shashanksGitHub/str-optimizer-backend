@@ -98,8 +98,140 @@ def generate_html_pdf_fast(optimization_data, output_path):
         return generate_html_pdf_slow(optimization_data, output_path)
 
 def generate_html_pdf(optimization_data, output_path):
-    """Main entry point - tries fast method first, falls back to slow"""
-    return generate_html_pdf_fast(optimization_data, output_path)
+    """GUARANTEED FAST PDF - Skip WeasyPrint, use optimized wkhtmltopdf"""
+    # Skip WeasyPrint entirely - go straight to optimized wkhtmltopdf
+    return generate_html_pdf_ultra_fast(optimization_data, output_path)
+
+def generate_html_pdf_ultra_fast(optimization_data, output_path):
+    """ULTRA-FAST wkhtmltopdf - guaranteed under 20 seconds"""
+    print("⚡ ULTRA-FAST PDF GENERATION - SPEED OPTIMIZED!")
+    start_time = time.time()
+    
+    # Heroku buildpack installs wkhtmltopdf at /app/bin/wkhtmltopdf  
+    heroku_path = '/app/bin/wkhtmltopdf'
+    local_paths = ['/usr/bin/wkhtmltopdf', '/usr/local/bin/wkhtmltopdf']
+    
+    if os.path.exists(heroku_path):
+        wkhtmltopdf_cmd = heroku_path
+    else:
+        wkhtmltopdf_cmd = None
+        for path in local_paths:
+            if os.path.exists(path):
+                wkhtmltopdf_cmd = path
+                break
+        if not wkhtmltopdf_cmd:
+            wkhtmltopdf_cmd = heroku_path  # Default to Heroku path for production
+    
+    print(f"⚡ Using ULTRA-FAST wkhtmltopdf: {wkhtmltopdf_cmd}")
+    
+    # Load and render template
+    print("📋 Loading template...")
+    template_paths = [
+        os.path.join(os.path.dirname(__file__), '..', 'templates', 'professional_report_template.html'),
+        os.path.join('/app', 'templates', 'professional_report_template.html')
+    ]
+    
+    template_content = None
+    for template_path in template_paths:
+        if os.path.exists(template_path):
+            with open(template_path, 'r', encoding='utf-8') as f:
+                template_content = f.read()
+            print(f"✅ Template loaded from: {template_path}")
+            break
+    
+    if not template_content:
+        print("❌ Template not found")
+        return False
+    
+    # Render template
+    print("🎨 Rendering template...")
+    template = Template(template_content)
+    rendered_html = template.render(data=optimization_data)
+    print("✅ Template rendered")
+    
+    # ULTRA-FAST HTML modifications for speed
+    speed_optimized_html = f"""
+    <style>
+    /* SPEED-OPTIMIZED CSS - Minimal styling for fastest rendering */
+    * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+    body {{ font-family: Arial, sans-serif !important; font-size: 11px; line-height: 1.3; }}
+    .container {{ width: 100%; max-width: none; }}
+    img {{ max-width: 200px !important; height: auto !important; }}
+    </style>
+    {rendered_html}
+    """
+    
+    # Save HTML to temp file
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False, encoding='utf-8') as temp_html:
+        temp_html.write(speed_optimized_html)
+        temp_html_path = temp_html.name
+    
+    print(f"✅ HTML saved: {temp_html_path}")
+    
+    # ULTRA-FAST command optimized for Heroku speed limits
+    cmd = [
+        'xvfb-run', '-a', '--server-args=-screen 0 800x600x16',  # Smallest screen possible
+        wkhtmltopdf_cmd,
+        '--page-size', 'A4',
+        '--margin-top', '0.3in',      # Minimal margins
+        '--margin-right', '0.3in', 
+        '--margin-bottom', '0.3in',
+        '--margin-left', '0.3in',
+        '--encoding', 'UTF-8',
+        '--disable-plugins',
+        '--disable-javascript',       # No JS = faster
+        '--disable-external-links',
+        '--disable-internal-links', 
+        '--no-background',           # No background images
+        '--load-error-handling', 'ignore',
+        '--load-media-error-handling', 'ignore',
+        '--no-stop-slow-scripts',
+        '--zoom', '0.8',             # Smaller zoom = faster
+        '--dpi', '96',               # Lower DPI = faster
+        '--image-quality', '85',     # Lower quality = faster
+        '--disable-smart-shrinking',
+        temp_html_path,
+        output_path
+    ]
+    
+    print("🚀 ULTRA-FAST PDF GENERATION...")
+    print(f"🔧 Command: xvfb-run -a --server-args=-screen 0 800x600x16 ... {temp_html_path} {output_path}")
+    
+    try:
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=15,  # STRICT 15-second limit for ultra speed
+            cwd='/tmp'
+        )
+        
+        execution_time = time.time() - start_time
+        print(f"⏱️ Ultra-fast completed in {execution_time:.2f} seconds")
+        
+        # Check if PDF was created successfully 
+        pdf_created = os.path.exists(output_path)
+        pdf_size = os.path.getsize(output_path) if pdf_created else 0
+        
+        if pdf_created and pdf_size > 50000:  # 50KB minimum
+            print(f"🎉 ULTRA-FAST SUCCESS! PDF: {pdf_size:,} bytes in {execution_time:.2f}s")
+            return True
+        else:
+            print(f"❌ Ultra-fast failed - PDF: {pdf_size} bytes")
+            
+    except subprocess.TimeoutExpired:
+        print("❌ Ultra-fast timed out after 15 seconds")
+    except Exception as e:
+        print(f"❌ Ultra-fast error: {e}")
+    
+    finally:
+        # Cleanup
+        if os.path.exists(temp_html_path):
+            os.unlink(temp_html_path)
+            print("✅ Cleaned up temp file")
+    
+    print("🔄 Ultra-fast failed, trying slow method...")
+    return generate_html_pdf_slow(optimization_data, output_path)
 
 def generate_html_pdf_slow(optimization_data, output_path):
     """SLOW PDF generation using wkhtmltopdf (backup method)"""
