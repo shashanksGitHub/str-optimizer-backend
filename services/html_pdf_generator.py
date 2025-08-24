@@ -50,27 +50,31 @@ def generate_html_pdf_fast(optimization_data, output_path):
         rendered_html = template.render(**optimization_data)
         print("✅ Template rendered")
         
-        # Generate PDF directly from HTML string (SIMPLIFIED)
+        # Generate PDF directly from HTML string (ULTRA-SIMPLIFIED TEST)
         print("📄 Converting HTML to PDF with WeasyPrint...")
         
-        # Add CSS directly to HTML for faster processing
-        enhanced_html = f"""
-        <style>
-        @page {{ 
-            margin: 0.5in; 
-            size: A4;
-        }}
-        body {{ 
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif !important;
-            line-height: 1.4;
-        }}
-        </style>
-        {rendered_html}
-        """
-        
-        # Simple WeasyPrint call without external CSS
-        html_doc = HTML(string=enhanced_html)
-        html_doc.write_pdf(output_path)
+        try:
+            # Minimal test first - just create a simple HTML
+            test_html = "<html><body><h1>Test PDF</h1><p>This is a test.</p></body></html>"
+            print("🧪 Testing minimal WeasyPrint...")
+            html_doc = HTML(string=test_html)
+            html_doc.write_pdf(output_path)
+            print("✅ Minimal test succeeded!")
+            
+        except Exception as minimal_error:
+            print(f"❌ Minimal test failed: {minimal_error}")
+            # If minimal test fails, try with our actual content
+            enhanced_html = f"""
+            <style>
+            @page {{ margin: 0.5in; size: A4; }}
+            body {{ font-family: Arial, sans-serif; line-height: 1.4; }}
+            </style>
+            {rendered_html}
+            """
+            
+            print("🔄 Trying with full content...")
+            html_doc = HTML(string=enhanced_html)  
+            html_doc.write_pdf(output_path)
         
         execution_time = time.time() - start_time
         print(f"⚡ FAST PDF completed in {execution_time:.2f} seconds")
