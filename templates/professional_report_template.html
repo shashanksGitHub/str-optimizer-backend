@@ -88,12 +88,13 @@
             line-height: 1.5;
         }
         
-        /* Score Cards */
+        /* Score Cards - FIXED TO SINGLE ROW */
         .score-grid {
             display: flex;
+            justify-content: space-between;
             gap: 20px;
             margin-bottom: 40px;
-            justify-content: flex-start;
+            align-items: stretch;
         }
         
         .score-card {
@@ -102,9 +103,8 @@
             border-radius: 8px;
             padding: 25px 20px;
             text-align: center;
-            min-width: 140px;
             flex: 1;
-            max-width: 180px;
+            min-width: 0;
         }
         
         .score-card.highlight {
@@ -357,7 +357,7 @@
             <p><strong>AI Analysis Summary:</strong> {{ optimized_description[:200] | default("Expected booking improvement is estimated at 20% with enhanced title optimization and strategic amenity additions. The optimized listing positioning elevates this property as a premium retreat, offering unique value in the Central Pune, India market for increased revenue potential.") }}{% if optimized_description and optimized_description|length > 200 %}...{% endif %}</p>
         </div>
         
-        <!-- Score Cards -->
+        <!-- Score Cards - FIXED SINGLE ROW LAYOUT -->
         <div class="score-grid">
             <div class="score-card highlight">
                 <div class="score-value">{{ pricing_analysis.current_rating | default("3.9") }}</div>
