@@ -358,7 +358,7 @@
 
         <!-- Alert Summary Box -->
         <div class="alert-box">
-            <p><strong>AI Analysis Summary:</strong> {{ optimized_description[:200] | default("Expected booking improvement is estimated at 20% with enhanced title optimization and strategic amenity additions. The optimized listing positioning elevates this property as a premium retreat, offering unique value in the Central Pune, India market for increased revenue potential.") }}{% if optimized_description and optimized_description|length > 200 %}...{% endif %}</p>
+            <p><strong>AI Analysis Summary:</strong> {{ optimized_description | default("Expected booking improvement is estimated at 20% with enhanced title optimization and strategic amenity additions. The optimized listing positioning elevates this property as a premium retreat, offering unique value in the Central Pune, India market for increased revenue potential.") }}</p>
         </div>
         
         <!-- Score Cards - PDF-FRIENDLY HORIZONTAL LAYOUT -->
