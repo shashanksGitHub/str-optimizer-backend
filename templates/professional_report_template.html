@@ -158,16 +158,16 @@
         }
         
         .priority-header {
-            display: flex;
-            align-items: center;
             margin-bottom: 15px;
-            gap: 10px;
         }
         
         .priority-title {
             font-weight: bold;
             font-size: 16px;
             color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
         
         .priority-badge {
@@ -181,6 +181,7 @@
             border: none;
             display: inline-block;
             margin-left: auto;
+            flex-shrink: 0;
         }
         
         .priority-badge.high {
@@ -389,8 +390,7 @@
         
         <div class="priority-item">
             <div class="priority-header">
-                <div class="priority-title">1. Title Enhancement for Search Visibility</div>
-                <div class="priority-badge high">HIGH PRIORITY</div>
+                <div class="priority-title">1. Title Enhancement for Search Visibility <span class="priority-badge high">HIGH PRIORITY</span></div>
             </div>
             <div class="content-section">
                 <p><strong>Current:</strong> "{{ title[:50] | default("Serene 2BHK Nest in Central Pune") }}"</p>
@@ -405,8 +405,7 @@
         
         <div class="priority-item">
             <div class="priority-header">
-                <div class="priority-title">2. Dynamic Pricing Strategy</div>
-                <div class="priority-badge high">HIGH PRIORITY</div>
+                <div class="priority-title">2. Dynamic Pricing Strategy <span class="priority-badge high">HIGH PRIORITY</span></div>
             </div>
             <div class="content-section">
                 <p><strong>AI Pricing Analysis:</strong></p>
@@ -418,8 +417,7 @@
         
         <div class="priority-item">
             <div class="priority-header">
-                <div class="priority-title">3. Professional Photography Upgrade</div>
-                <div class="priority-badge high">HIGH PRIORITY</div>
+                <div class="priority-title">3. Professional Photography Upgrade <span class="priority-badge high">HIGH PRIORITY</span></div>
             </div>
             <div class="content-section">
                 <p><strong>Current Photo Count:</strong> {{ image_urls | length if image_urls else 0 }} images found</p>
@@ -429,8 +427,7 @@
 
         <div class="priority-item">
             <div class="priority-header">
-                <div class="priority-title">4. Guest Experience Optimization</div>
-                <div class="priority-badge medium">MEDIUM PRIORITY</div>
+                <div class="priority-title">4. Guest Experience Optimization <span class="priority-badge medium">MEDIUM PRIORITY</span></div>
             </div>
             <div class="content-section">
                 <p><strong>AI Guest Profile Analysis:</strong></p>
@@ -466,8 +463,7 @@
         
         <div class="priority-item">
             <div class="priority-header">
-                <div class="priority-title">5. Booking Gap Analysis & Optimization</div>
-                <div class="priority-badge high">HIGH PRIORITY</div>
+                <div class="priority-title">5. Booking Gap Analysis & Optimization <span class="priority-badge high">HIGH PRIORITY</span></div>
             </div>
             <div class="content-section">
                 <p><strong>AI Booking Pattern Analysis:</strong></p>
