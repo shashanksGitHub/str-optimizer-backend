@@ -276,10 +276,11 @@
             margin: 0 0 24px 0;
         }
 
-        /* 4-card grid */
+        /* 6-card grid (3 rows x 2 columns) */
         .market-cards-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
+            grid-template-rows: repeat(3, 1fr);
             gap: 16px;
             margin-bottom: 32px;
         }
@@ -289,6 +290,21 @@
             border: 1px solid #e5e7eb;
             border-radius: 8px;
             padding: 20px;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Special styling for Revenue Insights card (Card 5) */
+        .market-card.market-revenue-card {
+            background: #fef3c7;
+            border: 1px solid #e5e7eb;
+        }
+
+        /* Special styling for Strategic Recommendations card (Card 6) */
+        .market-card.market-strategy-card {
+            background: #dcfce7;
+            border: 1px solid #e5e7eb;
         }
 
         .market-card-header {
@@ -341,51 +357,7 @@
             font-weight: 500;
         }
 
-        /* Bottom insights grid */
-        .market-insights-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 32px;
-        }
 
-        .market-insight-card {
-            border-radius: 8px;
-            padding: 20px;
-        }
-
-        .market-revenue-card {
-            background: #fef3c7;
-        }
-
-        .market-strategy-card {
-            background: #dcfce7;
-        }
-
-        .market-insight-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .market-insight-icon {
-            font-size: 16px;
-        }
-
-        .market-insight-header h3 {
-            font-size: 14px;
-            font-weight: 600;
-            color: #111827;
-            margin: 0;
-        }
-
-        .market-insight-body p {
-            font-size: 13px;
-            color: #4b5563;
-            line-height: 1.4;
-            margin: 0;
-        }
 
         /* Footer */
         .market-footer {
@@ -742,9 +714,10 @@
             <!-- Section Title -->
             <h2 class="market-section-title">Competitive Advantages</h2>
 
-            <!-- 4-card grid -->
+            <!-- 6-card grid (3 rows x 2 columns) -->
             <div class="market-cards-grid">
-                <!-- Location Analysis Card -->
+                <!-- Row 1: Cards 1 & 2 -->
+                <!-- Card 1: Location Analysis -->
                 <div class="market-card">
                     <div class="market-card-header">
                         <span class="market-card-icon">🏢</span>
@@ -761,7 +734,7 @@
                     </div>
                 </div>
 
-                <!-- Amenities Analysis Card -->
+                <!-- Card 2: Amenities Analysis -->
                 <div class="market-card">
                     <div class="market-card-header">
                         <span class="market-card-icon">🏠</span>
@@ -778,7 +751,8 @@
                     </div>
                 </div>
 
-                <!-- Visual Appeal Card -->
+                <!-- Row 2: Cards 3 & 4 -->
+                <!-- Card 3: Visual Appeal -->
                 <div class="market-card">
                     <div class="market-card-header">
                         <span class="market-card-icon">📸</span>
@@ -795,7 +769,7 @@
                     </div>
                 </div>
 
-                <!-- Guest Experience Card -->
+                <!-- Card 4: Guest Experience -->
                 <div class="market-card">
                     <div class="market-card-header">
                         <span class="market-card-icon">👥</span>
@@ -811,28 +785,26 @@
                         <div class="market-progress-label">Experience Score: 84%</div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Bottom insights - 2 cards -->
-            <div class="market-insights-grid">
-                <!-- Revenue Insights -->
-                <div class="market-insight-card market-revenue-card">
-                    <div class="market-insight-header">
-                        <span class="market-insight-icon">📈</span>
+                <!-- Row 3: Cards 5 & 6 -->
+                <!-- Card 5: Revenue Insights -->
+                <div class="market-card market-revenue-card">
+                    <div class="market-card-header">
+                        <span class="market-card-icon">📈</span>
                         <h3>Revenue Insights</h3>
                     </div>
-                    <div class="market-insight-body">
+                    <div class="market-card-body">
                         <p>Expected booking improvement: The optimized title and added amenities are likely to increase booking rates by at least 15-20%, leading to a revenue impact of around 10-15% increase.</p>
                     </div>
                 </div>
 
-                <!-- Strategic Recommendations -->
-                <div class="market-insight-card market-strategy-card">
-                    <div class="market-insight-header">
-                        <span class="market-insight-icon">💡</span>
+                <!-- Card 6: Strategic Recommendations -->
+                <div class="market-card market-strategy-card">
+                    <div class="market-card-header">
+                        <span class="market-card-icon">💡</span>
                         <h3>Strategic Recommendations</h3>
                     </div>
-                    <div class="market-insight-body">
+                    <div class="market-card-body">
                         <p>Strategic pricing recommendations suggest for similar properties in Central Pune typically falls between INR 3,500 to INR 7,000 per night for a Serene 2BHK Nest, depending on location, amenities, and demand.</p>
                     </div>
                 </div>
