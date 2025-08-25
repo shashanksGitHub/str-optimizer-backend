@@ -10,9 +10,9 @@ try:
     from weasyprint import HTML, CSS
     WEASYPRINT_AVAILABLE = True
     print("✅ WeasyPrint available - using fast PDF generation")
-except ImportError:
+except (ImportError, OSError, Exception) as e:
     WEASYPRINT_AVAILABLE = False
-    print("⚠️ WeasyPrint not available - falling back to wkhtmltopdf")
+    print(f"⚠️ WeasyPrint not available - falling back to wkhtmltopdf. Error: {e}")
 
 def generate_html_pdf_fast(optimization_data, output_path):
     """
