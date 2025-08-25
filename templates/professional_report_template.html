@@ -195,6 +195,180 @@
             color: #d97706;
             border: none;
         }
+
+        /* Market Analysis Page Styles */
+        .market-analysis-page {
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1e293b;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-icon {
+            font-size: 20px;
+        }
+
+        .market-overview {
+            background: #e0e7ff;
+            border-left: 4px solid #4f46e5;
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 4px;
+            color: #4f46e5;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1e293b;
+            margin: 30px 0 20px 0;
+        }
+
+        .competitive-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .competitive-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .card-icon {
+            font-size: 16px;
+        }
+
+        .card-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        .card-content p {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .location-progress {
+            width: 92%;
+            background: #3b82f6;
+        }
+
+        .amenities-progress {
+            width: 88%;
+            background: #3b82f6;
+        }
+
+        .visual-progress {
+            width: 76%;
+            background: #3b82f6;
+        }
+
+        .experience-progress {
+            width: 84%;
+            background: #3b82f6;
+        }
+
+        .score-label {
+            font-size: 12px;
+            color: #3b82f6;
+            font-weight: 500;
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .insight-card {
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .revenue-insight {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+        }
+
+        .strategic-insight {
+            background: #dcfce7;
+            border: 1px solid #22c55e;
+        }
+
+        .insight-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .insight-icon {
+            font-size: 16px;
+        }
+
+        .insight-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        .insight-content p {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .page-footer {
+            text-align: center;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 40px;
+            padding: 20px 0;
+        }
         
         /* Content Sections */
         .content-section {
@@ -508,6 +682,123 @@
                     <li>On-site laundry facilities for guests to use.</li>
                     <li>Sunrise yoga sessions on the lawn overlooking the river.</li>
                 </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- Market Analysis & Competitive Edge Page -->
+    <div class="page market-analysis-page">
+        <div class="header">
+            <div class="header-content">
+                <h1 class="company-name">STR Performance Optimizer</h1>
+                <div class="report-type">Market Analysis</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Page Title -->
+            <div class="page-title">
+                <span class="chart-icon">📊</span> Market Analysis & Competitive Edge
+            </div>
+
+            <!-- Market Overview -->
+            <div class="market-overview">
+                <p>Market rates for similar properties in Central Pune, India typically range from competitive pricing tiers, with seasonal optimization strategies and value-added experiences recommended to enhance positioning and increase average booking value in the local market.</p>
+            </div>
+
+            <!-- Competitive Advantages Section -->
+            <div class="section-title">Competitive Advantages</div>
+
+            <div class="competitive-grid">
+                <!-- Location Analysis -->
+                <div class="competitive-card location-card">
+                    <div class="card-header">
+                        <span class="card-icon">🏢</span>
+                        <h3>Location Analysis</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>Market rate range for similar properties in Central Pune typically falls between INR 3,500 to INR 7,000 per night for a Serene 2BHK Nest, depending on location, amenities, and demand.</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill location-progress"></div>
+                        </div>
+                        <div class="score-label">Market Positioning: 92%</div>
+                    </div>
+                </div>
+
+                <!-- Amenities Analysis -->
+                <div class="competitive-card amenities-card">
+                    <div class="card-header">
+                        <span class="card-icon">🏠</span>
+                        <h3>Amenities Analysis</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>Complimentary breakfast service with local specialties.</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill amenities-progress"></div>
+                        </div>
+                        <div class="score-label">Amenity Score: 88%</div>
+                    </div>
+                </div>
+
+                <!-- Visual Appeal -->
+                <div class="competitive-card visual-card">
+                    <div class="card-header">
+                        <span class="card-icon">📸</span>
+                        <h3>Visual Appeal</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>No photos detected.</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill visual-progress"></div>
+                        </div>
+                        <div class="score-label">Visual Score: 76%</div>
+                    </div>
+                </div>
+
+                <!-- Guest Experience -->
+                <div class="competitive-card experience-card">
+                    <div class="card-header">
+                        <span class="card-icon">👥</span>
+                        <h3>Guest Experience</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>Primary Guest Personas: Nature Enthusiasts: Individuals who appreciate greenery and tranquility.</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill experience-progress"></div>
+                        </div>
+                        <div class="score-label">Experience Score: 84%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Insights -->
+            <div class="insights-grid">
+                <!-- Revenue Insights -->
+                <div class="insight-card revenue-insight">
+                    <div class="insight-header">
+                        <span class="insight-icon">📈</span>
+                        <h3>Revenue Insights</h3>
+                    </div>
+                    <div class="insight-content">
+                        <p>Expected booking improvement: The optimized title and added amenities are likely to increase booking rates by at least 15-20%, leading to a revenue impact of around 10-15% increase.</p>
+                    </div>
+                </div>
+
+                <!-- Strategic Recommendations -->
+                <div class="insight-card strategic-insight">
+                    <div class="insight-header">
+                        <span class="insight-icon">💡</span>
+                        <h3>Strategic Recommendations</h3>
+                    </div>
+                    <div class="insight-content">
+                        <p>Strategic pricing recommendations suggest for similar properties in Central Pune typically falls between INR 3,500 to INR 7,000 per night for a Serene 2BHK Nest, depending on location, amenities, and demand.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="page-footer">
+                STR Performance Optimization Report
             </div>
         </div>
     </div>
