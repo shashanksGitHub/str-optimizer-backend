@@ -21,14 +21,11 @@
         
         /* Header */
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             padding: 20px 40px;
             border-bottom: 3px solid #4285f4;
             margin-bottom: 30px;
-            flex-wrap: nowrap;
             min-height: 40px;
+            overflow: hidden;
         }
         
         .header h1 {
@@ -36,14 +33,12 @@
             font-size: 24px;
             font-weight: bold;
             margin: 0;
-            flex-shrink: 0;
         }
         
         .header .date {
             color: #666;
             font-size: 14px;
             white-space: nowrap;
-            flex-shrink: 0;
             text-align: right;
         }
         
@@ -737,8 +732,9 @@
 <body>
     <!-- Header -->
     <div class="header">
-        <h1>STR Performance Optimizer</h1>
-        <div class="date">Analysis Date: August 2025</div>
+        <h1 style="display: inline-block; float: left;">STR Performance Optimizer</h1>
+        <div class="date" style="display: inline-block; float: right;">Analysis Date: August 2025</div>
+        <div style="clear: both;"></div>
     </div>
     
     <div class="content">
