@@ -217,10 +217,8 @@
         }
 
         .market-header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             padding: 16px 32px;
+            overflow: hidden;
         }
 
         .market-header-left h1 {
@@ -902,11 +900,12 @@
             <div class="market-header-top"></div>
             <div class="market-header-content">
                 <div class="market-header-left">
-                    <h1>STR Performance Optimizer</h1>
+                    <h1 style="display: inline-block; float: left;">STR Performance Optimizer</h1>
                 </div>
                 <div class="market-header-right">
-                    <span>Market Analysis</span>
+                    <span style="display: inline-block; float: right;">Market Analysis</span>
                 </div>
+                <div style="clear: both;"></div>
             </div>
         </div>
 
