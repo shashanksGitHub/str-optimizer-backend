@@ -530,10 +530,8 @@
         }
 
         .content-header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             padding: 12px 24px;
+            overflow: hidden;
         }
 
         .content-header-left h1 {
@@ -1057,11 +1055,12 @@
         <div class="content-header">
             <div class="content-header-content">
                 <div class="content-header-left">
-                    <h1>STR Performance Optimizer</h1>
+                    <h1 style="display: inline-block; float: left;">STR Performance Optimizer</h1>
                 </div>
                 <div class="content-header-right">
-                    <span>Content Strategy</span>
+                    <span style="display: inline-block; float: right;">Content Strategy</span>
                 </div>
+                <div style="clear: both;"></div>
             </div>
         </div>
 
