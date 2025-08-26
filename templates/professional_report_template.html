@@ -1130,6 +1130,68 @@
             margin: 0 0 4px 0;
         }
 
+        /* ROI Section */
+        .roi-section {
+            margin-top: 32px;
+            margin-bottom: 24px;
+        }
+
+        .roi-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .roi-icon {
+            font-size: 16px;
+        }
+
+        .roi-title h3 {
+            color: #111827;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* ROI content box */
+        .roi-content-box {
+            background: #f1f5f9;
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            margin: 16px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .roi-content {
+            margin-bottom: 0;
+        }
+
+        /* ROI items */
+        .roi-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            gap: 8px;
+        }
+
+        .roi-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .roi-number {
+            color: #111827;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .roi-text {
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
         /* Action footer */
         .action-footer {
             text-align: center;
@@ -1140,88 +1202,7 @@
             border-top: 1px solid #e5e7eb;
         }
 
-        /* Insights Page Styles */
-        .insights-page {
-            background: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            min-height: 100vh;
-            padding: 0;
-            margin: 0;
-        }
 
-        .insights-main {
-            padding: 32px 24px;
-        }
-
-        /* Page title with icon */
-        .insights-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 24px;
-            font-weight: 600;
-            color: #111827;
-            margin-bottom: 24px;
-        }
-
-        .insights-icon {
-            font-size: 24px;
-        }
-
-        .insights-title h2 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: 600;
-            color: #111827;
-        }
-
-        /* Insights content box */
-        .insights-content-box {
-            background: #f1f5f9;
-            border-left: 4px solid #3b82f6;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 0 4px 4px 0;
-        }
-
-        .insights-content {
-            margin-bottom: 0;
-        }
-
-        /* Insight items */
-        .insight-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 20px;
-            gap: 8px;
-        }
-
-        .insight-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .insight-number {
-            color: #111827;
-            font-weight: 600;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-
-        .insight-text {
-            color: #374151;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        /* Insights footer */
-        .insights-footer {
-            text-align: center;
-            font-size: 12px;
-            color: #6b7280;
-            margin-top: 32px;
-            padding: 8px 0;
-            border-top: 1px solid #e5e7eb;
-        }
     </style>
 </head>
 <body>
@@ -1898,46 +1879,39 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Footer -->
-            <div class="action-footer">
-                STR Performance Optimization Report
-            </div>
-        </div>
-    </div>
-
-    <!-- AI Performance Insights & ROI Projections Page -->
-    <div style="page-break-before: always;" class="page insights-page">
-        <div class="insights-main">
-            <!-- Page Title with icon -->
-            <div class="insights-title">
-                <span class="insights-icon">🚀</span>
-                <h2>AI Performance Insights & ROI Projections</h2>
-            </div>
-
-            <!-- Insights Content Box -->
-            <div class="insights-content-box">
-                <div class="insights-content">
-                    <div class="insight-item">
-                        <span class="insight-number">1.</span>
-                        <span class="insight-text">Expected booking improvement: The optimized title and added amenities are likely to increase booking rates by at least 15-20%, leading to a revenue impact of around 10-15% increase.</span>
+                <!-- AI Performance Insights & ROI Projections Section -->
+                <div class="roi-section">
+                    <!-- Section Title -->
+                    <div class="roi-title">
+                        <span class="roi-icon">🚀</span>
+                        <h3>AI Performance Insights & ROI Projections</h3>
                     </div>
-                    
-                    <div class="insight-item">
-                        <span class="insight-number">2.</span>
-                        <span class="insight-text">Top performance drivers: The unique selling point of being located by the Mula River and the addition of desirable amenities such as a rooftop terrace and river view are the top drivers for enhancing listing performance.</span>
-                    </div>
-                    
-                    <div class="insight-item">
-                        <span class="insight-number">3.</span>
-                        <span class="insight-text">Market positioning advantage: The listing now positions itself as a tranquil oasis by the river, standing out among competitors in central Pune by offering a serene escape for guests seeking a peaceful environment.</span>
+
+                    <!-- ROI Content Box -->
+                    <div class="roi-content-box">
+                        <div class="roi-content">
+                            <div class="roi-item">
+                                <span class="roi-number">1.</span>
+                                <span class="roi-text">Expected booking improvement: The optimized title and added amenities are likely to increase booking rates by at least 15-20%, leading to a revenue impact of around 10-15% increase.</span>
+                            </div>
+                            
+                            <div class="roi-item">
+                                <span class="roi-number">2.</span>
+                                <span class="roi-text">Top performance drivers: The unique selling point of being located by the Mula River and the addition of desirable amenities such as a rooftop terrace and river view are the top drivers for enhancing listing performance.</span>
+                            </div>
+                            
+                            <div class="roi-item">
+                                <span class="roi-number">3.</span>
+                                <span class="roi-text">Market positioning advantage: The listing now positions itself as a tranquil oasis by the river, standing out among competitors in central Pune by offering a serene escape for guests seeking a peaceful environment.</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Footer -->
-            <div class="insights-footer">
+            <div class="action-footer">
                 STR Performance Optimization Report
             </div>
         </div>
