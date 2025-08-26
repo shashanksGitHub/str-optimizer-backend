@@ -1202,6 +1202,179 @@
             border-top: 1px solid #e5e7eb;
         }
 
+        /* 30-Day Implementation Roadmap Page Styles */
+        .roadmap-page, .roadmap-page-2 {
+            background: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+
+        .roadmap-main, .roadmap-main-2 {
+            padding: 32px 24px;
+        }
+
+        /* Roadmap header */
+        .roadmap-header {
+            margin-bottom: 32px;
+            border-bottom: 4px solid #3b82f6;
+        }
+
+        .roadmap-header-content {
+            padding: 12px 24px;
+            overflow: hidden;
+        }
+
+        .roadmap-header h1 {
+            color: #3b82f6;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .roadmap-header span {
+            color: #6b7280;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* Page title with icon */
+        .roadmap-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 24px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 24px;
+        }
+
+        .roadmap-icon {
+            font-size: 24px;
+        }
+
+        .roadmap-title h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        /* Quick Win Strategy Box */
+        .quick-win-box {
+            background: #dbeafe;
+            border: 1px solid #93c5fd;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 20px 0 32px 0;
+        }
+
+        .quick-win-content {
+            color: #1e40af;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .quick-win-content strong {
+            font-weight: 600;
+        }
+
+        /* Week sections */
+        .week-section {
+            margin-bottom: 32px;
+        }
+
+        .week-title {
+            color: #111827;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 16px 0;
+        }
+
+        /* Checklist items */
+        .checklist-items {
+            margin-bottom: 16px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            gap: 8px;
+        }
+
+        .check-icon {
+            color: #10b981;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .check-text {
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Impact boxes */
+        .impact-box {
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 16px 0;
+            font-size: 14px;
+        }
+
+        .week1-impact, .week2-impact, .week3-impact, .week4-impact {
+            background: #dcfce7;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+        }
+
+        .impact-box strong {
+            font-weight: 600;
+        }
+
+        /* Call to Action Section */
+        .cta-section {
+            background: #374151;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 40px 0 24px 0;
+            text-align: center;
+        }
+
+        .cta-title {
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 12px 0;
+        }
+
+        .cta-text {
+            color: #d1d5db;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Roadmap footer */
+        .roadmap-footer {
+            text-align: center;
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 24px;
+            padding: 8px 0;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        /* Page 2 specific adjustments */
+        .roadmap-main-2 {
+            padding: 32px 24px;
+        }
+
 
     </style>
 </head>
@@ -1916,5 +2089,180 @@
             </div>
         </div>
     </div>
+
+    <!-- 30-Day Implementation Roadmap Page 1 -->
+    <div style="page-break-before: always;" class="page roadmap-page">
+        <div class="roadmap-main">
+            <!-- Header -->
+            <div class="roadmap-header">
+                <div class="roadmap-header-content">
+                    <h1 style="display: inline-block; float: left;">STR Performance Optimizer</h1>
+                    <span style="display: inline-block; float: right;">Action Plan</span>
+                    <div style="clear: both;"></div>
+                </div>
+            </div>
+
+            <!-- Page Title with icon -->
+            <div class="roadmap-title">
+                <span class="roadmap-icon">🚀</span>
+                <h2>30-Day Implementation Roadmap</h2>
+            </div>
+
+            <!-- Quick Win Strategy Box -->
+            <div class="quick-win-box">
+                <div class="quick-win-content">
+                    <strong>Quick Win Strategy:</strong> Focus on high-impact, low-effort changes first. You can implement 80% of recommendations within 30 days for immediate results.
+                </div>
+            </div>
+
+            <!-- Week 1 -->
+            <div class="week-section">
+                <h3 class="week-title">Week 1: Immediate Actions (3 hours effort)</h3>
+                
+                <div class="checklist-items">
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Update title to optimized version</span>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Rewrite first paragraph of description using provided template</span>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Adjust base prices by +20%% (your rating justifies this)</span>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Enable instant booking with requirements</span>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Add weekend pricing premiums</span>
+                    </div>
+                </div>
+
+                <div class="impact-box week1-impact">
+                    <strong>Expected Impact:</strong> +15% bookings, ++20%% revenue immediately
+                </div>
+            </div>
+
+            <!-- Week 2 -->
+            <div class="week-section">
+                <h3 class="week-title">Week 2: Content Enhancement (5 hours effort)</h3>
+                
+                <div class="checklist-items">
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Complete description rewrite using SEO keywords</span>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Professional photography session for 5 key shots</span>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Reorganize photo order with new hero shot</span>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Create romance and spa package offerings</span>
+                    </div>
+                </div>
+
+                <div class="impact-box week2-impact">
+                    <strong>Expected Impact:</strong> +25% conversion rate
+                </div>
+            </div>
+
+            <!-- Week 3 -->
+            <div class="week-section">
+                <h3 class="week-title">Week 3: Revenue Optimization (3 hours effort)</h3>
+                
+                <div class="checklist-items">
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Implement seasonal pricing strategy</span>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Set up add-on packages in listing</span>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Create gap-filling discount rules</span>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Update house rules for premium positioning</span>
+                    </div>
+                </div>
+
+                <div class="impact-box week3-impact">
+                    <strong>Expected Impact:</strong> +30% average nightly rate
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 30-Day Implementation Roadmap Page 2 -->
+    <div style="page-break-before: always;" class="page roadmap-page-2">
+        <div class="roadmap-main-2">
+            <!-- Week 4 -->
+            <div class="week-section">
+                <h3 class="week-title">Week 4: Guest Experience Enhancement (4 hours effort)</h3>
+                
+                <div class="checklist-items">
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Create digital welcome guide with local recommendations</span>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Set up automated messaging for premium experience</span>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Order supplies for add-on packages</span>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Create Instagram-worthy spots signage</span>
+                    </div>
+                </div>
+
+                <div class="impact-box week4-impact">
+                    <strong>Expected Impact:</strong> +50% chance of 5-star reviews
+                </div>
+            </div>
+
+            <!-- Call to Action Section -->
+            <div class="cta-section">
+                <div class="cta-content">
+                    <h3 class="cta-title">Ready to Transform Your Listing?</h3>
+                    <p class="cta-text">This AI-powered analysis identified 25+ optimization opportunities specific to your property.</p>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="roadmap-footer">
+                STR Performance Optimization Report
+            </div>
+        </div>
+    </div>
+
 </body>
 </html> 
