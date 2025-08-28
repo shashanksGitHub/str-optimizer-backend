@@ -375,15 +375,16 @@ def optimize_listing(form_data):
     )
 
     description_prompt = (
-        f"Rewrite this Airbnb description to maximize bookings:\n"
-        f"- Start with a compelling hook\n"
-        f"- Highlight unique features and amenities\n"
-        f"- Include location benefits\n"
-        f"- Use emotional language that helps guests visualize their stay\n"
-        f"- Structure with short paragraphs for easy reading\n"
-        f"- End with a call-to-action\n\n"
-        f"Original description: {description}\n\n"
-        f"Return only the optimized description, nothing else."
+        f"Create a compelling 2-3 line summary for this Airbnb property that will be used as an 'AI Analysis Summary':\n"
+        f"- Maximum 2-3 sentences only\n"
+        f"- Start with the key appeal/hook\n"
+        f"- Mention the location and main features\n"
+        f"- Use engaging, descriptive language\n"
+        f"- NO call-to-action needed\n"
+        f"- Keep it concise and impactful\n\n"
+        f"Property details: {description}\n"
+        f"Location: {location}\n\n"
+        f"Return only the 2-3 line summary, nothing else."
     )
 
     # Generate optimized titles (3 options)
@@ -437,7 +438,7 @@ def optimize_listing(form_data):
         )
         optimized_description = desc_response.choices[0].message.content.strip()
     else:
-        optimized_description = f"Welcome to this amazing property! {description[:200]}... Experience comfort and convenience in this beautifully designed space. Perfect for travelers seeking quality accommodation with modern amenities. Book now for an unforgettable stay!"
+        optimized_description = f"Discover comfort and style at this exceptional property in {location}. Featuring modern amenities and thoughtful design for the perfect getaway."
 
     # Suggest amenities
     if client:
