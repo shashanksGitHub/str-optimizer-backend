@@ -2012,10 +2012,10 @@
                     </div>
                     {% endif %}
                     
-                    {% if dynamic_percentages and dynamic_percentages.average_rate_increase %}
+                    {% if dynamic_percentages and dynamic_percentages.average_rate_adjustment %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Adjust base prices by +{{ dynamic_percentages.average_rate_increase }}% (your {{ pricing_analysis.current_rating if pricing_analysis and pricing_analysis.current_rating else 'current' }} rating justifies this)</span>
+                        <span class="check-text">Consider rate adjustments of {{ dynamic_percentages.average_rate_adjustment }}% based on market analysis</span>
                     </div>
                     {% endif %}
                     
@@ -2113,7 +2113,7 @@
                 </div>
 
                 <div class="impact-box week3-impact">
-                    <strong>Expected Impact:</strong> +{{ dynamic_percentages.average_rate_increase }}% average nightly rate
+                    <strong>Expected Impact:</strong> {{ dynamic_percentages.average_rate_adjustment }}% rate optimization potential
                 </div>
             </div>
 

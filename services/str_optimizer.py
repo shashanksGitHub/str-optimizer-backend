@@ -360,7 +360,7 @@ def optimize_listing(form_data):
 
     # Generate optimized title and description with enhanced prompts
     title_prompt = (
-        f"Create 3 compelling Airbnb titles that maximize bookings. Follow these guidelines:\n"
+        f"Create 3 compelling Airbnb titles that attract suitable guests. Follow these guidelines:\n"
         f"- Aim for 50 characters or less (Airbnb recommendation), but prioritize impact over strict length\n"
         f"- Include location/neighborhood if mentioned\n"
         f"- Highlight unique features or amenities\n"
@@ -531,16 +531,16 @@ Provide analysis in exactly this format:
 - Midweek discount opportunities: [X]% discount suggested
 - Last-minute booking incentives: [specific strategies]
 
-**Revenue Recovery Tactics:**
-- Monthly stay discounts: [X]% for 28+ days
-- Seasonal pricing adjustments: [specific recommendations]
-- Gap-filling promotions: [2-3 specific strategies]"""
+**Occupancy Enhancement Tactics:**
+- Extended stay discounts: [X]% for 28+ days
+- Seasonal pricing considerations: [specific recommendations]
+- Gap-filling strategies: [2-3 specific approaches]"""
         
         try:
             gap_response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                    {"role": "system", "content": "You are an Airbnb revenue optimization specialist focusing on occupancy maximization."},
+                    {"role": "system", "content": "You are a vacation rental occupancy specialist focusing on booking optimization and guest experience."},
                     {"role": "user", "content": gap_prompt}
                 ]
             )
@@ -558,10 +558,10 @@ Provide analysis in exactly this format:
 - Midweek discount opportunities: 15% discount suggested for Mon-Thu
 - Last-minute booking incentives: 10% discount for bookings within 7 days
 
-**Revenue Recovery Tactics:**
-- Monthly stay discounts: 25% for 28+ days
-- Seasonal pricing adjustments: Increase rates 20% for peak season, decrease 15% for off-season
-- Gap-filling promotions: Flash sales, extended stay packages, early bird discounts"""
+**Occupancy Enhancement Tactics:**
+- Extended stay discounts: 25% for 28+ days
+- Seasonal pricing considerations: Adjust rates based on demand patterns
+- Gap-filling strategies: Special offers, extended stay packages, early booking incentives"""
 
     # NEW: Guest Profile Match Analysis
     guest_profile_analysis = ""
@@ -641,14 +641,14 @@ Provide analysis in exactly this format:
     try:
         pricing_prompt = f"""Analyze pricing for a {title} in {location}. Provide exactly 3 concise points:
 1. Market rate range for similar properties
-2. Seasonal pricing strategy (high/low season rates)
-3. One key revenue optimization tip
+2. Seasonal pricing considerations (high/low season patterns)
+3. One key pricing strategy recommendation
 Keep each point to 1-2 sentences maximum."""
         
         pricing_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": f"You are an Airbnb pricing strategist with expertise in global vacation rental markets. Focus on {location if location != 'your area' else 'local market'} dynamics."},
+                {"role": "system", "content": f"You are a vacation rental market analyst with expertise in global short-term rental markets. Focus on {location if location != 'your area' else 'local market'} dynamics."},
                 {"role": "user", "content": pricing_prompt}
             ]
         )
@@ -670,7 +670,7 @@ Keep each point to 1-2 sentences maximum."""
 Provide exactly 3 concise recommendations:
 1. Top missing photo type needed
 2. One lighting/quality improvement
-3. One key shot to boost bookings
+3. One key shot to enhance guest appeal
 Keep each point to 1-2 sentences maximum."""
             
             photo_response = client.chat.completions.create(
@@ -698,7 +698,7 @@ Keep each point to 1-2 sentences maximum."""
 - Amenities added: {amenities_count} new suggestions
 
 Provide exactly 3 concise insights:
-1. Expected booking improvement % and revenue impact
+1. Expected improvement in guest interest and booking likelihood
 2. Top 2 performance drivers identified
 3. Market positioning advantage gained
 Keep each point to 1-2 sentences maximum."""
@@ -706,7 +706,7 @@ Keep each point to 1-2 sentences maximum."""
         insights_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are an Airbnb performance analyst with expertise in listing optimization ROI."},
+                {"role": "system", "content": "You are a vacation rental performance analyst with expertise in listing optimization and guest experience."},
                 {"role": "user", "content": insights_prompt}
             ]
         )
@@ -907,19 +907,19 @@ Respond in JSON format:
 
 
 def generate_revenue_projections(client, location, title):
-    """Generate AI-powered revenue projections and booking statistics"""
+    """Generate AI-powered booking performance analysis and statistics"""
     if not client:
         return None
     
     try:
-        revenue_prompt = f"""Generate revenue projections for this property:
+        revenue_prompt = f"""Analyze potential performance improvements for this property:
 Location: {location}
 Title: {title}
 
-Provide realistic projections in JSON format:
+Provide realistic analysis in JSON format:
 {{
-    "booking_improvement": [5-40 percent],
-    "revenue_impact": [5-30 percent],
+    "booking_improvement": [5-40 percent potential],
+    "revenue_impact": [5-30 percent potential],
     "occupancy_rates": [[leisure %], [family %], [business %]],
     "seasonal_adjustments": {{
         "peak_increase": [10-60 percent],
@@ -933,7 +933,7 @@ Base on location market conditions and property type."""
         revenue_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a revenue management expert for vacation rentals."},
+                {"role": "system", "content": "You are a vacation rental performance analyst specializing in booking optimization."},
                 {"role": "user", "content": revenue_prompt}
             ]
         )
@@ -961,12 +961,12 @@ Provide values in JSON format:
 {{
     "search_visibility": [10-30],
     "conversion_rate": [15-35], 
-    "average_rate_increase": [20-40],
+    "average_rate_adjustment": [20-40],
     "review_probability": [30-70],
     "midweek_discount": [10-25],
     "lastminute_discount": [5-15],
     "monthly_discount": [15-30],
-    "seasonal_increase": [5-20],
+    "seasonal_adjustment": [5-20],
     "minimum_stay_revenue": [30-60],
     "holiday_premium": [30-70],
     "extended_stay_discount": [15-25],
@@ -978,7 +978,7 @@ Base on property type and market positioning."""
         percentages_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a pricing strategy expert for vacation rentals."},
+                {"role": "system", "content": "You are a vacation rental market analyst specializing in pricing patterns."},
                 {"role": "user", "content": percentages_prompt}
             ]
         )
@@ -1013,16 +1013,16 @@ Competitive Scores:
 - Visual Score: {competitive_scores.get('visual_score', 0) if competitive_scores else 0}/100
 - Experience Score: {competitive_scores.get('experience_score', 0) if competitive_scores else 0}/100
 
-Revenue Impact:
-- Booking Improvement: {revenue_projections.get('booking_improvement', 0) if revenue_projections else 0}%
-- Revenue Impact: {revenue_projections.get('revenue_impact', 0) if revenue_projections else 0}%
+Performance Analysis:
+- Booking Improvement Potential: {revenue_projections.get('booking_improvement', 0) if revenue_projections else 0}%
+- Overall Impact Potential: {revenue_projections.get('revenue_impact', 0) if revenue_projections else 0}%
 
 Dynamic Metrics:
 - Conversion Rate: {dynamic_percentages.get('conversion_rate', 0) if dynamic_percentages else 0}%
-- Average Rate Increase: {dynamic_percentages.get('average_rate_increase', 0) if dynamic_percentages else 0}%
+- Rate Adjustment Potential: {dynamic_percentages.get('average_rate_adjustment', 0) if dynamic_percentages else 0}%
 
 Assign priority levels based on:
-- HIGH: Critical impact on bookings/revenue, low current scores, high improvement potential
+- HIGH: Critical impact on bookings/performance, low current scores, high improvement potential
 - MEDIUM: Moderate impact, average current performance
 - LOW: Minor impact, already performing well
 
