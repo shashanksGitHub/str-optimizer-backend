@@ -1425,8 +1425,8 @@
                 <div class="priority-title">1. Title Enhancement for Search Visibility <span class="priority-badge high">HIGH PRIORITY</span></div>
             </div>
             <div class="content-section">
-                <p><strong>Current:</strong> "{{ title[:50] }}"</p>
-                <p><strong>Optimized:</strong> "{{ title_suggestions[0][:50] if title_suggestions else '' }}"</p>
+                <p><strong>Current:</strong> "{{ title }}"</p>
+                <p><strong>Optimized:</strong> "{{ title_suggestions[0] if title_suggestions else '' }}"</p>
                 <p><strong>Additional Options:</strong></p>
                 <ul>
                     {% if title_suggestions and title_suggestions|length > 1 %}
@@ -1693,7 +1693,7 @@
                         <div class="optimized-description">
                             <strong>AI-Optimized:</strong>
                             <div class="optimized-text">
-                                {{ optimized_description[:100] }}{{ '...' if optimized_description and optimized_description|length > 100 else '' }}
+                                {{ optimized_description }}
                             </div>
                         </div>
                     </div>
@@ -1933,7 +1933,7 @@
                             <span class="priority-item-label">AI-Enhanced Version ({{ optimized_description.split()|length if optimized_description else 0 }} words):</span>
                         </div>
                         <div class="enhanced-description">
-                            {{ optimized_description[:100] }}{{ '...' if optimized_description and optimized_description|length > 100 else '' }}
+                            {{ optimized_description }}
                         </div>
                     </div>
                 </div>
@@ -1995,7 +1995,7 @@
                     {% if title_suggestions and title_suggestions|length > 0 %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Update title to: "{{ title_suggestions[0][:50] }}{{ '...' if title_suggestions[0]|length > 50 else '' }}"</span>
+                        <span class="check-text">Update title to: "{{ title_suggestions[0] }}"</span>
                     </div>
                     {% endif %}
                     
