@@ -1395,13 +1395,13 @@
 
         <!-- Alert Summary Box -->
         <div class="alert-box">
-            <p><strong>AI Analysis Summary:</strong> {{ optimized_description | default("Escape to your own private oasis in this charming bungalow. Indulge in the luxury of having an entire floor all to yourself, complete with cozy accommodations and modern amenities for the ultimate relaxation experience.") }}</p>
+            <p><strong>AI Analysis Summary:</strong> {{ optimized_description }}</p>
         </div>
         
         <!-- Score Cards - PDF-FRIENDLY HORIZONTAL LAYOUT -->
         <div class="score-grid">
             <div class="score-card highlight">
-                <div class="score-value">{{ pricing_analysis.current_rating | default("3.9") }}</div>
+                <div class="score-value">{{ pricing_analysis.current_rating }}</div>
                 <div class="score-label">Guest Rating</div>
             </div>
             <div class="score-card">
@@ -1409,7 +1409,7 @@
                 <div class="score-label">AI Optimization Score</div>
             </div>
             <div class="score-card">
-                <div class="score-value">+{{ revenue_projections.revenue_impact | default("20") }}%</div>
+                <div class="score-value">+{{ revenue_projections.revenue_impact }}%</div>
                 <div class="score-label">Revenue Potential</div>
             </div>
         </div>
@@ -1425,12 +1425,15 @@
                 <div class="priority-title">1. Title Enhancement for Search Visibility <span class="priority-badge high">HIGH PRIORITY</span></div>
             </div>
             <div class="content-section">
-                <p><strong>Current:</strong> "{{ title[:50] | default("Serene 2BHK Nest in Central Pune") }}"</p>
-                <p><strong>Optimized:</strong> "{{ title_suggestions[0][:50] if title_suggestions else "Tranquil 2BHK Oasis by Mula River" }}"</p>
+                <p><strong>Current:</strong> "{{ title[:50] }}"</p>
+                <p><strong>Optimized:</strong> "{{ title_suggestions[0][:50] if title_suggestions else '' }}"</p>
                 <p><strong>Additional Options:</strong></p>
                 <ul>
-                    <li>"Urban Retreat with River View"</li>
-                    <li>"Serene 2BHK Nest in Central Pune"</li>
+                    {% if title_suggestions and title_suggestions|length > 1 %}
+                        {% for suggestion in title_suggestions[1:] %}
+                        <li>"{{ suggestion }}"</li>
+                        {% endfor %}
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -1441,9 +1444,10 @@
             </div>
             <div class="content-section">
                 <p><strong>AI Pricing Analysis:</strong></p>
-                <p>1. Market rate range for similar properties in {{ location | default("Central Pune") }} typically falls between {{ market_analysis_data.currency | default("INR") }} {{ market_analysis_data.price_range_min | default("3,500") }} to {{ market_analysis_data.currency | default("INR") }} {{ market_analysis_data.price_range_max | default("7,000") }} per night, depending on location, amenities, and demand.</p>
-                <p>2. Implement a seasonal pricing strategy with higher rates during peak travel seasons like winter (November to February) and lower rates in the monsoon season (June to September) to maximize occupancy and revenue.</p>
-                <p>3. One key revenue optimization tip is to offer discounted rates for longer stays (e.g., 7+ nights), incentivizing guests to book extended stays and increase overall occupancy rates.</p>
+                <p>1. Market rate range for similar properties in {{ location }} typically falls between {{ market_analysis_data.currency }} {{ market_analysis_data.price_range_min }} to {{ market_analysis_data.currency }} {{ market_analysis_data.price_range_max }} per night, depending on location, amenities, and demand.</p>
+                            {% for insight in market_analysis_data.market_insights %}
+            <p>{{ loop.index + 1 }}. {{ insight }}</p>
+            {% endfor %}
             </div>
         </div>
         
@@ -1452,8 +1456,7 @@
                 <div class="priority-title">3. Professional Photography Upgrade <span class="priority-badge high">HIGH PRIORITY</span></div>
             </div>
             <div class="content-section">
-                <p><strong>Current Photo Count:</strong> {{ image_urls | length if image_urls else 0 }} images found</p>
-                <p>No photos detected. Professional photos are essential - consider hiring a photographer to showcase your property's best features.</p>
+                {{ photo_audit }}
             </div>
         </div>
 
@@ -1462,34 +1465,7 @@
                 <div class="priority-title">4. Guest Experience Optimization <span class="priority-badge medium">MEDIUM PRIORITY</span></div>
             </div>
             <div class="content-section">
-                <p><strong>AI Guest Profile Analysis:</strong></p>
-                <p><strong>Primary Guest Personas:</strong></p>
-                <p>1. Nature Enthusiasts: Individuals who appreciate greenery and tranquility. They seek a peaceful retreat away from the hustle and bustle of the city. [{{ revenue_projections.occupancy_rates[0] | default("50") }}% of bookings]</p>
-                <p>2. Families Looking for Relaxation: Families looking for a comfortable and spacious accommodation near the Mula River. They value a serene environment and space for their children to play. [{{ revenue_projections.occupancy_rates[1] | default("30") }}% of bookings]</p>
-                <p>3. Solo Travelers Seeking Central Location: Solo travelers drawn to the property's central location for easy access to Pune's attractions while enjoying a peaceful setting. [{{ revenue_projections.occupancy_rates[2] | default("20") }}% of bookings]</p>
-                
-                <p><strong>Guest Demographics:</strong></p>
-                <ul>
-                    <li>Age range: 25-45 years (primary), 35-55 years (secondary)</li>
-                    <li>Travel purpose: Leisure (80% split), Business (20% split)</li>
-                    <li>Group size: 3 people average</li>
-                    <li>Booking lead time: 14 days average</li>
-                </ul>
-                
-                <p><strong>Tailored Recommendations:</strong></p>
-                <ul>
-                    <li>Green spaces and river views</li>
-                    <li>Peaceful and serene environment</li>
-                    <li>Proximity to Pune's attractions</li>
-                </ul>
-                
-                <p><strong>Messaging adjustments:</strong></p>
-                <p>1. Highlight the property's tranquil setting and access to nature as a primary selling point.</p>
-                <p>2. Emphasize the family-friendly aspects of the accommodation, such as spacious rooms and outdoor areas for children.</p>
-                
-                <p><strong>Service enhancements:</strong></p>
-                <p>1. Offer guided nature walks or activities for nature enthusiasts to explore the surroundings.</p>
-                <p>2. Provide family-friendly amenities such as board games or outdoor toys for children to enhance the stay experience.</p>
+                {{ guest_profile_analysis }}
             </div>
         </div>
         
@@ -1499,26 +1475,16 @@
             </div>
             <div class="content-section">
                 <p><strong>AI Booking Pattern Analysis:</strong></p>
-                <p><strong>Calendar Gap Analysis:</strong></p>
-                <ul>
-                    <li>Identified low-demand periods: Weekdays in the months of May and August</li>
-                    <li>Average booking gap length: 5 days</li>
-                </ul>
+
                 
                 <p><strong>Occupancy Optimization Strategies:</strong></p>
-                <ul>
-                    <li>Minimum stay adjustments: Implement a minimum stay requirement of 3 nights on weekends to attract longer bookings.</li>
-                                    <li>Midweek discount opportunities: Offer a {{ dynamic_percentages.midweek_discount | default("15") }}% discount for bookings from Monday to Thursday to incentivize midweek stays.</li>
-                <li>Last-minute booking incentives: Offer a {{ dynamic_percentages.lastminute_discount | default("10") }}% discount for bookings made within 48 hours of check-in to encourage last-minute bookings.</li>
-                </ul>
+                                {{ booking_gap_analysis }}
                 
                 <p><strong>Revenue Recovery Tactics:</strong></p>
                 <ul>
-                                    <li>Monthly stay discounts: Offer a {{ dynamic_percentages.monthly_discount | default("20") }}% discount for stays of 28 days or more to appeal to long-term guests.</li>
-                <li>Seasonal pricing adjustments: Increase prices by {{ dynamic_percentages.seasonal_increase | default("10") }}% during peak tourist seasons like December and January.</li>
-                    <li>Gap-filling promotions:</li>
-                    <li>1. Offer a "Stay 4 Pay 3" promotion for selected dates during low-demand periods.</li>
-                    <li>2. Collaborate with local event organizers to offer a discounted package for attendees of nearby events.</li>
+                                    <li>Monthly stay discounts: Offer a {{ dynamic_percentages.monthly_discount }}% discount for stays of 28 days or more to appeal to long-term guests.</li>
+                <li>Seasonal pricing adjustments: Increase prices by {{ dynamic_percentages.seasonal_increase }}% during peak tourist seasons like December and January.</li>
+
                 </ul>
             </div>
         </div>
@@ -1531,15 +1497,9 @@
         </div>
         
         <div class="analysis-box">
-            <div class="analysis-header">Missing Amenities Analysis: {{ amenities.missing_high_impact | length if amenities and amenities.missing_high_impact else 5 }} amenities identified</div>
+            <div class="analysis-header">AI-Suggested Amenities Analysis</div>
             <div class="analysis-content">
-                <ol>
-                    <li>Complimentary breakfast service with local specialties.</li>
-                    <li>High-speed Wi-Fi access throughout the property.</li>
-                    <li>Indoor fitness center with modern equipment.</li>
-                    <li>On-site laundry facilities for guests to use.</li>
-                    <li>Sunrise yoga sessions on the lawn overlooking the river.</li>
-                </ol>
+                {{ amenities }}
             </div>
         </div>
     </div>
@@ -1569,7 +1529,7 @@
 
             <!-- Blue info box -->
             <div class="market-info-box">
-                Market rates for similar properties in Central Pune, India typically range from competitive pricing tiers, with seasonal optimization strategies and value-added experiences recommended to enhance positioning and increase average booking value in the local market.
+                {{ market_analysis_data.market_insights[0] if market_analysis_data and market_analysis_data.market_insights else '' }}
             </div>
 
             <!-- Section Title -->
@@ -1587,14 +1547,14 @@
                                 <h3 style="font-size: 14px; font-weight: 600; color: #111827; margin: 0;">Location Analysis</h3>
                             </div>
                             <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
-                                <p style="font-size: 12px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">Market rate range for similar properties in Central Pune typically falls between INR 3,500 to INR 7,000 per night for a Serene 2BHK Nest, depending on location, amenities, and demand.</p>
+                                <p style="font-size: 12px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">{{ market_analysis_data.market_insights[1] if market_analysis_data and market_analysis_data.market_insights and market_analysis_data.market_insights|length > 1 else '' }}</p>
                                 <div style="margin-top: auto;">
                                     <div style="margin-bottom: 6px;">
                                         <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
-                                            <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.market_positioning | default("92") }}%;"></div>
+                                            <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.market_positioning }}%;"></div>
                                         </div>
                                     </div>
-                                    <div style="font-size: 12px; color: #3b82f6; font-weight: 500;">Market Positioning: {{ competitive_scores.market_positioning | default("92") }}%</div>
+                                    <div style="font-size: 12px; color: #3b82f6; font-weight: 500;">Market Positioning: {{ competitive_scores.market_positioning }}%</div>
                                 </div>
                             </div>
                         </div>
@@ -1607,14 +1567,14 @@
                                 <h3 style="font-size: 14px; font-weight: 600; color: #111827; margin: 0;">Amenities Analysis</h3>
                             </div>
                             <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
-                                <p style="font-size: 12px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">Complimentary breakfast service with local specialties.</p>
+                                <p style="font-size: 12px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">{{ amenities.split('\n')[0] if amenities else '' }}</p>
                                 <div style="margin-top: auto;">
                                     <div style="margin-bottom: 6px;">
                                         <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
-                                            <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.amenity_score | default("88") }}%;"></div>
+                                            <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.amenity_score }}%;"></div>
                                         </div>
                                     </div>
-                                    <div style="font-size: 12px; color: #3b82f6; font-weight: 500;">Amenity Score: {{ competitive_scores.amenity_score | default("88") }}%</div>
+                                    <div style="font-size: 12px; color: #3b82f6; font-weight: 500;">Amenity Score: {{ competitive_scores.amenity_score }}%</div>
                                 </div>
                             </div>
                         </div>
@@ -1631,14 +1591,14 @@
                                 <h3 style="font-size: 14px; font-weight: 600; color: #111827; margin: 0;">Visual Appeal</h3>
                             </div>
                             <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
-                                <p style="font-size: 12px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">No photos detected.</p>
+                                <p style="font-size: 12px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">{{ photo_audit.split('\n')[0] if photo_audit else 'No photos detected.' }}</p>
                                 <div style="margin-top: auto;">
                                     <div style="margin-bottom: 6px;">
                                         <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
-                                            <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.visual_score | default("76") }}%;"></div>
+                                            <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.visual_score }}%;"></div>
                                         </div>
                                     </div>
-                                    <div style="font-size: 12px; color: #3b82f6; font-weight: 500;">Visual Score: {{ competitive_scores.visual_score | default("76") }}%</div>
+                                    <div style="font-size: 12px; color: #3b82f6; font-weight: 500;">Visual Score: {{ competitive_scores.visual_score }}%</div>
                                 </div>
                             </div>
                         </div>
@@ -1651,14 +1611,14 @@
                                 <h3 style="font-size: 14px; font-weight: 600; color: #111827; margin: 0;">Guest Experience</h3>
                             </div>
                             <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
-                                <p style="font-size: 12px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">Primary Guest Personas: Nature Enthusiasts: Individuals who appreciate greenery and tranquility.</p>
+                                <p style="font-size: 12px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">{{ guest_profile_analysis.split('\n')[0] if guest_profile_analysis else '' }}</p>
                                 <div style="margin-top: auto;">
                                     <div style="margin-bottom: 6px;">
                                         <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
-                                            <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.experience_score | default("84") }}%;"></div>
+                                            <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.experience_score }}%;"></div>
                                         </div>
                                     </div>
-                                    <div style="font-size: 12px; color: #3b82f6; font-weight: 500;">Experience Score: {{ competitive_scores.experience_score | default("84") }}%</div>
+                                    <div style="font-size: 12px; color: #3b82f6; font-weight: 500;">Experience Score: {{ competitive_scores.experience_score }}%</div>
                                 </div>
                             </div>
                         </div>
@@ -1675,7 +1635,7 @@
                                 <h3 style="font-size: 14px; font-weight: 600; color: #111827; margin: 0;">Revenue Insights</h3>
                             </div>
                             <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
-                                <p style="font-size: 12px; color: #4b5563; line-height: 1.3; margin: 0;">Expected booking improvement: The optimized title and added amenities are likely to increase booking rates by at least 15-20%, leading to a revenue impact of around 10-15% increase.</p>
+                                <p style="font-size: 12px; color: #4b5563; line-height: 1.3; margin: 0;">{{ performance_insights.split('\n')[0] if performance_insights else '' }}</p>
                             </div>
                         </div>
                     </td>
@@ -1687,7 +1647,7 @@
                                 <h3 style="font-size: 14px; font-weight: 600; color: #111827; margin: 0;">Strategic Recommendations</h3>
                             </div>
                             <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
-                                <p style="font-size: 12px; color: #4b5563; line-height: 1.3; margin: 0;">Strategic pricing recommendations suggest for similar properties in Central Pune typically falls between INR 3,500 to INR 7,000 per night for a Serene 2BHK Nest, depending on location, amenities, and demand.</p>
+                                <p style="font-size: 12px; color: #4b5563; line-height: 1.3; margin: 0;">{{ market_analysis_data.market_insights[2] if market_analysis_data and market_analysis_data.market_insights and market_analysis_data.market_insights|length > 2 else '' }}</p>
                             </div>
                         </div>
                     </td>
@@ -1725,7 +1685,7 @@
 
             <!-- Content Analysis Box -->
             <div class="content-analysis-box">
-                <strong>Content Analysis:</strong> Current description: 10 words → Optimized: 83 words
+                <strong>Content Analysis:</strong> Current description: {{ title.split()|length if title else 0 }} words → Optimized: {{ optimized_description.split()|length if optimized_description else 0 }} words
             </div>
 
             <!-- AI-Generated Description Enhancement Section -->
@@ -1743,12 +1703,12 @@
                     
                     <div class="description-content">
                         <div class="current-description">
-                            <strong>Current:</strong> "Central Pune : 2BHK on Mula River : Ample Greenery"
+                            <strong>Current:</strong> "{{ title }}"
                         </div>
                         <div class="optimized-description">
                             <strong>AI-Optimized:</strong>
                             <div class="optimized-text">
-                                Experience the perfect blend of tranquility and convenience at our stunning 2BHK overlooking the serene Mula River in central Pune. Immerse yourself i...
+                                {{ optimized_description[:100] }}{{ '...' if optimized_description and optimized_description|length > 100 else '' }}
                             </div>
                         </div>
                     </div>
@@ -1763,9 +1723,9 @@
                 </div>
 
                 <div class="photo-analysis">
-                    <div class="photo-found"><strong>Current Photos Found:</strong> 0 images</div>
+                    <div class="photo-found"><strong>Current Photos Found:</strong> {{ image_urls|length if image_urls else 0 }} images</div>
                     <div class="photo-recommendation">
-                        No photos detected. Professional photos are essential - consider hiring a photographer to showcase your property's best features.
+                        {{ photo_audit }}
                     </div>
                 </div>
             </div>
@@ -1778,9 +1738,9 @@
                 </div>
 
                 <div class="seo-keywords">
-                    <div class="keyword-item"><strong>Location-Based Keywords:</strong> Central Pune, India</div>
-                    <div class="keyword-item"><strong>Property Type:</strong> Serene 2BHK Nest in Central Pune</div>
-                    <div class="keyword-item"><strong>Key Features:</strong> Based on 5 AI-suggested amenities</div>
+                    <div class="keyword-item"><strong>Location-Based Keywords:</strong> {{ location }}</div>
+                    <div class="keyword-item"><strong>Property Type:</strong> {{ title }}</div>
+                    <div class="keyword-item"><strong>Key Features:</strong> {{ amenities.split('\n')[0] if amenities else 'AI-suggested amenities' }}</div>
                 </div>
             </div>
 
@@ -1792,13 +1752,7 @@
                 </div>
 
                 <div class="review-analysis">
-                    <div class="review-category">
-                        <strong>**Recurring Praise:**</strong>
-                        <div class="review-items">
-                            <div>- Location and accessibility</div>
-                            <div>- Cleanliness and comfort</div>
-                            <div>- Host responsiveness</div>
-                        </div>
+                    {{ review_sentiment_analysis }}
                     </div>
 
                     <div class="review-category">
@@ -1893,7 +1847,7 @@
                             <div class="revenue-requirements">
                                 <div class="revenue-requirement">
                                     <span class="requirement-label">Weekdays:</span>
-                                    <span class="requirement-text">2-night minimum (increases revenue per booking by {{ dynamic_percentages.minimum_stay_revenue | default("45") }}%)</span>
+                                    <span class="requirement-text">2-night minimum (increases revenue per booking by {{ dynamic_percentages.minimum_stay_revenue }}%)</span>
                                 </div>
                                 <div class="revenue-requirement">
                                     <span class="requirement-label">Weekends:</span>
@@ -1905,7 +1859,7 @@
                                 </div>
                                 <div class="revenue-requirement">
                                     <span class="requirement-label">Holidays:</span>
-                                    <span class="requirement-text">4-night minimum with {{ dynamic_percentages.holiday_premium | default("50") }}% premium</span>
+                                    <span class="requirement-text">4-night minimum with {{ dynamic_percentages.holiday_premium }}% premium</span>
                                 </div>
                             </div>
                         </div>
@@ -1917,11 +1871,11 @@
                         <div class="revenue-strategies">
                             <div class="revenue-strategy">
                                 <span class="strategy-label">Last-Minute Deals:</span>
-                                <span class="strategy-text">{{ dynamic_percentages.lastminute_discount | default("15") }}% off for bookings within 48 hours</span>
+                                <span class="strategy-text">{{ dynamic_percentages.lastminute_discount }}% off for bookings within 48 hours</span>
                             </div>
                             <div class="revenue-strategy">
                                 <span class="strategy-label">Extended Stay Discount:</span>
-                                <span class="strategy-text">{{ dynamic_percentages.extended_stay_discount | default("20") }}% off for 7+ nights (targets remote workers)</span>
+                                <span class="strategy-text">{{ dynamic_percentages.extended_stay_discount }}% off for 7+ nights (targets remote workers)</span>
                             </div>
                             <div class="revenue-strategy">
                                 <span class="strategy-label">Mid-Week Special:</span>
@@ -1929,7 +1883,7 @@
                             </div>
                             <div class="revenue-strategy">
                                 <span class="strategy-label">Early Bird:</span>
-                                <span class="strategy-text">{{ dynamic_percentages.early_bird_discount | default("10") }}% off for bookings 60+ days in advance</span>
+                                <span class="strategy-text">{{ dynamic_percentages.early_bird_discount }}% off for bookings 60+ days in advance</span>
                             </div>
                         </div>
                     </div>
@@ -2132,7 +2086,7 @@
                     
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Adjust base prices by +{{ dynamic_percentages.average_rate_increase | default("20") }}% (your rating justifies this)</span>
+                        <span class="check-text">Adjust base prices by +{{ dynamic_percentages.average_rate_increase }}% (your rating justifies this)</span>
                     </div>
                     
                     <div class="checklist-item">
@@ -2147,7 +2101,7 @@
                 </div>
 
                 <div class="impact-box week1-impact">
-                    <strong>Expected Impact:</strong> +{{ revenue_projections.booking_improvement | default("15") }}% bookings, +{{ revenue_projections.revenue_impact | default("20") }}% revenue immediately
+                    <strong>Expected Impact:</strong> +{{ revenue_projections.booking_improvement }}% bookings, +{{ revenue_projections.revenue_impact }}% revenue immediately
                 </div>
             </div>
 
@@ -2178,7 +2132,7 @@
                 </div>
 
                 <div class="impact-box week2-impact">
-                    <strong>Expected Impact:</strong> +{{ dynamic_percentages.conversion_rate | default("25") }}% conversion rate
+                    <strong>Expected Impact:</strong> +{{ dynamic_percentages.conversion_rate }}% conversion rate
                 </div>
             </div>
 
@@ -2209,7 +2163,7 @@
                 </div>
 
                 <div class="impact-box week3-impact">
-                    <strong>Expected Impact:</strong> +{{ dynamic_percentages.average_rate_increase | default("30") }}% average nightly rate
+                    <strong>Expected Impact:</strong> +{{ dynamic_percentages.average_rate_increase }}% average nightly rate
                 </div>
             </div>
 
@@ -2240,7 +2194,7 @@
                 </div>
 
                 <div class="impact-box week4-impact">
-                    <strong>Expected Impact:</strong> +{{ dynamic_percentages.review_probability | default("50") }}% chance of 5-star reviews
+                    <strong>Expected Impact:</strong> +{{ dynamic_percentages.review_probability }}% chance of 5-star reviews
                 </div>
             </div>
 

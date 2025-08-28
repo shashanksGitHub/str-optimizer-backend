@@ -823,16 +823,7 @@ Keep each point to 1-2 sentences maximum."""
 def generate_dynamic_market_data(client, location, title, description):
     """Generate AI-powered market analysis data"""
     if not client:
-        return {
-            'price_range_min': 3500,
-            'price_range_max': 7000,
-            'currency': 'INR',
-            'market_insights': [
-                'Market rate range for similar properties typically falls between INR 3,500 to INR 7,000 per night',
-                'Implement seasonal pricing with higher rates during peak seasons',
-                'Offer discounted rates for longer stays to increase occupancy'
-            ]
-        }
+        return None
     
     try:
         market_prompt = f"""Analyze the short-term rental market for this property:
@@ -868,27 +859,13 @@ Base pricing on local market conditions and property type."""
         
     except Exception as e:
         print(f"Market data generation error: {e}")
-        return {
-            'price_range_min': 3500,
-            'price_range_max': 7000,
-            'currency': 'INR',
-            'market_insights': [
-                'Market rate range for similar properties typically falls between INR 3,500 to INR 7,000 per night',
-                'Implement seasonal pricing with higher rates during peak seasons',
-                'Offer discounted rates for longer stays to increase occupancy'
-            ]
-        }
+        return None
 
 
 def generate_competitive_scores(client, location, title, description):
     """Generate AI-powered competitive advantage scores"""
     if not client:
-        return {
-            'market_positioning': 92,
-            'amenity_score': 88,
-            'visual_score': 76,
-            'experience_score': 84
-        }
+        return None
     
     try:
         scores_prompt = f"""Analyze this property's competitive advantages:
@@ -924,27 +901,13 @@ Respond in JSON format:
         
     except Exception as e:
         print(f"Competitive scores generation error: {e}")
-        return {
-            'market_positioning': 92,
-            'amenity_score': 88,
-            'visual_score': 76,
-            'experience_score': 84
-        }
+        return None
 
 
 def generate_revenue_projections(client, location, title):
     """Generate AI-powered revenue projections and booking statistics"""
     if not client:
-        return {
-            'booking_improvement': 20,
-            'revenue_impact': 15,
-            'occupancy_rates': [50, 30, 20],  # leisure, family, business percentages
-            'seasonal_adjustments': {
-                'peak_increase': 50,
-                'off_season_decrease': 25,
-                'weekend_premium': 35
-            }
-        }
+        return None
     
     try:
         revenue_prompt = f"""Generate revenue projections for this property:
@@ -979,35 +942,13 @@ Base on location market conditions and property type."""
         
     except Exception as e:
         print(f"Revenue projections generation error: {e}")
-        return {
-            'booking_improvement': 20,
-            'revenue_impact': 15,
-            'occupancy_rates': [50, 30, 20],
-            'seasonal_adjustments': {
-                'peak_increase': 50,
-                'off_season_decrease': 25,
-                'weekend_premium': 35
-            }
-        }
+        return None
 
 
 def generate_dynamic_percentages(client, title, description):
     """Generate AI-powered percentage values for various metrics"""
     if not client:
-        return {
-            'search_visibility': 20,
-            'conversion_rate': 25,
-            'average_rate_increase': 30,
-            'review_probability': 50,
-            'midweek_discount': 15,
-            'lastminute_discount': 10,
-            'monthly_discount': 20,
-            'seasonal_increase': 10,
-            'minimum_stay_revenue': 45,
-            'holiday_premium': 50,
-            'extended_stay_discount': 20,
-            'early_bird_discount': 10
-        }
+        return None
     
     try:
         percentages_prompt = f"""Generate realistic percentage values for this property's optimization metrics:
@@ -1046,17 +987,4 @@ Base on property type and market positioning."""
         
     except Exception as e:
         print(f"Dynamic percentages generation error: {e}")
-        return {
-            'search_visibility': 20,
-            'conversion_rate': 25,
-            'average_rate_increase': 30,
-            'review_probability': 50,
-            'midweek_discount': 15,
-            'lastminute_discount': 10,
-            'monthly_discount': 20,
-            'seasonal_increase': 10,
-            'minimum_stay_revenue': 45,
-            'holiday_premium': 50,
-            'extended_stay_discount': 20,
-            'early_bird_discount': 10
-        } 
+        return None 
