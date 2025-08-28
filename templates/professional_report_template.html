@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STR Performance Optimizer - {{ title | default("Property Analysis Report") }}</title>
+    <title>Listing Optimizer - {{ title | default("Property Analysis Report") }}</title>
     <style>
         * {
             margin: 0;
@@ -194,6 +194,12 @@
         .priority-badge.medium {
             background: #fef3c7;
             color: #d97706;
+            border: none;
+        }
+        
+        .priority-badge.low {
+            background: #d1fae5;
+            color: #059669;
             border: none;
         }
 
@@ -1381,7 +1387,7 @@
 <body>
     <!-- Header -->
     <div class="header">
-        <h1 style="display: inline-block; float: left;">STR Performance Optimizer</h1>
+        <h1 style="display: inline-block; float: left;">Listing Optimizer</h1>
         <div class="date" style="display: inline-block; float: right;">Analysis Date: August 2025</div>
         <div style="clear: both;"></div>
     </div>
@@ -1422,7 +1428,7 @@
         
         <div class="priority-item">
             <div class="priority-header">
-                <div class="priority-title">1. Title Enhancement for Search Visibility <span class="priority-badge high">HIGH PRIORITY</span></div>
+                <div class="priority-title">1. Title Enhancement for Search Visibility <span class="priority-badge {{ 'high' if task_priorities.title_priority == 'HIGH' else 'medium' if task_priorities.title_priority == 'MEDIUM' else 'low' }}">{{ task_priorities.title_priority if task_priorities else 'HIGH' }} PRIORITY</span></div>
             </div>
             <div class="content-section">
                 <p><strong>Current:</strong> "{{ title }}"</p>
@@ -1440,7 +1446,7 @@
         
         <div class="priority-item">
             <div class="priority-header">
-                <div class="priority-title">2. Dynamic Pricing Strategy <span class="priority-badge high">HIGH PRIORITY</span></div>
+                <div class="priority-title">2. Dynamic Pricing Strategy <span class="priority-badge {{ 'high' if task_priorities.pricing_priority == 'HIGH' else 'medium' if task_priorities.pricing_priority == 'MEDIUM' else 'low' }}">{{ task_priorities.pricing_priority if task_priorities else 'HIGH' }} PRIORITY</span></div>
             </div>
             <div class="content-section">
                 {{ pricing_analysis }}
@@ -1449,7 +1455,7 @@
         
         <div class="priority-item">
             <div class="priority-header">
-                <div class="priority-title">3. Professional Photography Upgrade <span class="priority-badge high">HIGH PRIORITY</span></div>
+                <div class="priority-title">3. Professional Photography Upgrade <span class="priority-badge {{ 'high' if task_priorities.photo_priority == 'HIGH' else 'medium' if task_priorities.photo_priority == 'MEDIUM' else 'low' }}">{{ task_priorities.photo_priority if task_priorities else 'HIGH' }} PRIORITY</span></div>
             </div>
             <div class="content-section">
                 {{ photo_audit }}
@@ -1458,7 +1464,7 @@
 
         <div class="priority-item">
             <div class="priority-header">
-                <div class="priority-title">4. Guest Experience Optimization <span class="priority-badge medium">MEDIUM PRIORITY</span></div>
+                <div class="priority-title">4. Guest Experience Optimization <span class="priority-badge {{ 'high' if task_priorities.experience_priority == 'HIGH' else 'medium' if task_priorities.experience_priority == 'MEDIUM' else 'low' }}">{{ task_priorities.experience_priority if task_priorities else 'MEDIUM' }} PRIORITY</span></div>
             </div>
             <div class="content-section">
                 {{ guest_profile_analysis }}
@@ -1467,7 +1473,7 @@
         
         <div class="priority-item">
             <div class="priority-header">
-                <div class="priority-title">5. Booking Gap Analysis & Optimization <span class="priority-badge high">HIGH PRIORITY</span></div>
+                <div class="priority-title">5. Booking Gap Analysis & Optimization <span class="priority-badge {{ 'high' if task_priorities.booking_priority == 'HIGH' else 'medium' if task_priorities.booking_priority == 'MEDIUM' else 'low' }}">{{ task_priorities.booking_priority if task_priorities else 'HIGH' }} PRIORITY</span></div>
             </div>
             <div class="content-section">
                 {{ booking_gap_analysis }}
@@ -1496,7 +1502,7 @@
             <div class="market-header-top"></div>
             <div class="market-header-content">
                 <div class="market-header-left">
-                    <h1 style="display: inline-block; float: left;">STR Performance Optimizer</h1>
+                    <h1 style="display: inline-block; float: left;">Listing Optimizer</h1>
                 </div>
                 <div class="market-header-right">
                     <span style="display: inline-block; float: right;">Market Analysis</span>
@@ -1641,7 +1647,7 @@
 
             <!-- Footer -->
             <div class="market-footer">
-                STR Performance Optimization Report
+                Listing Optimization Report
             </div>
         </div>
     </div>
@@ -1652,7 +1658,7 @@
         <div class="content-header">
             <div class="content-header-content">
                 <div class="content-header-left">
-                    <h1 style="display: inline-block; float: left;">STR Performance Optimizer</h1>
+                    <h1 style="display: inline-block; float: left;">Listing Optimizer</h1>
                 </div>
                 <div class="content-header-right">
                     <span style="display: inline-block; float: right;">Content Strategy</span>
@@ -1746,7 +1752,7 @@
 
             <!-- Footer -->
             <div class="content-footer">
-                STR Performance Optimization Report
+                Listing Optimization Report
             </div>
         </div>
     </div>
@@ -1757,7 +1763,7 @@
         <div class="revenue-header">
             <div class="revenue-header-content">
                 <div class="revenue-header-left">
-                    <h1 style="display: inline-block; float: left;">STR Performance Optimizer</h1>
+                    <h1 style="display: inline-block; float: left;">Listing Optimizer</h1>
                 </div>
                 <div class="revenue-header-right">
                     <span style="display: inline-block; float: right;">Revenue Optimization</span>
@@ -1840,7 +1846,7 @@
 
             <!-- Footer -->
             <div class="revenue-footer">
-                STR Performance Optimization Report
+                Listing Optimization Report
             </div>
         </div>
     </div>
@@ -1851,7 +1857,7 @@
         <div class="action-header">
             <div class="action-header-content">
                 <div class="action-header-left">
-                    <h1 style="display: inline-block; float: left;">STR Performance Optimizer</h1>
+                    <h1 style="display: inline-block; float: left;">Listing Optimizer</h1>
                 </div>
                 <div class="action-header-right">
                     <span style="display: inline-block; float: right;">Action Plan</span>
@@ -1957,7 +1963,7 @@
 
             <!-- Footer -->
             <div class="action-footer">
-                STR Performance Optimization Report
+                Listing Optimization Report
             </div>
         </div>
     </div>
@@ -1968,7 +1974,7 @@
             <!-- Header -->
             <div class="roadmap-header">
                 <div class="roadmap-header-content">
-                    <h1 style="display: inline-block; float: left;">STR Performance Optimizer</h1>
+                    <h1 style="display: inline-block; float: left;">Listing Optimizer</h1>
                     <span style="display: inline-block; float: right;">Action Plan</span>
                     <div style="clear: both;"></div>
                 </div>
@@ -2160,7 +2166,7 @@
 
             <!-- Footer -->
             <div class="roadmap-footer">
-                STR Performance Optimization Report
+                Listing Optimization Report
             </div>
         </div>
     </div>

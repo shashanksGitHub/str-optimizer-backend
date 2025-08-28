@@ -753,7 +753,8 @@ Keep each point to 1-2 sentences maximum."""
                 'market_analysis_data': market_analysis_data,
                 'competitive_scores': competitive_scores,
                 'revenue_projections': revenue_projections,
-                'dynamic_percentages': dynamic_percentages
+                'dynamic_percentages': dynamic_percentages,
+                'task_priorities': generate_task_priorities(client, competitive_scores, revenue_projections, dynamic_percentages)
             }
             
             # Generate the professional PDF
@@ -988,4 +989,70 @@ Base on property type and market positioning."""
         
     except Exception as e:
         print(f"Dynamic percentages generation error: {e}")
-        return None 
+        return None
+
+def generate_task_priorities(client, competitive_scores, revenue_projections, dynamic_percentages):
+    """Generate AI-powered task priorities based on analysis results"""
+    if not client:
+        return {
+            'title_priority': 'HIGH',
+            'pricing_priority': 'HIGH', 
+            'photo_priority': 'HIGH',
+            'experience_priority': 'MEDIUM',
+            'booking_priority': 'HIGH'
+        }
+    
+    try:
+        # Create context from analysis results
+        context = f"""
+Based on the following analysis results, determine the priority level (HIGH, MEDIUM, LOW) for each optimization task:
+
+Competitive Scores:
+- Market Positioning: {competitive_scores.get('market_positioning', 0) if competitive_scores else 0}/100
+- Amenity Score: {competitive_scores.get('amenity_score', 0) if competitive_scores else 0}/100  
+- Visual Score: {competitive_scores.get('visual_score', 0) if competitive_scores else 0}/100
+- Experience Score: {competitive_scores.get('experience_score', 0) if competitive_scores else 0}/100
+
+Revenue Impact:
+- Booking Improvement: {revenue_projections.get('booking_improvement', 0) if revenue_projections else 0}%
+- Revenue Impact: {revenue_projections.get('revenue_impact', 0) if revenue_projections else 0}%
+
+Dynamic Metrics:
+- Conversion Rate: {dynamic_percentages.get('conversion_rate', 0) if dynamic_percentages else 0}%
+- Average Rate Increase: {dynamic_percentages.get('average_rate_increase', 0) if dynamic_percentages else 0}%
+
+Assign priority levels based on:
+- HIGH: Critical impact on bookings/revenue, low current scores, high improvement potential
+- MEDIUM: Moderate impact, average current performance
+- LOW: Minor impact, already performing well
+
+Return JSON format:
+{{
+    "title_priority": "[HIGH/MEDIUM/LOW]",
+    "pricing_priority": "[HIGH/MEDIUM/LOW]", 
+    "photo_priority": "[HIGH/MEDIUM/LOW]",
+    "experience_priority": "[HIGH/MEDIUM/LOW]",
+    "booking_priority": "[HIGH/MEDIUM/LOW]"
+}}"""
+        
+        priorities_response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are an expert at prioritizing optimization tasks based on data analysis."},
+                {"role": "user", "content": context}
+            ]
+        )
+        
+        import json
+        priorities_data = json.loads(priorities_response.choices[0].message.content.strip())
+        return priorities_data
+        
+    except Exception as e:
+        print(f"Error generating task priorities: {e}")
+        return {
+            'title_priority': 'HIGH',
+            'pricing_priority': 'HIGH', 
+            'photo_priority': 'HIGH',
+            'experience_priority': 'MEDIUM',
+            'booking_priority': 'HIGH'
+        } 
