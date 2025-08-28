@@ -1401,7 +1401,7 @@
         <!-- Score Cards - PDF-FRIENDLY HORIZONTAL LAYOUT -->
         <div class="score-grid">
             <div class="score-card highlight">
-                <div class="score-value">{{ pricing_analysis.current_rating }}</div>
+                <div class="score-value">{{ pricing_analysis.current_rating if pricing_analysis and pricing_analysis.current_rating else '0' }}</div>
                 <div class="score-label">Guest Rating</div>
             </div>
             <div class="score-card">
@@ -1409,7 +1409,7 @@
                 <div class="score-label">AI Optimization Score</div>
             </div>
             <div class="score-card">
-                <div class="score-value">+{{ revenue_projections.revenue_impact }}%</div>
+                <div class="score-value">+{{ revenue_projections.revenue_impact if revenue_projections and revenue_projections.revenue_impact else '0' }}%</div>
                 <div class="score-label">Revenue Potential</div>
             </div>
         </div>
