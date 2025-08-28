@@ -1405,7 +1405,7 @@
                 <div class="score-label">Guest Rating</div>
             </div>
             <div class="score-card">
-                <div class="score-value">8.8/10</div>
+                <div class="score-value">{{ competitive_scores.market_positioning if competitive_scores and competitive_scores.market_positioning else '0' }}/100</div>
                 <div class="score-label">AI Optimization Score</div>
             </div>
             <div class="score-card">
