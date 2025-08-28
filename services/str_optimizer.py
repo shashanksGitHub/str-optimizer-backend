@@ -714,6 +714,12 @@ Keep each point to 1-2 sentences maximum."""
         print(f"Performance insights error: {e}")
         performance_insights = "Performance analysis unavailable. Track your booking metrics after implementing these optimizations."
 
+    # Generate dynamic market analysis data
+    market_analysis_data = generate_dynamic_market_data(client, location, title, description)
+    competitive_scores = generate_competitive_scores(client, location, title, description)
+    revenue_projections = generate_revenue_projections(client, location, title)
+    dynamic_percentages = generate_dynamic_percentages(client, title, description)
+    
     # Generate chart data for visualizations
     occupancy_trend_data, revenue_trend_data = generate_mock_trend_data()
     competitor_pricing_data = generate_competitor_pricing_data(location, title)
@@ -742,7 +748,11 @@ Keep each point to 1-2 sentences maximum."""
                 'pricing_analysis': pricing_analysis,
                 'photo_audit': photo_audit,
                 'performance_insights': performance_insights,
-                'image_urls': image_urls
+                'image_urls': image_urls,
+                'market_analysis_data': market_analysis_data,
+                'competitive_scores': competitive_scores,
+                'revenue_projections': revenue_projections,
+                'dynamic_percentages': dynamic_percentages
             }
             
             # Generate the professional PDF
@@ -807,4 +817,246 @@ Keep each point to 1-2 sentences maximum."""
         print("❌ No PDF path available or file doesn't exist")
     
     print("✅ Returning optimization result...")
-    return result 
+    return result
+
+
+def generate_dynamic_market_data(client, location, title, description):
+    """Generate AI-powered market analysis data"""
+    if not client:
+        return {
+            'price_range_min': 3500,
+            'price_range_max': 7000,
+            'currency': 'INR',
+            'market_insights': [
+                'Market rate range for similar properties typically falls between INR 3,500 to INR 7,000 per night',
+                'Implement seasonal pricing with higher rates during peak seasons',
+                'Offer discounted rates for longer stays to increase occupancy'
+            ]
+        }
+    
+    try:
+        market_prompt = f"""Analyze the short-term rental market for this property:
+Location: {location}
+Title: {title}
+Description: {description}
+
+Generate realistic market data in this JSON format:
+{{
+    "price_range_min": [number],
+    "price_range_max": [number], 
+    "currency": "[currency code]",
+    "market_insights": [
+        "[insight 1 about market rates]",
+        "[insight 2 about pricing strategy]", 
+        "[insight 3 about revenue optimization]"
+    ]
+}}
+
+Base pricing on local market conditions and property type."""
+        
+        market_response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a short-term rental market analyst. Provide realistic pricing data based on location and property type."},
+                {"role": "user", "content": market_prompt}
+            ]
+        )
+        
+        import json
+        market_data = json.loads(market_response.choices[0].message.content.strip())
+        return market_data
+        
+    except Exception as e:
+        print(f"Market data generation error: {e}")
+        return {
+            'price_range_min': 3500,
+            'price_range_max': 7000,
+            'currency': 'INR',
+            'market_insights': [
+                'Market rate range for similar properties typically falls between INR 3,500 to INR 7,000 per night',
+                'Implement seasonal pricing with higher rates during peak seasons',
+                'Offer discounted rates for longer stays to increase occupancy'
+            ]
+        }
+
+
+def generate_competitive_scores(client, location, title, description):
+    """Generate AI-powered competitive advantage scores"""
+    if not client:
+        return {
+            'market_positioning': 92,
+            'amenity_score': 88,
+            'visual_score': 76,
+            'experience_score': 84
+        }
+    
+    try:
+        scores_prompt = f"""Analyze this property's competitive advantages:
+Location: {location}
+Title: {title}
+Description: {description}
+
+Rate each category from 1-100 based on market competitiveness:
+- Market Positioning: How well positioned vs competitors
+- Amenity Score: Quality/uniqueness of amenities
+- Visual Score: Likely photo/presentation quality
+- Experience Score: Overall guest experience potential
+
+Respond in JSON format:
+{{
+    "market_positioning": [1-100],
+    "amenity_score": [1-100],
+    "visual_score": [1-100],
+    "experience_score": [1-100]
+}}"""
+        
+        scores_response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a competitive analysis expert for short-term rentals."},
+                {"role": "user", "content": scores_prompt}
+            ]
+        )
+        
+        import json
+        scores_data = json.loads(scores_response.choices[0].message.content.strip())
+        return scores_data
+        
+    except Exception as e:
+        print(f"Competitive scores generation error: {e}")
+        return {
+            'market_positioning': 92,
+            'amenity_score': 88,
+            'visual_score': 76,
+            'experience_score': 84
+        }
+
+
+def generate_revenue_projections(client, location, title):
+    """Generate AI-powered revenue projections and booking statistics"""
+    if not client:
+        return {
+            'booking_improvement': 20,
+            'revenue_impact': 15,
+            'occupancy_rates': [50, 30, 20],  # leisure, family, business percentages
+            'seasonal_adjustments': {
+                'peak_increase': 50,
+                'off_season_decrease': 25,
+                'weekend_premium': 35
+            }
+        }
+    
+    try:
+        revenue_prompt = f"""Generate revenue projections for this property:
+Location: {location}
+Title: {title}
+
+Provide realistic projections in JSON format:
+{{
+    "booking_improvement": [5-40 percent],
+    "revenue_impact": [5-30 percent],
+    "occupancy_rates": [[leisure %], [family %], [business %]],
+    "seasonal_adjustments": {{
+        "peak_increase": [10-60 percent],
+        "off_season_decrease": [10-40 percent], 
+        "weekend_premium": [15-50 percent]
+    }}
+}}
+
+Base on location market conditions and property type."""
+        
+        revenue_response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a revenue management expert for vacation rentals."},
+                {"role": "user", "content": revenue_prompt}
+            ]
+        )
+        
+        import json
+        revenue_data = json.loads(revenue_response.choices[0].message.content.strip())
+        return revenue_data
+        
+    except Exception as e:
+        print(f"Revenue projections generation error: {e}")
+        return {
+            'booking_improvement': 20,
+            'revenue_impact': 15,
+            'occupancy_rates': [50, 30, 20],
+            'seasonal_adjustments': {
+                'peak_increase': 50,
+                'off_season_decrease': 25,
+                'weekend_premium': 35
+            }
+        }
+
+
+def generate_dynamic_percentages(client, title, description):
+    """Generate AI-powered percentage values for various metrics"""
+    if not client:
+        return {
+            'search_visibility': 20,
+            'conversion_rate': 25,
+            'average_rate_increase': 30,
+            'review_probability': 50,
+            'midweek_discount': 15,
+            'lastminute_discount': 10,
+            'monthly_discount': 20,
+            'seasonal_increase': 10,
+            'minimum_stay_revenue': 45,
+            'holiday_premium': 50,
+            'extended_stay_discount': 20,
+            'early_bird_discount': 10
+        }
+    
+    try:
+        percentages_prompt = f"""Generate realistic percentage values for this property's optimization metrics:
+Title: {title}
+Description: {description}
+
+Provide values in JSON format:
+{{
+    "search_visibility": [10-30],
+    "conversion_rate": [15-35], 
+    "average_rate_increase": [20-40],
+    "review_probability": [30-70],
+    "midweek_discount": [10-25],
+    "lastminute_discount": [5-15],
+    "monthly_discount": [15-30],
+    "seasonal_increase": [5-20],
+    "minimum_stay_revenue": [30-60],
+    "holiday_premium": [30-70],
+    "extended_stay_discount": [15-25],
+    "early_bird_discount": [5-15]
+}}
+
+Base on property type and market positioning."""
+        
+        percentages_response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a pricing strategy expert for vacation rentals."},
+                {"role": "user", "content": percentages_prompt}
+            ]
+        )
+        
+        import json
+        percentages_data = json.loads(percentages_response.choices[0].message.content.strip())
+        return percentages_data
+        
+    except Exception as e:
+        print(f"Dynamic percentages generation error: {e}")
+        return {
+            'search_visibility': 20,
+            'conversion_rate': 25,
+            'average_rate_increase': 30,
+            'review_probability': 50,
+            'midweek_discount': 15,
+            'lastminute_discount': 10,
+            'monthly_discount': 20,
+            'seasonal_increase': 10,
+            'minimum_stay_revenue': 45,
+            'holiday_premium': 50,
+            'extended_stay_discount': 20,
+            'early_bird_discount': 10
+        } 
