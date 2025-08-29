@@ -515,26 +515,19 @@ Provide analysis in exactly this format:
     # NEW: Booking Gap & Occupancy Optimization Analysis
     booking_gap_analysis = ""
     if client:
-        gap_prompt = f"""Analyze booking optimization opportunities for this Airbnb property:
+        gap_prompt = f"""Analyze booking optimization for: {title} in {url}
 
-Property: {title}
-Location: {url}
-Description: {description[:200]}
+Generate compact analysis in this format:
+**Booking Optimization:**
+• Gap periods: [when + why]
+• Quick fixes: [2 actionable items]
+• Pricing tactics: [discount % + timing]
 
-Provide analysis in exactly this format:
-**Calendar Gap Analysis:**
-- Identified low-demand periods: [specific days/periods]
-- Average booking gap length: [X] days
+**Revenue Enhancement:**
+• Extended stays: [discount % for X+ days]  
+• Seasonal strategy: [1-line recommendation]
 
-**Occupancy Optimization Strategies:**
-- Minimum stay adjustments: [specific recommendations]
-- Midweek discount opportunities: [X]% discount suggested
-- Last-minute booking incentives: [specific strategies]
-
-**Occupancy Enhancement Tactics:**
-- Extended stay discounts: [X]% for 28+ days
-- Seasonal pricing considerations: [specific recommendations]
-- Gap-filling strategies: [2-3 specific approaches]"""
+Keep response under 60 words total."""
         
         try:
             gap_response = client.chat.completions.create(
@@ -549,19 +542,14 @@ Provide analysis in exactly this format:
             print(f"Booking gap analysis error: {e}")
     
     if not booking_gap_analysis:
-        booking_gap_analysis = """**Calendar Gap Analysis:**
-- Identified low-demand periods: Weekdays (Mon-Thu), mid-month periods
-- Average booking gap length: 3-4 days
+        booking_gap_analysis = """**Booking Optimization:**
+• Gap periods: Weekdays (Mon-Thu), mid-month low demand
+• Quick fixes: 2-night minimum weekdays, instant booking enabled
+• Pricing tactics: 15% midweek discount, 10% last-minute deals
 
-**Occupancy Optimization Strategies:**
-- Minimum stay adjustments: Reduce to 2 nights for weekdays
-- Midweek discount opportunities: 15% discount suggested for Mon-Thu
-- Last-minute booking incentives: 10% discount for bookings within 7 days
-
-**Occupancy Enhancement Tactics:**
-- Extended stay discounts: 25% for 28+ days
-- Seasonal pricing considerations: Adjust rates based on demand patterns
-- Gap-filling strategies: Special offers, extended stay packages, early booking incentives"""
+**Revenue Enhancement:**
+• Extended stays: 25% discount for 28+ days
+• Seasonal strategy: Adjust rates based on demand patterns"""
 
     # NEW: Guest Profile Match Analysis
     guest_profile_analysis = ""
@@ -691,17 +679,20 @@ Keep each point to 1-2 sentences maximum."""
     performance_insights = ""
     try:
         amenities_count = len(amenities.split('\n'))
-        insights_prompt = f"""Based on this Airbnb listing optimization:
-- Original title: {title}
-- Optimized title: {optimized_title}
-- Location: {location}
-- Amenities added: {amenities_count} new suggestions
+        insights_prompt = f"""Based on this listing optimization for {location}:
+- Title: {title} → {optimized_title}
+- Added {amenities_count} amenity suggestions
 
-Provide exactly 3 concise insights:
-1. Expected improvement in guest interest and booking likelihood
-2. Top 2 performance drivers identified
-3. Market positioning advantage gained
-Keep each point to 1-2 sentences maximum."""
+Generate a compact performance summary in exactly this format:
+**Key Optimization Areas:**
+• [Primary improvement area]: [1-line benefit]
+• [Secondary area]: [1-line benefit]
+
+**Implementation Priority:**
+• Week 1: [Top action item]
+• Week 2-3: [Mid-term focus]
+
+Keep total response under 80 words."""
         
         insights_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
@@ -713,7 +704,13 @@ Keep each point to 1-2 sentences maximum."""
         performance_insights = insights_response.choices[0].message.content.strip()
     except Exception as e:
         print(f"Performance insights error: {e}")
-        performance_insights = "Performance analysis unavailable. Track your booking metrics after implementing these optimizations."
+        performance_insights = """**Key Optimization Areas:**
+• Title enhancement: Improved search visibility and guest appeal
+• Content optimization: Better description and amenity highlights
+
+**Implementation Priority:**  
+• Week 1: Update title and description
+• Week 2-3: Photo improvements and pricing adjustments"""
 
     # Generate dynamic market analysis data
     market_analysis_data = generate_dynamic_market_data(client, location, title, description)
