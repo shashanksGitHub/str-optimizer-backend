@@ -1404,6 +1404,62 @@
                             <p><strong>AI Analysis Summary:</strong> {{ optimized_description if optimized_description else '' }}</p>
         </div>
         
+        <!-- Optimization Results Summary (matching success page) -->
+        <div style="margin: 20px 0; display: flex; gap: 20px; flex-wrap: wrap;">
+            <!-- Optimized Title Options -->
+            <div style="flex: 1; min-width: 300px; background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 16px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                    <span style="font-size: 16px;">💡</span>
+                    <h3 style="font-size: 16px; font-weight: 600; color: #333; margin: 0;">Optimized Title Options</h3>
+                </div>
+                {% if title_suggestions and title_suggestions|length > 0 %}
+                    <div style="margin-bottom: 8px;">
+                        <span style="font-size: 12px; color: #28a745; font-weight: 600;">Option 1:</span>
+                        <div style="font-size: 14px; color: #333; margin-top: 4px;">{{ title_suggestions[0] }}</div>
+                    </div>
+                    {% if title_suggestions|length > 1 %}
+                        <div style="margin-bottom: 8px;">
+                            <span style="font-size: 12px; color: #28a745; font-weight: 600;">Option 2:</span>
+                            <div style="font-size: 14px; color: #333; margin-top: 4px;">{{ title_suggestions[1] }}</div>
+                        </div>
+                    {% endif %}
+                    {% if title_suggestions|length > 2 %}
+                        <div style="margin-bottom: 8px;">
+                            <span style="font-size: 12px; color: #28a745; font-weight: 600;">Option 3:</span>
+                            <div style="font-size: 14px; color: #333; margin-top: 4px;">{{ title_suggestions[2] }}</div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+            
+            <!-- Suggested Amenities -->
+            <div style="flex: 1; min-width: 300px; background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 16px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                    <span style="font-size: 16px;">🏆</span>
+                    <h3 style="font-size: 16px; font-weight: 600; color: #333; margin: 0;">Suggested Amenities</h3>
+                </div>
+                {% if amenities %}
+                    {% set amenity_list = amenities.split('\n') %}
+                    {% for amenity in amenity_list[:5] %}
+                        {% if amenity.strip() %}
+                            <div style="font-size: 14px; color: #333; margin-bottom: 6px;">{{ loop.index }}. {{ amenity.strip() }}</div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Enhanced Description -->
+        <div style="margin: 20px 0; background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 16px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                <span style="font-size: 16px;">📝</span>
+                <h3 style="font-size: 16px; font-weight: 600; color: #333; margin: 0;">Enhanced Description</h3>
+            </div>
+            <div style="font-size: 14px; color: #333; line-height: 1.5;">
+                {{ optimized_description if optimized_description else 'Enhanced description will be generated based on your property analysis.' }}
+            </div>
+        </div>
+        
         <!-- Score Cards - PDF-FRIENDLY HORIZONTAL LAYOUT -->
         <div class="score-grid">
             <div class="score-card highlight">
