@@ -687,10 +687,8 @@ Generate a compact performance summary in exactly this format:
 **Key Optimization Areas:**
 • [Primary improvement area]: [1-line benefit]
 • [Secondary area]: [1-line benefit]
-
-**Implementation Priority:**
-• Week 1: [Top action item]
-• Week 2-3: [Mid-term focus]
+• [Additional area]: [1-line benefit]
+• [Final area]: [1-line benefit]
 
 Keep total response under 80 words."""
         
@@ -707,10 +705,8 @@ Keep total response under 80 words."""
         performance_insights = """**Key Optimization Areas:**
 • Title enhancement: Improved search visibility and guest appeal
 • Content optimization: Better description and amenity highlights
-
-**Implementation Priority:**  
-• Week 1: Update title and description
-• Week 2-3: Photo improvements and pricing adjustments"""
+• Photo improvements: Professional quality images for better appeal
+• SEO optimization: Enhanced discoverability and search rankings"""
 
     # Generate AI-powered analysis data for both PDF and frontend
     print("🤖 Generating AI analysis data...")
