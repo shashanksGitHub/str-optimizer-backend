@@ -1663,9 +1663,11 @@
                                     {% if pricing_analysis %}
                                         {% set lines = pricing_analysis.split('\n') %}
                                         {% if lines|length > 2 %}
-                                            {{ lines[2] }}
-                                            {% if lines|length > 3 %}
-                                                <br>• {{ lines[3] }}
+                                            • {{ lines[2].strip() if lines[2] else 'Dynamic pricing strategy based on market demand' }}
+                                            {% if lines|length > 3 and lines[3].strip() %}
+                                                <br>• {{ lines[3].strip() }}
+                                            {% else %}
+                                                <br>• Competitive positioning for optimal revenue
                                             {% endif %}
                                         {% else %}
                                             • Dynamic pricing strategy based on market demand<br>• Competitive positioning for optimal revenue
