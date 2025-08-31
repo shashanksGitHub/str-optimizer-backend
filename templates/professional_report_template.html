@@ -1567,9 +1567,6 @@
                                         {% if amenities.split('\n')|length > 1 %}
                                             <br>• {{ amenities.split('\n')[1] }}
                                         {% endif %}
-                                        {% if amenities.split('\n')|length > 2 %}
-                                            <br>• {{ amenities.split('\n')[2] }}
-                                        {% endif %}
                                     {% else %}
                                         • Mini fridge for guest convenience<br>• Enhanced comfort amenities
                                     {% endif %}
@@ -1622,9 +1619,6 @@
                                         {{ guest_profile_analysis.split('\n')[0] if guest_profile_analysis.split('\n')|length > 0 else '' }}
                                         {% if guest_profile_analysis.split('\n')|length > 1 %}
                                             <br>• {{ guest_profile_analysis.split('\n')[1] }}
-                                        {% endif %}
-                                        {% if guest_profile_analysis.split('\n')|length > 2 %}
-                                            <br>• {{ guest_profile_analysis.split('\n')[2] }}
                                         {% endif %}
                                     {% else %}
                                         **Primary Guest Personas:**<br>• Business travelers and couples<br>• Weekend getaway seekers

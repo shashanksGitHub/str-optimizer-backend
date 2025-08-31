@@ -687,10 +687,8 @@ Generate a compact performance summary in exactly this format:
 **Key Optimization Areas:**
 • [Primary improvement area]: [1-line benefit]
 • [Secondary area]: [1-line benefit]
-• [Additional area]: [1-line benefit]
-• [Final area]: [1-line benefit]
 
-Keep total response under 80 words."""
+Keep total response under 60 words."""
         
         insights_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
@@ -704,9 +702,7 @@ Keep total response under 80 words."""
         print(f"Performance insights error: {e}")
         performance_insights = """**Key Optimization Areas:**
 • Title enhancement: Improved search visibility and guest appeal
-• Content optimization: Better description and amenity highlights
-• Photo improvements: Professional quality images for better appeal
-• SEO optimization: Enhanced discoverability and search rankings"""
+• Content optimization: Better description and amenity highlights"""
 
     # Generate AI-powered analysis data for both PDF and frontend
     print("🤖 Generating AI analysis data...")
