@@ -712,7 +712,13 @@ Keep total response under 80 words."""
 • Week 1: Update title and description
 • Week 2-3: Photo improvements and pricing adjustments"""
 
-    # AI analysis data will be generated later for both PDF and frontend
+    # Generate AI-powered analysis data for both PDF and frontend
+    print("🤖 Generating AI analysis data...")
+    market_analysis_data = generate_dynamic_market_data(client, location, title, description)
+    competitive_scores = generate_competitive_scores(client, location, title, description)
+    revenue_projections = generate_revenue_projections(client, location, title)
+    dynamic_percentages = generate_dynamic_percentages(client, title, description)
+    task_priorities = generate_task_priorities(client, competitive_scores, revenue_projections, dynamic_percentages)
     
     # Generate chart data for visualizations
     occupancy_trend_data, revenue_trend_data = generate_mock_trend_data()
@@ -784,13 +790,6 @@ Keep total response under 80 words."""
             print("📧 Email not requested or no email provided")
 
     print("📋 Building result dictionary...")
-    
-    # Generate AI-powered analysis data for both PDF and frontend
-    market_analysis_data = generate_dynamic_market_data(client, location, title, description)
-    competitive_scores = generate_competitive_scores(client, location, title, description)
-    revenue_projections = generate_revenue_projections(client, location, title)
-    dynamic_percentages = generate_dynamic_percentages(client, title, description)
-    task_priorities = generate_task_priorities(client, competitive_scores, revenue_projections, dynamic_percentages)
     
     # Ensure fallback data if AI generation fails
     if not competitive_scores:
