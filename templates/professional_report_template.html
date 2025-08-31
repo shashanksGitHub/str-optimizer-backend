@@ -367,8 +367,8 @@
             text-align: center;
             font-size: 12px;
             color: #6b7280;
-            margin-top: 16px;
-            padding: 8px 0;
+            margin-top: 12px;
+            padding: 6px 0;
             border-top: 1px solid #e5e7eb;
         }
         
@@ -1530,7 +1530,7 @@
             <h2 class="market-section-title">Competitive Advantages</h2>
 
             <!-- 6-card layout using table for PDF compatibility (2 cards per row) -->
-            <table style="width: 100%; border-collapse: separate; border-spacing: 12px; margin-bottom: 20px;">
+            <table style="width: 100%; border-collapse: separate; border-spacing: 10px; margin-bottom: 16px;">
                 <!-- ROW 1: Cards 1 & 2 -->
                 <tr>
                     <!-- CARD 1: Location Analysis -->
@@ -1659,7 +1659,21 @@
                                 <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0;">Strategic Recommendations</h3>
                             </div>
                             <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start;">
-                                <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{{ pricing_analysis.split('\n')[2] if pricing_analysis and pricing_analysis.split('\n')|length > 2 else 'Strategic pricing recommendations based on market analysis and competitive positioning to optimize your property\'s performance and guest appeal.' }}</p>
+                                <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">
+                                    {% if pricing_analysis %}
+                                        {% set lines = pricing_analysis.split('\n') %}
+                                        {% if lines|length > 2 %}
+                                            {{ lines[2] }}
+                                            {% if lines|length > 3 %}
+                                                <br>• {{ lines[3] }}
+                                            {% endif %}
+                                        {% else %}
+                                            • Dynamic pricing strategy based on market demand<br>• Competitive positioning for optimal revenue
+                                        {% endif %}
+                                    {% else %}
+                                        • Dynamic pricing strategy based on market demand<br>• Competitive positioning for optimal revenue
+                                    {% endif %}
+                                </p>
                             </div>
                         </div>
                     </td>
