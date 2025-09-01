@@ -707,20 +707,22 @@ Keep total response under 60 words."""
     # Generate strategic recommendations
     strategic_recommendations = ""
     try:
-        strategic_prompt = f"""Generate strategic recommendations for this STR property in {location}:
+        strategic_prompt = f"""Generate exactly 2 strategic recommendations for this STR property:
+Location: {location}
 Title: {title}
 
-Provide 2-3 key strategic recommendations in this format:
+Format exactly like this:
 • [Strategic area]: [Specific actionable recommendation]
+
 • [Market opportunity]: [How to capitalize on it]
 
 Focus on:
-- Market positioning strategies
-- Seasonal optimization opportunities  
-- Guest experience differentiation
-- Revenue maximization tactics
+- Market positioning and differentiation strategies
+- Revenue optimization through pricing/booking tactics
+- Seasonal adjustments and demand patterns
+- Guest experience improvements that drive bookings
 
-Keep total response under 100 words."""
+Provide exactly 2 bullet points, each under 25 words."""
         
         strategic_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
