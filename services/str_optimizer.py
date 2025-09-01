@@ -704,6 +704,36 @@ Keep total response under 60 words."""
 • Title enhancement: Improved search visibility and guest appeal
 • Content optimization: Better description and amenity highlights"""
 
+    # Generate strategic recommendations
+    strategic_recommendations = ""
+    try:
+        strategic_prompt = f"""Generate strategic recommendations for this STR property in {location}:
+Title: {title}
+
+Provide 2-3 key strategic recommendations in this format:
+• [Strategic area]: [Specific actionable recommendation]
+• [Market opportunity]: [How to capitalize on it]
+
+Focus on:
+- Market positioning strategies
+- Seasonal optimization opportunities  
+- Guest experience differentiation
+- Revenue maximization tactics
+
+Keep total response under 100 words."""
+        
+        strategic_response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a vacation rental strategy consultant specializing in market positioning and revenue optimization."},
+                {"role": "user", "content": strategic_prompt}
+            ]
+        )
+        strategic_recommendations = strategic_response.choices[0].message.content.strip()
+    except Exception as e:
+        print(f"Strategic recommendations error: {e}")
+        strategic_recommendations = ""
+
     # Generate AI-powered analysis data for both PDF and frontend
     print("🤖 Generating AI analysis data...")
     market_analysis_data = generate_dynamic_market_data(client, location, title, description)
@@ -827,6 +857,7 @@ Keep total response under 60 words."""
         'pricing_analysis': pricing_analysis,
         'photo_audit': photo_audit,
         'performance_insights': performance_insights,
+        'strategic_recommendations': strategic_recommendations,  # NEW - Strategic recommendations
         'occupancy_trend_data': occupancy_trend_data,  # NEW - Chart data
         'revenue_trend_data': revenue_trend_data,  # NEW - Chart data
         'competitor_pricing_data': competitor_pricing_data,  # NEW - Chart data
