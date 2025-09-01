@@ -1514,7 +1514,7 @@
             <h2 class="market-section-title">Competitive Advantages</h2>
 
             <!-- 6-card layout using table for PDF compatibility (2 cards per row) -->
-            <table style="width: 100%; border-collapse: separate; border-spacing: 10px; margin-bottom: 16px;">
+            <table style="width: 100%; border-collapse: separate; border-spacing: 10px; margin-bottom: 8px;">
                 <!-- ROW 1: Cards 1 & 2 -->
                 <tr>
                     <!-- CARD 1: Location Analysis -->
@@ -1755,22 +1755,7 @@
                 </div>
             </div>
 
-            <!-- AI-Suggested Amenities Section -->
-            <div class="content-section">
-                <div class="content-section-header">
-                    <span class="content-section-icon">💡</span>
-                    <span class="content-section-title">AI-Suggested Amenities</span>
-                </div>
-                <div style="background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 16px; margin: 12px 0;">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                        <span style="padding: 3px 8px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; background: #fef3c7; color: #d97706;">MEDIUM PRIORITY</span>
-                    </div>
-                    <div style="font-weight: bold; color: #92400e; margin-bottom: 8px;">AI-Suggested Amenities Analysis</div>
-                    <div style="color: #92400e; font-size: 14px; line-height: 1.5;">
-                        {{ amenities }}
-                    </div>
-                </div>
-            </div>
+
 
             <!-- Footer -->
             <div class="content-footer">
@@ -1862,6 +1847,26 @@
                                 <span class="strategy-text">{{ dynamic_percentages.early_bird_discount }}% off for bookings 60+ days in advance</span>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI-Suggested Amenities Section -->
+            <div style="margin-top: 32px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                    <span style="font-size: 16px;">💡</span>
+                    <h3 style="color: #111827; font-size: 18px; font-weight: 600; margin: 0;">AI-Suggested Amenities</h3>
+                </div>
+                
+                <div class="revenue-content-container">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                        <span style="background: #fef3c7; color: #d97706; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.5px;">MEDIUM PRIORITY</span>
+                    </div>
+                    
+                    <div style="color: #111827; font-weight: 600; font-size: 16px; margin-bottom: 12px;">AI-Suggested Amenities Analysis</div>
+                    
+                    <div style="color: #374151; font-size: 14px; line-height: 1.6;">
+                        {{ amenities }}
                     </div>
                 </div>
             </div>
