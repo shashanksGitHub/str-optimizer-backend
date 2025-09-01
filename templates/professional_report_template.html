@@ -1659,27 +1659,7 @@
                                 <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0;">Strategic Recommendations</h3>
                             </div>
                             <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start;">
-                                <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">
-                                    {% if pricing_analysis %}
-                                        {% set lines = pricing_analysis.split('\n') %}
-                                        {% if lines|length > 2 %}
-                                            {% set line2_clean = lines[2].strip().replace('1.', '').replace('2.', '').replace('3.', '').replace('4.', '').replace('5.', '').strip() if lines[2] else '' %}
-                                            {% set short_line2 = line2_clean[:50] if line2_clean and line2_clean|length > 50 else line2_clean %}
-                                            • {{ short_line2 if short_line2 else 'Dynamic pricing optimization' }}
-                                            {% if lines|length > 3 and lines[3].strip() %}
-                                                {% set line3_clean = lines[3].strip().replace('1.', '').replace('2.', '').replace('3.', '').replace('4.', '').replace('5.', '').strip() %}
-                                                {% set short_line3 = line3_clean[:50] if line3_clean and line3_clean|length > 50 else line3_clean %}
-                                                <br>• {{ short_line3 if short_line3 else 'Market positioning strategy' }}
-                                            {% else %}
-                                                <br>• Market positioning strategy
-                                            {% endif %}
-                                        {% else %}
-                                            • Dynamic pricing optimization<br>• Market positioning strategy
-                                        {% endif %}
-                                    {% else %}
-                                        • Dynamic pricing optimization<br>• Market positioning strategy
-                                    {% endif %}
-                                </p>
+                                <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{{ strategic_recommendations if strategic_recommendations else '' }}</p>
                             </div>
                         </div>
                     </td>
