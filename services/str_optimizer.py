@@ -742,6 +742,7 @@ Provide exactly 2 bullet points, each under 25 words."""
     competitive_scores = generate_competitive_scores(client, location, title, description)
     revenue_projections = generate_revenue_projections(client, location, title)
     dynamic_percentages = generate_dynamic_percentages(client, title, description)
+    guest_rating = generate_guest_rating(client, location, title, description)
     task_priorities = generate_task_priorities(client, competitive_scores, revenue_projections, dynamic_percentages)
     
     # Generate chart data for visualizations
@@ -848,6 +849,9 @@ Provide exactly 2 bullet points, each under 25 words."""
             'booking_priority': 'HIGH'
         }
     
+    if not guest_rating:
+        guest_rating = 4.2
+    
     result = {
         'optimized_title': optimized_title,
         'title_suggestions': title_suggestions,  # NEW - Array of 3 title options
@@ -873,7 +877,7 @@ Provide exactly 2 bullet points, each under 25 words."""
         'task_priorities': task_priorities,
         'title': title,  # Include original title for frontend
         'location': location,  # Include location for frontend
-        'guest_rating': 4.2  # Add a realistic guest rating for display
+        'guest_rating': guest_rating
     }
     
     print("📄 Adding PDF download URL to result...")
@@ -971,6 +975,52 @@ Respond in JSON format:
     except Exception as e:
         print(f"Competitive scores generation error: {e}")
         return None
+
+
+def generate_guest_rating(client, location, title, description):
+    """Generate AI-powered realistic guest rating"""
+    if not client:
+        return 4.2  # fallback rating
+    
+    try:
+        rating_prompt = f"""Analyze this property and estimate a realistic guest rating:
+Location: {location}
+Title: {title}
+Description: {description}
+
+Based on the property details, market standards, and typical guest expectations, provide a realistic guest rating between 3.5 and 5.0.
+
+Consider factors like:
+- Location appeal and accessibility
+- Property description quality and features
+- Likely amenities and comfort level
+- Market positioning
+
+Respond with just the rating number (e.g., 4.3):"""
+        
+        rating_response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a vacation rental rating analyst specializing in realistic guest satisfaction predictions."},
+                {"role": "user", "content": rating_prompt}
+            ]
+        )
+        
+        rating_text = rating_response.choices[0].message.content.strip()
+        # Extract the numeric rating
+        rating = float(rating_text)
+        
+        # Ensure rating is within reasonable bounds
+        if rating < 3.5:
+            rating = 3.5
+        elif rating > 5.0:
+            rating = 5.0
+            
+        return round(rating, 1)
+        
+    except Exception as e:
+        print(f"Guest rating generation error: {e}")
+        return 4.2  # fallback rating
 
 
 def generate_revenue_projections(client, location, title):
