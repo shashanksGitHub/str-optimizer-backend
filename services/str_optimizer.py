@@ -985,13 +985,13 @@ Title: {title}
 
 Provide realistic analysis in JSON format:
 {{
-    "booking_improvement": [5-40 percent potential],
-    "revenue_impact": [5-30 percent potential],
+    "booking_improvement": [5-40],
+    "revenue_impact": [5-30],
     "occupancy_rates": [[leisure %], [family %], [business %]],
     "seasonal_adjustments": {{
-        "peak_increase": [10-60 percent],
-        "off_season_decrease": [10-40 percent], 
-        "weekend_premium": [15-50 percent]
+        "peak_increase": [10-60],
+        "off_season_decrease": [10-40], 
+        "weekend_premium": [15-50]
     }}
 }}
 
