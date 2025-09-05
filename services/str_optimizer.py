@@ -849,7 +849,19 @@ Provide exactly 2 bullet points, each under 25 words."""
             'booking_priority': 'HIGH'
         }
     
-    if not guest_rating:
+    # Ensure guest_rating is always a valid number (never None, 0, or falsy)
+    if not guest_rating or guest_rating == 0:
+        guest_rating = 4.2
+    
+    # Additional safety check to ensure it's a proper float
+    try:
+        guest_rating = float(guest_rating)
+        if guest_rating < 3.5:
+            guest_rating = 3.5
+        elif guest_rating > 5.0:
+            guest_rating = 5.0
+        guest_rating = round(guest_rating, 1)
+    except (ValueError, TypeError):
         guest_rating = 4.2
     
     result = {
@@ -1007,8 +1019,18 @@ Respond with just the rating number (e.g., 4.3):"""
         )
         
         rating_text = rating_response.choices[0].message.content.strip()
-        # Extract the numeric rating
-        rating = float(rating_text)
+        
+        # Extract the numeric rating with better error handling
+        try:
+            # Try to extract just the number from the response
+            import re
+            number_match = re.search(r'(\d+\.?\d*)', rating_text)
+            if number_match:
+                rating = float(number_match.group(1))
+            else:
+                rating = 4.2  # fallback if no number found
+        except (ValueError, AttributeError):
+            rating = 4.2  # fallback if conversion fails
         
         # Ensure rating is within reasonable bounds
         if rating < 3.5:
@@ -1074,20 +1096,20 @@ def generate_dynamic_percentages(client, title, description):
 Title: {title}
 Description: {description}
 
-Provide values in JSON format:
+Provide values in JSON format with ranges using dashes (no brackets, no commas):
 {{
-    "search_visibility": [10-30],
-    "conversion_rate": [15-35], 
-    "average_rate_adjustment": [20-40],
-    "review_probability": [30-70],
-    "midweek_discount": [10-25],
-    "lastminute_discount": [5-15],
-    "monthly_discount": [15-30],
-    "seasonal_adjustment": [5-20],
-    "minimum_stay_revenue": [30-60],
-    "holiday_premium": [30-70],
-    "extended_stay_discount": [15-25],
-    "early_bird_discount": [5-15]
+    "search_visibility": "10-30",
+    "conversion_rate": "15-35", 
+    "average_rate_adjustment": "20-40",
+    "review_probability": "30-70",
+    "midweek_discount": "12-18",
+    "lastminute_discount": "7-12",
+    "monthly_discount": "15-30",
+    "seasonal_adjustment": "5-20",
+    "minimum_stay_revenue": "35-50",
+    "holiday_premium": "40-60",
+    "extended_stay_discount": "18-22",
+    "early_bird_discount": "8-12"
 }}
 
 Base on property type and market positioning."""
