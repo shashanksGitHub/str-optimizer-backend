@@ -2022,7 +2022,7 @@
                     {% if photo_audit %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Reorganize photo order based on AI analysis: {% if photo_audit and '. ' in photo_audit and photo_audit.split('. ')|length > 1 %}{% set base_text = photo_audit.split('. ')[1] %}{{ base_text.split(' 2')[0].split('. 2')[0].split(' 3')[0].split('. 3')[0].split(' 4')[0].split('. 4')[0].rstrip(' .') + '.' }}{% else %}Optimize photo sequence for better engagement{% endif %}</span>
+                        <span class="check-text">Reorganize photo order based on AI analysis: {% if photo_audit and '. ' in photo_audit and photo_audit.split('. ')|length > 1 %}{% set base_text = photo_audit.split('. ')[1] %}{% set cleaned_text = base_text.split(' 2.')[0].split(' 2')[0].split('. 2.')[0].split('. 2')[0].split(' 3.')[0].split(' 3')[0].split('. 3.')[0].split('. 3')[0].split(' 4.')[0].split(' 4')[0].split('. 4.')[0].split('. 4')[0] %}{{ cleaned_text.rstrip(' .0123456789') + '.' }}{% else %}Optimize photo sequence for better engagement{% endif %}</span>
                     </div>
                     {% endif %}
                     
@@ -2103,7 +2103,7 @@
                     {% if photo_audit %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Create photo opportunities: {% if photo_audit and '. ' in photo_audit and photo_audit.split('. ')|length > 1 %}{% set base_text = photo_audit.split('. ')[1] %}{{ base_text.split(' 2')[0].split('. 2')[0].split(' 3')[0].split('. 3')[0].split(' 4')[0].split('. 4')[0].rstrip(' .') + '.' }}{% else %}AI-optimized visual appeal{% endif %}</span>
+                        <span class="check-text">Create photo opportunities: {% if photo_audit and '. ' in photo_audit and photo_audit.split('. ')|length > 1 %}{% set base_text = photo_audit.split('. ')[1] %}{% set cleaned_text = base_text.split(' 2.')[0].split(' 2')[0].split('. 2.')[0].split('. 2')[0].split(' 3.')[0].split(' 3')[0].split('. 3.')[0].split('. 3')[0].split(' 4.')[0].split(' 4')[0].split('. 4.')[0].split('. 4')[0] %}{{ cleaned_text.rstrip(' .0123456789') + '.' }}{% else %}AI-optimized visual appeal{% endif %}</span>
                     </div>
                     {% endif %}
                 </div>
