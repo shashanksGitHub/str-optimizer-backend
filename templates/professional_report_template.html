@@ -2022,7 +2022,7 @@
                     {% if photo_audit %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Reorganize photo order based on AI analysis: {{ photo_audit.split('. ')[1].split(' 2')[0] if '. ' in photo_audit and photo_audit.split('. ')|length > 1 else (photo_audit.split('.')[0] + '.' if photo_audit.split('.')|length > 1 else 'Optimize photo sequence for better engagement') }}</span>
+                        <span class="check-text">Reorganize photo order based on AI analysis: {{ photo_audit.split('. ')[1].split('. 2')[0].split(' 2')[0].rstrip('.') + '.' if '. ' in photo_audit and photo_audit.split('. ')|length > 1 else (photo_audit.split('.')[0] + '.' if photo_audit.split('.')|length > 1 else 'Optimize photo sequence for better engagement') }}</span>
                     </div>
                     {% endif %}
                     
@@ -2103,7 +2103,7 @@
                     {% if photo_audit %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Create photo opportunities: {{ photo_audit.split('. ')[1].split(' 2')[0] if '. ' in photo_audit and photo_audit.split('. ')|length > 1 else (photo_audit.split('.')[0] + '.' if photo_audit.split('.')|length > 1 else 'AI-optimized visual appeal') }}</span>
+                        <span class="check-text">Create photo opportunities: {{ photo_audit.split('. ')[1].split('. 2')[0].split(' 2')[0].rstrip('.') + '.' if '. ' in photo_audit and photo_audit.split('. ')|length > 1 else (photo_audit.split('.')[0] + '.' if photo_audit.split('.')|length > 1 else 'AI-optimized visual appeal') }}</span>
                     </div>
                     {% endif %}
                 </div>
