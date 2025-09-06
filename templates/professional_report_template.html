@@ -2022,7 +2022,7 @@
                     {% if photo_audit %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Reorganize photo order based on AI analysis: {{ photo_audit.split('.')[0] if photo_audit.split('.')|length > 0 else 'Optimize photo sequence for better engagement' }}.</span>
+                        <span class="check-text">Reorganize photo order based on AI analysis: {{ photo_audit.split('. ')[1] if '. ' in photo_audit and photo_audit.split('. ')|length > 1 else (photo_audit.split('.')[0] + '.' if photo_audit.split('.')|length > 1 else 'Optimize photo sequence for better engagement') }}</span>
                     </div>
                     {% endif %}
                     
@@ -2045,7 +2045,7 @@
                     {% if market_analysis_data and market_analysis_data.market_insights %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Implement seasonal pricing strategy: {{ market_analysis_data.market_insights[0].split('.')[0] if market_analysis_data.market_insights|length > 0 else 'AI-optimized pricing' }}</span>
+                        <span class="check-text">Implement seasonal pricing strategy: {{ market_analysis_data.market_insights[0] if market_analysis_data.market_insights|length > 0 else 'AI-optimized pricing strategy based on local market conditions' }}</span>
                     </div>
                     {% endif %}
                     
@@ -2066,7 +2066,7 @@
                     {% if guest_profile_analysis %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Update house rules: {{ guest_profile_analysis.split('.')[0] if guest_profile_analysis.split('.')|length > 0 else 'AI-optimized positioning' }}.</span>
+                        <span class="check-text">Update house rules: {{ guest_profile_analysis.split('. ')[1] if '. ' in guest_profile_analysis and guest_profile_analysis.split('. ')|length > 1 else (guest_profile_analysis.split('.')[0] + '.' if guest_profile_analysis.split('.')|length > 1 else 'AI-optimized positioning') }}</span>
                     </div>
                     {% endif %}
                 </div>
@@ -2089,7 +2089,7 @@
                     {% if guest_profile_analysis %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Set up automated messaging: {{ guest_profile_analysis.split('.')[0] if guest_profile_analysis.split('.')|length > 0 else 'AI-optimized guest experience' }}.</span>
+                        <span class="check-text">Set up automated messaging: {{ guest_profile_analysis.split('. ')[1] if '. ' in guest_profile_analysis and guest_profile_analysis.split('. ')|length > 1 else (guest_profile_analysis.split('.')[0] + '.' if guest_profile_analysis.split('.')|length > 1 else 'AI-optimized guest experience') }}</span>
                     </div>
                     {% endif %}
                     
@@ -2103,7 +2103,7 @@
                     {% if photo_audit %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Create photo opportunities: {{ photo_audit.split('.')[0] if photo_audit.split('.')|length > 0 else 'AI-optimized visual appeal' }}.</span>
+                        <span class="check-text">Create photo opportunities: {{ photo_audit.split('. ')[1] if '. ' in photo_audit and photo_audit.split('. ')|length > 1 else (photo_audit.split('.')[0] + '.' if photo_audit.split('.')|length > 1 else 'AI-optimized visual appeal') }}</span>
                     </div>
                     {% endif %}
                 </div>
