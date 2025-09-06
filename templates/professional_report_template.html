@@ -2022,14 +2022,14 @@
                     {% if photo_audit %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Reorganize photo order based on AI analysis: {{ photo_audit.split('.')[0] }}</span>
+                        <span class="check-text">Reorganize photo order based on AI analysis: {{ photo_audit.split('.')[0] if photo_audit.split('.')|length > 0 else 'Optimize photo sequence for better engagement' }}.</span>
                     </div>
                     {% endif %}
                     
                     {% if amenities %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Create package offerings: {{ amenities.split('\n')[0] if amenities.split('\n')|length > 0 else 'AI-suggested packages' }}</span>
+                        <span class="check-text">Create package offerings: {{ amenities.split('\n')[0].replace('1. ', '') if amenities.split('\n')|length > 0 and amenities.split('\n')[0] else 'High-speed WiFi and essential amenities' }}</span>
                     </div>
                     {% endif %}
                 </div>
@@ -2052,7 +2052,7 @@
                     {% if amenities %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Set up add-on packages: {{ amenities.split('\n')[0] if amenities.split('\n')|length > 0 else 'AI-suggested amenities' }}</span>
+                        <span class="check-text">Set up add-on packages: {{ amenities.split('\n')[0].replace('1. ', '') if amenities.split('\n')|length > 0 and amenities.split('\n')[0] else 'High-speed WiFi and essential amenities' }}</span>
                     </div>
                     {% endif %}
                     
@@ -2066,7 +2066,7 @@
                     {% if guest_profile_analysis %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Update house rules: {{ guest_profile_analysis.split('.')[0] if guest_profile_analysis.split('.')|length > 0 else 'AI-optimized positioning' }}</span>
+                        <span class="check-text">Update house rules: {{ guest_profile_analysis.split('.')[0] if guest_profile_analysis.split('.')|length > 0 else 'AI-optimized positioning' }}.</span>
                     </div>
                     {% endif %}
                 </div>
@@ -2089,21 +2089,21 @@
                     {% if guest_profile_analysis %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Set up automated messaging: {{ guest_profile_analysis.split('.')[0] if guest_profile_analysis.split('.')|length > 0 else 'AI-optimized guest experience' }}</span>
+                        <span class="check-text">Set up automated messaging: {{ guest_profile_analysis.split('.')[0] if guest_profile_analysis.split('.')|length > 0 else 'AI-optimized guest experience' }}.</span>
                     </div>
                     {% endif %}
                     
                     {% if amenities %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Order supplies for: {{ amenities.split('\n')[0] if amenities.split('\n')|length > 0 else 'AI-suggested amenities' }}</span>
+                        <span class="check-text">Order supplies for: {{ amenities.split('\n')[0].replace('1. ', '') if amenities.split('\n')|length > 0 and amenities.split('\n')[0] else 'High-speed WiFi and essential amenities' }}</span>
                     </div>
                     {% endif %}
                     
                     {% if photo_audit %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Create photo opportunities: {{ photo_audit.split('.')[0] if photo_audit.split('.')|length > 0 else 'AI-optimized visual appeal' }}</span>
+                        <span class="check-text">Create photo opportunities: {{ photo_audit.split('.')[0] if photo_audit.split('.')|length > 0 else 'AI-optimized visual appeal' }}.</span>
                     </div>
                     {% endif %}
                 </div>
