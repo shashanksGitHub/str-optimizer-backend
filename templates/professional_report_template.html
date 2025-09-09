@@ -2063,12 +2063,7 @@
                     </div>
                     {% endif %}
                     
-                    {% if guest_profile_analysis %}
-                    <div class="checklist-item">
-                        <span class="check-icon">✓</span>
-                        <span class="check-text">Update house rules: {{ guest_profile_analysis.split('. ')[1] if '. ' in guest_profile_analysis and guest_profile_analysis.split('. ')|length > 1 else (guest_profile_analysis.split('.')[0] + '.' if guest_profile_analysis.split('.')|length > 1 else 'AI-optimized positioning') }}</span>
-                    </div>
-                    {% endif %}
+
                 </div>
 
 
@@ -2086,12 +2081,7 @@
                     </div>
                     {% endif %}
                     
-                    {% if guest_profile_analysis %}
-                    <div class="checklist-item">
-                        <span class="check-icon">✓</span>
-                        <span class="check-text">Set up automated messaging: {{ guest_profile_analysis.split('. ')[1] if '. ' in guest_profile_analysis and guest_profile_analysis.split('. ')|length > 1 else (guest_profile_analysis.split('.')[0] + '.' if guest_profile_analysis.split('.')|length > 1 else 'AI-optimized guest experience') }}</span>
-                    </div>
-                    {% endif %}
+
                     
                     {% if amenities %}
                     <div class="checklist-item">
