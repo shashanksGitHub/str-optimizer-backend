@@ -37,6 +37,7 @@ allowed_origins = [
     "http://localhost:3000", 
     "http://localhost:3001",
     "https://str-optimizer.web.app",  # Firebase hosting
+    "https://optimizemystr.com",  # Production frontend domain
     "https://str-optimizer-backend-7d9de05e5c57.herokuapp.com",  # Heroku backend URL
 ]
 
