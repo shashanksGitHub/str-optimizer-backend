@@ -1661,7 +1661,17 @@
                                         {% endif %}
                                         {% if guest_profile_analysis.split('\n')|length > 1 %}
                                             {% set clean_line2 = guest_profile_analysis.split('\n')[1] | replace('**', '') | replace('*', '') %}
-                                            {% if clean_line2.startswith('2. ') %}
+                                            {% if clean_line2.startswith('1. ') %}
+                                                <br>• {{ clean_line2[3:] }}
+                                            {% elif clean_line2.startswith('1) ') %}
+                                                <br>• {{ clean_line2[3:] }}
+                                            {% elif clean_line2.startswith('1 ') %}
+                                                <br>• {{ clean_line2[2:] }}
+                                            {% elif clean_line2.startswith('1:') %}
+                                                <br>• {{ clean_line2[2:] }}
+                                            {% elif clean_line2.startswith('1-') %}
+                                                <br>• {{ clean_line2[2:] }}
+                                            {% elif clean_line2.startswith('2. ') %}
                                                 <br>• {{ clean_line2[3:] }}
                                             {% elif clean_line2.startswith('2) ') %}
                                                 <br>• {{ clean_line2[3:] }}
