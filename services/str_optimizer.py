@@ -466,18 +466,18 @@ def optimize_listing(form_data):
 Reviews: {reviews}
 
 Provide analysis in exactly this format:
-**Recurring Praise:**
+**Recurring Praise**
 - [Top 3 most mentioned positive aspects]
 
-**Common Complaints:**
+**Common Complaints**
 - [Top 2-3 recurring issues mentioned]
 
-**Sentiment Trends:**
+**Sentiment Trends**
 - Overall sentiment: [Positive/Mixed/Negative] ([X]% positive mentions)
 - Guest satisfaction score: [X]/10
 - Key emotional drivers: [list top 2-3]
 
-**Actionable Insights:**
+**Actionable Insights**
 - [2-3 specific recommendations based on feedback patterns]"""
         
         try:
@@ -493,21 +493,21 @@ Provide analysis in exactly this format:
             print(f"Sentiment analysis error: {e}")
     
     if not review_sentiment_analysis:
-        review_sentiment_analysis = """**Recurring Praise:**
+        review_sentiment_analysis = """**Recurring Praise**
 - Location and accessibility
 - Cleanliness and comfort
 - Host responsiveness
 
-**Common Complaints:**
+**Common Complaints**
 - WiFi connectivity issues
 - Noise from nearby areas
 
-**Sentiment Trends:**
+**Sentiment Trends**
 - Overall sentiment: Positive (78% positive mentions)
 - Guest satisfaction score: 7.8/10
 - Key emotional drivers: Comfort, convenience, value
 
-**Actionable Insights:**
+**Actionable Insights**
 - Upgrade internet infrastructure for better connectivity
 - Add noise-canceling features or soundproofing
 - Highlight location benefits more prominently in listing"""
