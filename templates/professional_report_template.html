@@ -1518,11 +1518,15 @@
             <div class="market-info-box" style="margin-bottom: 16px;">
                 {% if pricing_analysis %}
                     {% set first_line = pricing_analysis.split('\n')[0] %}
-                    {% if first_line.startswith('1. ') %}
-                        {{ first_line[3:] }}
-                    {% else %}
-                        {{ first_line }}
-                    {% endif %}
+                    {% set clean_line = first_line | replace('**', '') | replace('*', '') %}
+                    {# Remove numbered list patterns #}
+                    {% for i in range(1, 21) %}
+                        {% set clean_line = clean_line | replace(i ~ '. ', '') %}
+                        {% set clean_line = clean_line | replace(i ~ ') ', '') %}
+                        {% set clean_line = clean_line | replace(i ~ ': ', '') %}
+                        {% set clean_line = clean_line | replace(i ~ ' ', '', 1) if clean_line.startswith(i ~ ' ') %}
+                    {% endfor %}
+                    {{ clean_line.strip() }}
                 {% endif %}
             </div>
 
@@ -1544,11 +1548,15 @@
                                 <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
                                     {% if pricing_analysis %}
                                         {% set first_line = pricing_analysis.split('\n')[0] %}
-                                        {% if first_line.startswith('1. ') %}
-                                            • {{ first_line[3:] }}
-                                        {% else %}
-                                            {{ first_line }}
-                                        {% endif %}
+                                        {% set clean_line = first_line | replace('**', '') | replace('*', '') %}
+                                        {# Remove numbered list patterns #}
+                                        {% for i in range(1, 21) %}
+                                            {% set clean_line = clean_line | replace(i ~ '. ', '') %}
+                                            {% set clean_line = clean_line | replace(i ~ ') ', '') %}
+                                            {% set clean_line = clean_line | replace(i ~ ': ', '') %}
+                                            {% set clean_line = clean_line | replace(i ~ ' ', '', 1) if clean_line.startswith(i ~ ' ') %}
+                                        {% endfor %}
+                                        • {{ clean_line.strip() }}
                                     {% endif %}
                                 </p>
                                 <div style="margin-top: auto;">
@@ -1572,20 +1580,20 @@
                             <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
                                 <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
                                     {% if amenities %}
-                                        {% set line1 = amenities.split('\n')[0] if amenities.split('\n')|length > 0 else '' %}
-                                        {% if line1.startswith('1. ') %}
-                                            • {{ line1[3:] }}
-                                        {% else %}
-                                            {{ line1 }}
-                                        {% endif %}
-                                        {% if amenities.split('\n')|length > 1 %}
-                                            {% set line2 = amenities.split('\n')[1] %}
-                                            {% if line2.startswith('2. ') %}
-                                                <br>• {{ line2[3:] }}
-                                            {% else %}
-                                                <br>{{ line2 }}
+                                        {% set lines = amenities.split('\n') %}
+                                        {% for line in lines[:2] %}
+                                            {% if line.strip() %}
+                                                {% set clean_line = line | replace('**', '') | replace('*', '') %}
+                                                {# Remove numbered list patterns #}
+                                                {% for i in range(1, 21) %}
+                                                    {% set clean_line = clean_line | replace(i ~ '. ', '') %}
+                                                    {% set clean_line = clean_line | replace(i ~ ') ', '') %}
+                                                    {% set clean_line = clean_line | replace(i ~ ': ', '') %}
+                                                    {% set clean_line = clean_line | replace(i ~ ' ', '', 1) if clean_line.startswith(i ~ ' ') %}
+                                                {% endfor %}
+                                                {% if not loop.first %}<br>{% endif %}• {{ clean_line.strip() }}
                                             {% endif %}
-                                        {% endif %}
+                                        {% endfor %}
                                     {% else %}
                                         • Mini fridge for guest convenience<br>• Enhanced comfort amenities
                                     {% endif %}
@@ -1616,11 +1624,15 @@
                                 <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
                                     {% if photo_audit %}
                                         {% set first_line = photo_audit.split('\n')[0] %}
-                                        {% if first_line.startswith('1. ') %}
-                                            • {{ first_line[3:] }}
-                                        {% else %}
-                                            {{ first_line }}
-                                        {% endif %}
+                                        {% set clean_line = first_line | replace('**', '') | replace('*', '') %}
+                                        {# Remove numbered list patterns #}
+                                        {% for i in range(1, 21) %}
+                                            {% set clean_line = clean_line | replace(i ~ '. ', '') %}
+                                            {% set clean_line = clean_line | replace(i ~ ') ', '') %}
+                                            {% set clean_line = clean_line | replace(i ~ ': ', '') %}
+                                            {% set clean_line = clean_line | replace(i ~ ' ', '', 1) if clean_line.startswith(i ~ ' ') %}
+                                        {% endfor %}
+                                        • {{ clean_line.strip() }}
                                     {% else %}
                                         • No photos detected.
                                     {% endif %}
@@ -1650,29 +1662,13 @@
                                         {% for line in lines[:2] %}
                                             {% if line.strip() %}
                                                 {% set clean_line = line | replace('**', '') | replace('*', '') %}
-                                                {% if clean_line.startswith('1. ') %}
-                                                    {% set clean_line = clean_line[3:] %}
-                                                {% elif clean_line.startswith('2. ') %}
-                                                    {% set clean_line = clean_line[3:] %}
-                                                {% elif clean_line.startswith('3. ') %}
-                                                    {% set clean_line = clean_line[3:] %}
-                                                {% elif clean_line.startswith('4. ') %}
-                                                    {% set clean_line = clean_line[3:] %}
-                                                {% elif clean_line.startswith('5. ') %}
-                                                    {% set clean_line = clean_line[3:] %}
-                                                {% elif clean_line.startswith('1) ') %}
-                                                    {% set clean_line = clean_line[3:] %}
-                                                {% elif clean_line.startswith('2) ') %}
-                                                    {% set clean_line = clean_line[3:] %}
-                                                {% elif clean_line.startswith('1: ') %}
-                                                    {% set clean_line = clean_line[3:] %}
-                                                {% elif clean_line.startswith('2: ') %}
-                                                    {% set clean_line = clean_line[3:] %}
-                                                {% elif clean_line.startswith('1 ') %}
-                                                    {% set clean_line = clean_line[2:] %}
-                                                {% elif clean_line.startswith('2 ') %}
-                                                    {% set clean_line = clean_line[2:] %}
-                                                {% endif %}
+                                                {# Remove numbered list patterns #}
+                                                {% for i in range(1, 21) %}
+                                                    {% set clean_line = clean_line | replace(i ~ '. ', '') %}
+                                                    {% set clean_line = clean_line | replace(i ~ ') ', '') %}
+                                                    {% set clean_line = clean_line | replace(i ~ ': ', '') %}
+                                                    {% set clean_line = clean_line | replace(i ~ ' ', '', 1) if clean_line.startswith(i ~ ' ') %}
+                                                {% endfor %}
                                                 {% if not loop.first %}<br>{% endif %}• {{ clean_line.strip() }}
                                             {% endif %}
                                         {% endfor %}
@@ -2094,7 +2090,7 @@
                     {% if amenities %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Create package offerings: {{ amenities.split('\n')[0].replace('1. ', '') if amenities.split('\n')|length > 0 and amenities.split('\n')[0] else 'High-speed WiFi and essential amenities' }}</span>
+                        <span class="check-text">Create package offerings: {% if amenities.split('\n')|length > 0 and amenities.split('\n')[0] %}{% set clean_line = amenities.split('\n')[0] | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_line = clean_line | replace(i ~ '. ', '') %}{% set clean_line = clean_line | replace(i ~ ') ', '') %}{% set clean_line = clean_line | replace(i ~ ': ', '') %}{% set clean_line = clean_line | replace(i ~ ' ', '', 1) if clean_line.startswith(i ~ ' ') %}{% endfor %}{{ clean_line.strip() }}{% else %}High-speed WiFi and essential amenities{% endif %}</span>
                     </div>
                     {% endif %}
                 </div>
@@ -2117,7 +2113,7 @@
                     {% if amenities %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Set up add-on packages: {{ amenities.split('\n')[0].replace('1. ', '') if amenities.split('\n')|length > 0 and amenities.split('\n')[0] else 'High-speed WiFi and essential amenities' }}</span>
+                        <span class="check-text">Set up add-on packages: {% if amenities.split('\n')|length > 0 and amenities.split('\n')[0] %}{% set clean_line = amenities.split('\n')[0] | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_line = clean_line | replace(i ~ '. ', '') %}{% set clean_line = clean_line | replace(i ~ ') ', '') %}{% set clean_line = clean_line | replace(i ~ ': ', '') %}{% set clean_line = clean_line | replace(i ~ ' ', '', 1) if clean_line.startswith(i ~ ' ') %}{% endfor %}{{ clean_line.strip() }}{% else %}High-speed WiFi and essential amenities{% endif %}</span>
                     </div>
                     {% endif %}
                     
@@ -2151,7 +2147,7 @@
                     {% if amenities %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Order supplies for: {{ amenities.split('\n')[0].replace('1. ', '') if amenities.split('\n')|length > 0 and amenities.split('\n')[0] else 'High-speed WiFi and essential amenities' }}</span>
+                        <span class="check-text">Order supplies for: {% if amenities.split('\n')|length > 0 and amenities.split('\n')[0] %}{% set clean_line = amenities.split('\n')[0] | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_line = clean_line | replace(i ~ '. ', '') %}{% set clean_line = clean_line | replace(i ~ ') ', '') %}{% set clean_line = clean_line | replace(i ~ ': ', '') %}{% set clean_line = clean_line | replace(i ~ ' ', '', 1) if clean_line.startswith(i ~ ' ') %}{% endfor %}{{ clean_line.strip() }}{% else %}High-speed WiFi and essential amenities{% endif %}</span>
                     </div>
                     {% endif %}
                     
