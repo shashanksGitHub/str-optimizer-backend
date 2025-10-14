@@ -1646,16 +1646,36 @@
                             <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
                                 <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
                                     {% if guest_profile_analysis %}
-                                        {% set clean_line1 = guest_profile_analysis.split('\n')[0] | replace('**', '') | replace('*', '') if guest_profile_analysis.split('\n')|length > 0 else '' %}
-                                        {% set clean_line1 = clean_line1 | regex_replace('^\\d+\\.\\s*', '') %}
-                                        • {{ clean_line1 }}
-                                        {% if guest_profile_analysis.split('\n')|length > 1 %}
-                                            {% set clean_line2 = guest_profile_analysis.split('\n')[1] | replace('**', '') | replace('*', '') %}
-                                            {% set clean_line2 = clean_line2 | regex_replace('^\\d+\\.\\s*', '') %}
-                                            {% if clean_line2.strip() %}
-                                                <br>• {{ clean_line2 }}
+                                        {% set lines = guest_profile_analysis.split('\n') %}
+                                        {% for line in lines[:2] %}
+                                            {% if line.strip() %}
+                                                {% set clean_line = line | replace('**', '') | replace('*', '') %}
+                                                {% if clean_line.startswith('1. ') %}
+                                                    {% set clean_line = clean_line[3:] %}
+                                                {% elif clean_line.startswith('2. ') %}
+                                                    {% set clean_line = clean_line[3:] %}
+                                                {% elif clean_line.startswith('3. ') %}
+                                                    {% set clean_line = clean_line[3:] %}
+                                                {% elif clean_line.startswith('4. ') %}
+                                                    {% set clean_line = clean_line[3:] %}
+                                                {% elif clean_line.startswith('5. ') %}
+                                                    {% set clean_line = clean_line[3:] %}
+                                                {% elif clean_line.startswith('1) ') %}
+                                                    {% set clean_line = clean_line[3:] %}
+                                                {% elif clean_line.startswith('2) ') %}
+                                                    {% set clean_line = clean_line[3:] %}
+                                                {% elif clean_line.startswith('1: ') %}
+                                                    {% set clean_line = clean_line[3:] %}
+                                                {% elif clean_line.startswith('2: ') %}
+                                                    {% set clean_line = clean_line[3:] %}
+                                                {% elif clean_line.startswith('1 ') %}
+                                                    {% set clean_line = clean_line[2:] %}
+                                                {% elif clean_line.startswith('2 ') %}
+                                                    {% set clean_line = clean_line[2:] %}
+                                                {% endif %}
+                                                {% if not loop.first %}<br>{% endif %}• {{ clean_line.strip() }}
                                             {% endif %}
-                                        {% endif %}
+                                        {% endfor %}
                                     {% else %}
                                         • Primary Guest Personas:<br>• Luxury Travelers: Seeking upscale accommodations with exclusive amenities like a private pool and stunning mountain views. They value tranquility and privacy during their stay. [40% of bookings]<br>• Business travelers and couples<br>• Weekend getaway seekers
                                     {% endif %}
