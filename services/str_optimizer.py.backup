@@ -574,20 +574,20 @@ Reviews available: {'Yes' if reviews else 'No'}
 
 Provide analysis in exactly this format:
 **Primary Guest Personas:**
-1. [Persona 1]: [description, % of bookings]
-2. [Persona 2]: [description, % of bookings]  
-3. [Persona 3]: [description, % of bookings]
+• [Persona 1]: [description, % of bookings]
+• [Persona 2]: [description, % of bookings]  
+• [Persona 3]: [description, % of bookings]
 
 **Guest Demographics:**
-- Age range: [X-Y] years (primary), [X-Y] years (secondary)
-- Travel purpose: [leisure/business/mixed] ([X]% split)
-- Group size: [X] people average
-- Booking lead time: [X] days average
+• Age range: [X-Y] years (primary), [X-Y] years (secondary)
+• Travel purpose: [leisure/business/mixed] ([X]% split)
+• Group size: [X] people average
+• Booking lead time: [X] days average
 
 **Tailored Recommendations:**
-- Amenities to emphasize: [top 3 for target guests]
-- Messaging adjustments: [2-3 specific suggestions]
-- Service enhancements: [2-3 guest-specific improvements]"""
+• Amenities to emphasize: [top 3 for target guests]
+• Messaging adjustments: [2-3 specific suggestions]
+• Service enhancements: [2-3 guest-specific improvements]"""
         
         try:
             profile_response = client.chat.completions.create(
@@ -603,20 +603,20 @@ Provide analysis in exactly this format:
     
     if not guest_profile_analysis:
         guest_profile_analysis = """**Primary Guest Personas:**
-1. Leisure Couples: Romantic getaways, weekend trips (40% of bookings)
-2. Remote Workers: Digital nomads, extended stays (35% of bookings)
-3. Small Families: Parents with 1-2 children, vacation stays (25% of bookings)
+• Leisure Couples: Romantic getaways, weekend trips (40% of bookings)
+• Remote Workers: Digital nomads, extended stays (35% of bookings)
+• Small Families: Parents with 1-2 children, vacation stays (25% of bookings)
 
 **Guest Demographics:**
-- Age range: 28-45 years (primary), 25-35 years (secondary)
-- Travel purpose: Leisure (60%), Business (25%), Mixed (15%)
-- Group size: 2.3 people average
-- Booking lead time: 12 days average
+• Age range: 28-45 years (primary), 25-35 years (secondary)
+• Travel purpose: Leisure (60%), Business (25%), Mixed (15%)
+• Group size: 2.3 people average
+• Booking lead time: 12 days average
 
 **Tailored Recommendations:**
-- Amenities to emphasize: High-speed WiFi, romantic ambiance features, family-friendly amenities
-- Messaging adjustments: Highlight work-from-home setup, romantic features, child safety measures
-- Service enhancements: Welcome packages for couples, workspace setup guide, family activity recommendations"""
+• Amenities to emphasize: High-speed WiFi, romantic ambiance features, family-friendly amenities
+• Messaging adjustments: Highlight work-from-home setup, romantic features, child safety measures
+• Service enhancements: Welcome packages for couples, workspace setup guide, family activity recommendations"""
 
     # Scrape images from Airbnb listing
     image_urls = []
