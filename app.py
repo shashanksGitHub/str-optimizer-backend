@@ -221,7 +221,7 @@ def payment_success():
     session_id = request.args.get('session_id')
     if not session_id:
         # Redirect to frontend with error
-        frontend_url = os.getenv('FRONTEND_URL', 'https://str-optimizer.web.app')
+        frontend_url = os.getenv('FRONTEND_URL', 'https://optimizemystr.com')
         return redirect(f'{frontend_url}/payment-error?error=missing_session_id')
 
     try:
@@ -231,7 +231,7 @@ def payment_success():
         metadata = checkout_session.metadata
 
         if not metadata or not metadata.get('delivery_type'):
-            frontend_url = os.getenv('FRONTEND_URL', 'https://str-optimizer.web.app')
+            frontend_url = os.getenv('FRONTEND_URL', 'https://optimizemystr.com')
             return redirect(f'{frontend_url}/payment-error?error=invalid_session_data')
         
         delivery_type = metadata.get('delivery_type')
@@ -259,16 +259,16 @@ def payment_success():
         # Just redirect immediately to show the beautiful loading experience
         
         # Redirect to frontend success page with session_id
-        frontend_url = os.getenv('FRONTEND_URL', 'https://str-optimizer.web.app')
+        frontend_url = os.getenv('FRONTEND_URL', 'https://optimizemystr.com')
         return redirect(f'{frontend_url}/payment-success?session_id={session_id}')
         
     except stripe.error.StripeError as e:
         print(f"❌ Stripe error in payment success: {e}")
-        frontend_url = os.getenv('FRONTEND_URL', 'https://str-optimizer.web.app')
+        frontend_url = os.getenv('FRONTEND_URL', 'https://optimizemystr.com')
         return redirect(f'{frontend_url}/payment-error?error=stripe_error')
     except Exception as e:
         print(f"❌ Unexpected error in payment success: {e}")
-        frontend_url = os.getenv('FRONTEND_URL', 'https://str-optimizer.web.app')
+        frontend_url = os.getenv('FRONTEND_URL', 'https://optimizemystr.com')
         return redirect(f'{frontend_url}/payment-error?error=unexpected_error')
 
 # New endpoint for frontend to fetch optimization results
@@ -331,7 +331,9 @@ def get_optimization_result(session_id):
 
 @app.route('/api/payment-cancel')
 def payment_cancel():
-    return jsonify({'message': 'Payment cancelled'})
+    # Redirect to frontend cancel page instead of showing JSON
+    frontend_url = os.getenv('FRONTEND_URL', 'https://optimizemystr.com')
+    return redirect(f'{frontend_url}/payment-cancel')
 
 # Legacy routes for backwards compatibility (redirect to API routes)
 @app.route('/payment-success')
