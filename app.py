@@ -17,6 +17,9 @@ from PIL import Image
 import io
 import re
 from dotenv import load_dotenv
+import firebase_admin
+from firebase_admin import credentials, auth as firebase_auth
+import secrets
 
 # Load environment variables from .env file
 load_dotenv()
@@ -26,6 +29,36 @@ from services.airbnb_scraper import scrape_airbnb_images
 from services.pdf_generator import ModernPDF
 from services.email_service import send_email
 from services.str_optimizer import optimize_listing
+
+# Initialize Firebase Admin SDK
+try:
+    # Try to initialize Firebase Admin with default credentials
+    # For production, set GOOGLE_APPLICATION_CREDENTIALS env variable
+    if not firebase_admin._apps:
+        # Initialize with the same project as frontend
+        cred = credentials.Certificate({
+            "type": "service_account",
+            "project_id": "str-optimizer",
+            "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
+            "private_key": os.getenv("FIREBASE_PRIVATE_KEY", "").replace('\\n', '\n'),
+            "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
+            "client_id": os.getenv("FIREBASE_CLIENT_ID"),
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://oauth2.googleapis.com/token",
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+            "client_x509_cert_url": os.getenv("FIREBASE_CERT_URL")
+        }) if os.getenv("FIREBASE_PRIVATE_KEY") else None
+        
+        if cred:
+            firebase_admin.initialize_app(cred)
+            print("✅ Firebase Admin SDK initialized successfully")
+        else:
+            print("⚠️ Firebase Admin SDK not initialized - missing credentials")
+except Exception as e:
+    print(f"⚠️ Firebase Admin SDK initialization warning: {e}")
+
+# Store admin sessions (in production, use Redis or database)
+admin_sessions = {}
 
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'your-secret-key-here')
@@ -600,6 +633,133 @@ def debug_wkhtmltopdf():
         debug_info['app_bin_contents'] = 'Cannot access /app/bin/'
     
     return jsonify(debug_info)
+
+# ========================================
+# ADMIN ENDPOINTS
+# ========================================
+
+@app.route('/api/admin/verify-code', methods=['POST'])
+def verify_admin_code():
+    """Verify admin secret code and return session token"""
+    try:
+        data = request.json
+        provided_code = data.get('code', '')
+        
+        # Get admin secret code from environment
+        admin_secret = os.getenv('ADMIN_SECRET_CODE')
+        
+        if not admin_secret:
+            return jsonify({
+                'success': False,
+                'error': 'Admin access not configured'
+            }), 500
+        
+        # Verify the code
+        if provided_code == admin_secret:
+            # Generate a session token
+            session_token = secrets.token_urlsafe(32)
+            
+            # Store session (expires in 1 hour)
+            admin_sessions[session_token] = {
+                'created_at': time.time(),
+                'expires_at': time.time() + 3600  # 1 hour
+            }
+            
+            print(f"✅ Admin authenticated successfully")
+            return jsonify({
+                'success': True,
+                'token': session_token,
+                'message': 'Authentication successful'
+            })
+        else:
+            print(f"❌ Invalid admin code attempt")
+            return jsonify({
+                'success': False,
+                'error': 'Invalid admin code'
+            }), 401
+            
+    except Exception as e:
+        print(f"❌ Admin verification error: {e}")
+        return jsonify({
+            'success': False,
+            'error': 'Verification failed'
+        }), 500
+
+@app.route('/api/admin/users', methods=['GET'])
+def get_admin_users():
+    """Get all Firebase users (admin only)"""
+    try:
+        # Verify admin session token
+        auth_header = request.headers.get('Authorization', '')
+        
+        if not auth_header.startswith('Bearer '):
+            return jsonify({
+                'success': False,
+                'error': 'Missing authentication token'
+            }), 401
+        
+        token = auth_header.replace('Bearer ', '')
+        
+        # Check if token exists and is not expired
+        session = admin_sessions.get(token)
+        if not session:
+            return jsonify({
+                'success': False,
+                'error': 'Invalid or expired session'
+            }), 401
+        
+        if session['expires_at'] < time.time():
+            # Clean up expired session
+            del admin_sessions[token]
+            return jsonify({
+                'success': False,
+                'error': 'Session expired'
+            }), 401
+        
+        # Check if Firebase Admin is initialized
+        if not firebase_admin._apps:
+            return jsonify({
+                'success': False,
+                'error': 'Firebase Admin not initialized. Please configure Firebase credentials.'
+            }), 500
+        
+        # Fetch all users from Firebase
+        users_list = []
+        page = firebase_auth.list_users()
+        
+        while page:
+            for user in page.users:
+                users_list.append({
+                    'uid': user.uid,
+                    'email': user.email or 'N/A',
+                    'displayName': user.display_name or 'N/A',
+                    'emailVerified': user.email_verified,
+                    'disabled': user.disabled,
+                    'createdAt': user.user_metadata.creation_timestamp if user.user_metadata else None,
+                    'lastSignInAt': user.user_metadata.last_sign_in_timestamp if user.user_metadata else None,
+                    'photoURL': user.photo_url or None,
+                    'phoneNumber': user.phone_number or None,
+                    'providerData': [{'providerId': p.provider_id, 'uid': p.uid} for p in user.provider_data]
+                })
+            
+            # Get next page
+            page = page.get_next_page()
+        
+        print(f"✅ Retrieved {len(users_list)} Firebase users for admin")
+        return jsonify({
+            'success': True,
+            'users': users_list,
+            'total': len(users_list)
+        })
+        
+    except Exception as e:
+        print(f"❌ Error fetching users: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            'success': False,
+            'error': f'Failed to fetch users: {str(e)}'
+        }), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5001))
