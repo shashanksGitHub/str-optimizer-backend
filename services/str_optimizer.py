@@ -452,11 +452,7 @@ def optimize_listing(form_data):
         )
         amenities = amenities_response.choices[0].message.content.strip()
     else:
-        amenities = """1. High-speed WiFi for remote work
-2. Smart TV with streaming services
-3. Coffee machine with premium coffee
-4. Air conditioning/heating system
-5. In-unit washer and dryer"""
+        amenities = ""
 
     # ENHANCED: Detailed Review Sentiment Analysis
     review_sentiment_analysis = ""
@@ -492,25 +488,7 @@ Provide analysis in exactly this format:
         except Exception as e:
             print(f"Sentiment analysis error: {e}")
     
-    if not review_sentiment_analysis:
-        review_sentiment_analysis = """**Recurring Praise**
-- Location and accessibility
-- Cleanliness and comfort
-- Host responsiveness
-
-**Common Complaints**
-- WiFi connectivity issues
-- Noise from nearby areas
-
-**Sentiment Trends**
-- Overall sentiment: Positive (78% positive mentions)
-- Guest satisfaction score: 7.8/10
-- Key emotional drivers: Comfort, convenience, value
-
-**Actionable Insights**
-- Upgrade internet infrastructure for better connectivity
-- Add noise-canceling features or soundproofing
-- Highlight location benefits more prominently in listing"""
+    # No static fallback - only show AI-generated content
 
     # NEW: Booking Gap & Occupancy Optimization Analysis
     booking_gap_analysis = ""
@@ -541,15 +519,7 @@ Keep response under 60 words total."""
         except Exception as e:
             print(f"Booking gap analysis error: {e}")
     
-    if not booking_gap_analysis:
-        booking_gap_analysis = """**Booking Optimization:**
-• Gap periods: Weekdays (Mon-Thu), mid-month low demand
-• Quick fixes: 2-night minimum weekdays, instant booking enabled
-• Pricing tactics: 15% midweek discount, 10% last-minute deals
-
-**Revenue Enhancement:**
-• Extended stays: 25% discount for 28+ days
-• Seasonal strategy: Adjust rates based on demand patterns"""
+    # No static fallback - only show AI-generated content
 
     # NEW: Guest Profile Match Analysis
     guest_profile_analysis = ""
@@ -590,22 +560,7 @@ Provide analysis in exactly this format:
         except Exception as e:
             print(f"Guest profile analysis error: {e}")
     
-    if not guest_profile_analysis:
-        guest_profile_analysis = """**Primary Guest Personas:**
-• Leisure Couples: Romantic getaways, weekend trips (40% of bookings)
-• Remote Workers: Digital nomads, extended stays (35% of bookings)
-• Small Families: Parents with 1-2 children, vacation stays (25% of bookings)
-
-**Guest Demographics:**
-• Age range: 28-45 years (primary), 25-35 years (secondary)
-• Travel purpose: Leisure (60%), Business (25%), Mixed (15%)
-• Group size: 2.3 people average
-• Booking lead time: 12 days average
-
-**Tailored Recommendations:**
-• Amenities to emphasize: High-speed WiFi, romantic ambiance features, family-friendly amenities
-• Messaging adjustments: Highlight work-from-home setup, romantic features, child safety measures
-• Service enhancements: Welcome packages for couples, workspace setup guide, family activity recommendations"""
+    # No static fallback - only show AI-generated content
 
     # Scrape images from Airbnb listing
     image_urls = []
@@ -700,9 +655,7 @@ Keep total response under 60 words."""
         performance_insights = insights_response.choices[0].message.content.strip()
     except Exception as e:
         print(f"Performance insights error: {e}")
-        performance_insights = """**Key Optimization Areas:**
-• Title enhancement: Improved search visibility and guest appeal
-• Content optimization: Better description and amenity highlights"""
+        performance_insights = ""
 
     # Generate strategic recommendations
     strategic_recommendations = ""
@@ -844,8 +797,8 @@ Provide exactly 2 bullet points, each under 25 words."""
         task_priorities = {
             'title_priority': 'HIGH',
             'pricing_priority': 'HIGH',
-            'photo_priority': 'MEDIUM',
-            'experience_priority': 'MEDIUM',
+            'photo_priority': 'HIGH',
+            'experience_priority': 'LOW',
             'booking_priority': 'HIGH'
         }
     
@@ -1137,7 +1090,7 @@ def generate_task_priorities(client, competitive_scores, revenue_projections, dy
             'title_priority': 'HIGH',
             'pricing_priority': 'HIGH', 
             'photo_priority': 'HIGH',
-            'experience_priority': 'MEDIUM',
+            'experience_priority': 'LOW',
             'booking_priority': 'HIGH'
         }
     
@@ -1192,6 +1145,6 @@ Return JSON format:
             'title_priority': 'HIGH',
             'pricing_priority': 'HIGH', 
             'photo_priority': 'HIGH',
-            'experience_priority': 'MEDIUM',
+            'experience_priority': 'LOW',
             'booking_priority': 'HIGH'
         } 

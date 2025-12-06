@@ -1404,8 +1404,7 @@
     <div class="content">
         <!-- Title Section -->
         <div class="title-section">
-            <div class="main-title">{{ title | default("Serene 2BHK Nest in Central Pune - AI Optimization Report") }}</div>
-            <div class="subtitle">Revenue & Performance Analysis for {{ location | default("Central Pune, India") }}</div>
+            <div class="main-title">{{ title }}</div>
         </div>
 
         <!-- Alert Summary Box -->
@@ -1416,7 +1415,7 @@
         <!-- Score Cards - PDF-FRIENDLY HORIZONTAL LAYOUT -->
         <div class="score-grid">
             <div class="score-card highlight">
-                            <div class="score-value">{{ guest_rating or 4.2 }}</div>
+                            <div class="score-value">{{ guest_rating }}</div>
             <div class="score-label">Guest Rating</div>
             </div>
             <div class="score-card">
@@ -1424,7 +1423,7 @@
                 <div class="score-label">AI Optimization Score</div>
             </div>
             <div class="score-card">
-                <div class="score-value">+{% if revenue_projections and revenue_projections.revenue_impact %}{% if revenue_projections.revenue_impact is iterable and revenue_projections.revenue_impact is not string %}{{ revenue_projections.revenue_impact[0] if revenue_projections.revenue_impact|length > 0 else '15' }}{% else %}{{ revenue_projections.revenue_impact }}{% endif %}{% else %}15{% endif %}%</div>
+                <div class="score-value">+{% if revenue_projections and revenue_projections.revenue_impact %}{% if revenue_projections.revenue_impact is iterable and revenue_projections.revenue_impact is not string %}{{ revenue_projections.revenue_impact[0] if revenue_projections.revenue_impact|length > 0 else '' }}{% else %}{{ revenue_projections.revenue_impact }}{% endif %}{% endif %}%</div>
                 <div class="score-label">Revenue Potential</div>
             </div>
         </div>
@@ -1473,7 +1472,7 @@
 
         <div class="priority-item">
             <div class="priority-header">
-                <div class="priority-title">4. Guest Experience Optimization <span class="priority-badge {{ 'high' if task_priorities.experience_priority == 'HIGH' else 'medium' if task_priorities.experience_priority == 'MEDIUM' else 'low' }}">{{ task_priorities.experience_priority if task_priorities else 'MEDIUM' }} PRIORITY</span></div>
+                <div class="priority-title">4. Guest Experience Optimization <span class="priority-badge {{ 'high' if task_priorities.experience_priority == 'HIGH' else 'medium' if task_priorities.experience_priority == 'MEDIUM' else 'low' }}">{{ task_priorities.experience_priority if task_priorities else 'LOW' }} PRIORITY</span></div>
             </div>
             <div class="content-section">
                 {{ guest_profile_analysis }}
@@ -1489,6 +1488,11 @@
             </div>
         </div>
 
+        <!-- Footer -->
+        <div style="text-align: center; font-size: 12px; color: #6b7280; margin-top: 20px; padding: 8px 0; border-top: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
+            <span>STR Listing Optimizer Report</span>
+        </div>
     </div>
 
     <!-- Market Analysis & Competitive Edge Page -->
@@ -1497,8 +1501,9 @@
         <div class="market-header">
             <div class="market-header-top"></div>
             <div class="market-header-content">
-                <div class="market-header-left">
-                    <h1 style="display: inline-block; float: left;">Listing Optimizer</h1>
+                <div class="market-header-left" style="display: flex; align-items: center;">
+                    <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 24px; width: auto; margin-right: 10px;" />
+                    <h1 style="display: inline-block;">Listing Optimizer</h1>
                 </div>
                 <div class="market-header-right">
                     <span style="display: inline-block; float: right;">Market Analysis</span>
@@ -1594,8 +1599,6 @@
                                                 {% if not loop.first %}<br>{% endif %}• {{ clean_line.strip() }}
                                             {% endif %}
                                         {% endfor %}
-                                    {% else %}
-                                        • Mini fridge for guest convenience<br>• Enhanced comfort amenities
                                     {% endif %}
                                 </p>
                                 <div style="margin-top: auto;">
@@ -1672,8 +1675,6 @@
                                                 {% if not loop.first %}<br>{% endif %}• {{ clean_line.strip() }}
                                             {% endif %}
                                         {% endfor %}
-                                    {% else %}
-                                        • Primary Guest Personas:<br>• Luxury Travelers: Seeking upscale accommodations with exclusive amenities like a private pool and stunning mountain views. They value tranquility and privacy during their stay. [40% of bookings]<br>• Business travelers and couples<br>• Weekend getaway seekers
                                     {% endif %}
                                 </p>
                                 <div style="margin-top: auto;">
@@ -1699,7 +1700,7 @@
                                 <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0;">Revenue Insights</h3>
                             </div>
                             <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start;">
-                                <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{% if performance_insights %}{{ performance_insights | replace('**', '') | replace('*', '') }}{% else %}Key Optimization Areas:\n• Title enhancement: Improved search visibility and guest appeal\n• Content optimization: Better description and amenity highlights\n• Photo improvements and pricing adjustments\n• SEO optimization for better discoverability{% endif %}</p>
+                                <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{% if performance_insights %}{{ performance_insights | replace('**', '') | replace('*', '') }}{% endif %}</p>
                             </div>
                         </div>
                     </td>
@@ -1711,7 +1712,7 @@
                                 <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0;">Strategic Recommendations</h3>
                             </div>
                             <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start;">
-                                <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{% if strategic_recommendations %}{{ strategic_recommendations | replace('**', '') | replace('*', '') }}{% else %}• Dynamic pricing strategy: Implement seasonal pricing adjustments to maximize occupancy during peak periods\n\n• Market positioning: Focus on unique amenities and location advantages to differentiate from competitors{% endif %}</p>
+                                <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{% if strategic_recommendations %}{{ strategic_recommendations | replace('**', '') | replace('*', '') }}{% endif %}</p>
                             </div>
                         </div>
                     </td>
@@ -1719,8 +1720,9 @@
             </table>
 
             <!-- Footer -->
-            <div class="market-footer">
-                Listing Optimization Report
+            <div class="market-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
+                <span>STR Listing Optimizer Report</span>
             </div>
         </div>
     </div>
@@ -1730,8 +1732,9 @@
         <!-- Header with blue bottom border -->
         <div class="content-header">
             <div class="content-header-content">
-                <div class="content-header-left">
-                    <h1 style="display: inline-block; float: left;">Listing Optimizer</h1>
+                <div class="content-header-left" style="display: flex; align-items: center;">
+                    <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 24px; width: auto; margin-right: 10px;" />
+                    <h1 style="display: inline-block;">Listing Optimizer</h1>
                 </div>
                 <div class="content-header-right">
                     <span style="display: inline-block; float: right;">Content Strategy</span>
@@ -1826,8 +1829,9 @@
 
 
             <!-- Footer -->
-            <div class="content-footer">
-                Listing Optimization Report
+            <div class="content-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
+                <span>STR Listing Optimizer Report</span>
             </div>
         </div>
     </div>
@@ -1837,8 +1841,9 @@
         <!-- Header -->
         <div class="content-header">
             <div class="content-header-content">
-                <div class="content-header-left">
-                    <h1 style="display: inline-block; float: left;">Listing Optimizer</h1>
+                <div class="content-header-left" style="display: flex; align-items: center;">
+                    <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 24px; width: auto; margin-right: 10px;" />
+                    <h1 style="display: inline-block;">Listing Optimizer</h1>
                 </div>
                 <div class="content-header-right">
                     <span style="display: inline-block; float: right;">AI Recommendations</span>
@@ -1886,8 +1891,9 @@
             </div>
 
             <!-- Footer -->
-            <div class="content-footer">
-                Listing Optimization Report
+            <div class="content-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
+                <span>STR Listing Optimizer Report</span>
             </div>
         </div>
     </div>
@@ -1897,8 +1903,9 @@
         <!-- Header with blue bottom border -->
         <div class="revenue-header">
             <div class="revenue-header-content">
-                <div class="revenue-header-left">
-                    <h1 style="display: inline-block; float: left;">Listing Optimizer</h1>
+                <div class="revenue-header-left" style="display: flex; align-items: center;">
+                    <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 24px; width: auto; margin-right: 10px;" />
+                    <h1 style="display: inline-block;">Listing Optimizer</h1>
                 </div>
                 <div class="revenue-header-right">
                     <span style="display: inline-block; float: right;">Revenue Optimization</span>
@@ -1918,7 +1925,7 @@
             <div class="revenue-analysis-box">
                 <div class="revenue-analysis-header">
                     <span class="revenue-analysis-label">AI Revenue Analysis:</span>
-                    <span class="revenue-analysis-text">Based on your property in {{ location }} with {{ guest_rating or '4.2' }} rating</span>
+                    <span class="revenue-analysis-text">Based on your property in {{ location }} with {{ guest_rating }} rating</span>
                 </div>
             </div>
 
@@ -1986,8 +1993,9 @@
 
 
             <!-- Footer -->
-            <div class="revenue-footer">
-                Listing Optimization Report
+            <div class="revenue-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
+                <span>STR Listing Optimizer Report</span>
             </div>
         </div>
     </div>
@@ -1998,7 +2006,10 @@
             <!-- Header -->
             <div class="roadmap-header">
                 <div class="roadmap-header-content">
-                    <h1 style="display: inline-block; float: left;">Listing Optimizer</h1>
+                    <div style="display: flex; align-items: center; float: left;">
+                        <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 24px; width: auto; margin-right: 10px;" />
+                        <h1 style="display: inline-block;">Listing Optimizer</h1>
+                    </div>
                     <span style="display: inline-block; float: right;">Action Plan</span>
                     <div style="clear: both;"></div>
                 </div>
@@ -2083,14 +2094,14 @@
                     {% if photo_audit %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Reorganize photo order based on AI analysis: {% if photo_audit and '. ' in photo_audit and photo_audit.split('. ')|length > 1 %}{% set base_text = photo_audit.split('. ')[1] %}{% set cleaned_text = base_text.split(' 2.')[0].split(' 2')[0].split('. 2.')[0].split('. 2')[0].split(' 3.')[0].split(' 3')[0].split('. 3.')[0].split('. 3')[0].split(' 4.')[0].split(' 4')[0].split('. 4.')[0].split('. 4')[0] %}{{ cleaned_text.rstrip(' .0123456789') + '.' }}{% else %}Optimize photo sequence for better engagement{% endif %}</span>
+                        <span class="check-text">Reorganize photo order based on AI analysis: {% if photo_audit and '. ' in photo_audit and photo_audit.split('. ')|length > 1 %}{% set base_text = photo_audit.split('. ')[1] %}{% set cleaned_text = base_text.split(' 2.')[0].split(' 2')[0].split('. 2.')[0].split('. 2')[0].split(' 3.')[0].split(' 3')[0].split('. 3.')[0].split('. 3')[0].split(' 4.')[0].split(' 4')[0].split('. 4.')[0].split('. 4')[0] %}{{ cleaned_text.rstrip(' .0123456789') + '.' }}{% endif %}</span>
                     </div>
                     {% endif %}
                     
                     {% if amenities %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Create package offerings: {% if amenities.split('\n')|length > 0 and amenities.split('\n')[0] %}{% set clean_line = amenities.split('\n')[0] | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_line = clean_line | replace(i ~ '. ', '') %}{% set clean_line = clean_line | replace(i ~ ') ', '') %}{% set clean_line = clean_line | replace(i ~ ': ', '') %}{% set clean_line = clean_line | replace(i ~ ' ', '', 1) if clean_line.startswith(i ~ ' ') %}{% endfor %}{{ clean_line.strip() }}{% else %}High-speed WiFi and essential amenities{% endif %}</span>
+                        <span class="check-text">Create package offerings: {% if amenities and amenities.split('\n')|length > 0 and amenities.split('\n')[0] %}{% set clean_line = amenities.split('\n')[0] | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_line = clean_line | replace(i ~ '. ', '') %}{% set clean_line = clean_line | replace(i ~ ') ', '') %}{% set clean_line = clean_line | replace(i ~ ': ', '') %}{% set clean_line = clean_line | replace(i ~ ' ', '', 1) if clean_line.startswith(i ~ ' ') %}{% endfor %}{{ clean_line.strip() }}{% endif %}</span>
                     </div>
                     {% endif %}
                 </div>
@@ -2113,7 +2124,7 @@
                     {% if amenities %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Set up add-on packages: {% if amenities.split('\n')|length > 0 and amenities.split('\n')[0] %}{% set clean_line = amenities.split('\n')[0] | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_line = clean_line | replace(i ~ '. ', '') %}{% set clean_line = clean_line | replace(i ~ ') ', '') %}{% set clean_line = clean_line | replace(i ~ ': ', '') %}{% set clean_line = clean_line | replace(i ~ ' ', '', 1) if clean_line.startswith(i ~ ' ') %}{% endfor %}{{ clean_line.strip() }}{% else %}High-speed WiFi and essential amenities{% endif %}</span>
+                        <span class="check-text">Set up add-on packages: {% if amenities and amenities.split('\n')|length > 0 and amenities.split('\n')[0] %}{% set clean_line = amenities.split('\n')[0] | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_line = clean_line | replace(i ~ '. ', '') %}{% set clean_line = clean_line | replace(i ~ ') ', '') %}{% set clean_line = clean_line | replace(i ~ ': ', '') %}{% set clean_line = clean_line | replace(i ~ ' ', '', 1) if clean_line.startswith(i ~ ' ') %}{% endfor %}{{ clean_line.strip() }}{% endif %}</span>
                     </div>
                     {% endif %}
                     
@@ -2147,14 +2158,14 @@
                     {% if amenities %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Order supplies for: {% if amenities.split('\n')|length > 0 and amenities.split('\n')[0] %}{% set clean_line = amenities.split('\n')[0] | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_line = clean_line | replace(i ~ '. ', '') %}{% set clean_line = clean_line | replace(i ~ ') ', '') %}{% set clean_line = clean_line | replace(i ~ ': ', '') %}{% set clean_line = clean_line | replace(i ~ ' ', '', 1) if clean_line.startswith(i ~ ' ') %}{% endfor %}{{ clean_line.strip() }}{% else %}High-speed WiFi and essential amenities{% endif %}</span>
+                        <span class="check-text">Order supplies for: {% if amenities and amenities.split('\n')|length > 0 and amenities.split('\n')[0] %}{% set clean_line = amenities.split('\n')[0] | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_line = clean_line | replace(i ~ '. ', '') %}{% set clean_line = clean_line | replace(i ~ ') ', '') %}{% set clean_line = clean_line | replace(i ~ ': ', '') %}{% set clean_line = clean_line | replace(i ~ ' ', '', 1) if clean_line.startswith(i ~ ' ') %}{% endfor %}{{ clean_line.strip() }}{% endif %}</span>
                     </div>
                     {% endif %}
                     
                     {% if photo_audit %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
-                        <span class="check-text">Create photo opportunities: {% if photo_audit and '. ' in photo_audit and photo_audit.split('. ')|length > 1 %}{% set base_text = photo_audit.split('. ')[1] %}{% set cleaned_text = base_text.split(' 2.')[0].split(' 2')[0].split('. 2.')[0].split('. 2')[0].split(' 3.')[0].split(' 3')[0].split('. 3.')[0].split('. 3')[0].split(' 4.')[0].split(' 4')[0].split('. 4.')[0].split('. 4')[0] %}{{ cleaned_text.rstrip(' .0123456789') + '.' }}{% else %}AI-optimized visual appeal{% endif %}</span>
+                        <span class="check-text">Create photo opportunities: {% if photo_audit and '. ' in photo_audit and photo_audit.split('. ')|length > 1 %}{% set base_text = photo_audit.split('. ')[1] %}{% set cleaned_text = base_text.split(' 2.')[0].split(' 2')[0].split('. 2.')[0].split('. 2')[0].split(' 3.')[0].split(' 3')[0].split('. 3.')[0].split('. 3')[0].split(' 4.')[0].split(' 4')[0].split('. 4.')[0].split('. 4')[0] %}{{ cleaned_text.rstrip(' .0123456789') + '.' }}{% endif %}</span>
                     </div>
                     {% endif %}
                 </div>
@@ -2173,8 +2184,9 @@
             </div>
 
             <!-- Footer -->
-            <div class="roadmap-footer">
-                Listing Optimization Report
+            <div class="roadmap-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
+                <span>STR Listing Optimizer Report</span>
             </div>
         </div>
     </div>
