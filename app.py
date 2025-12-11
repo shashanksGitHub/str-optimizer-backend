@@ -226,6 +226,7 @@ def create_checkout_session():
                 mode='payment',
                 success_url=success_url,
                 cancel_url=cancel_url,
+                allow_promotion_codes=True,
                 metadata={
                     'delivery_type': delivery_type,
                     'url': form_data.get('url', ''),
