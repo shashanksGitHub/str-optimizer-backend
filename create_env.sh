@@ -49,3 +49,5 @@ echo "   - ADMIN_SECRET_CODE (change from default 'admin123secure' to something 
 echo ""
 echo "Firebase Admin SDK credentials have been configured automatically."
 
+
+

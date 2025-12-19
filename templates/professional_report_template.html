@@ -1397,7 +1397,7 @@
             <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
             <h1 style="color: #4285f4; font-size: 24px; font-weight: bold; margin: 0; display: inline; vertical-align: middle;">Listing Optimizer</h1>
         </div>
-        <div class="date" style="display: inline-block; float: right;">Analysis Date: September 2025</div>
+        <div class="date" style="display: inline-block; float: right;">Analysis Date: {{ analysis_date | default(generated_at | default('')) }}</div>
         <div style="clear: both;"></div>
     </div>
     
@@ -1415,23 +1415,23 @@
         <!-- Score Cards - PDF-FRIENDLY HORIZONTAL LAYOUT -->
         <div class="score-grid">
             <div class="score-card highlight">
-                            <div class="score-value">{{ guest_rating }}</div>
-            <div class="score-label">Guest Rating</div>
+                <div class="score-value">+{% if revenue_projections and revenue_projections.revenue_impact %}{% if revenue_projections.revenue_impact is iterable and revenue_projections.revenue_impact is not string %}{{ revenue_projections.revenue_impact[0] if revenue_projections.revenue_impact|length > 0 else '' }}{% else %}{{ revenue_projections.revenue_impact }}{% endif %}{% endif %}%</div>
+                <div class="score-label">Revenue Potential</div>
+            </div>
+            <div class="score-card">
+                <div class="score-value">{{ guest_rating }}</div>
+                <div class="score-label">Guest Rating</div>
             </div>
             <div class="score-card">
                 <div class="score-value">{{ competitive_scores.market_positioning if competitive_scores and competitive_scores.market_positioning else '0' }}/100</div>
                 <div class="score-label">AI Optimization Score</div>
             </div>
-            <div class="score-card">
-                <div class="score-value">+{% if revenue_projections and revenue_projections.revenue_impact %}{% if revenue_projections.revenue_impact is iterable and revenue_projections.revenue_impact is not string %}{{ revenue_projections.revenue_impact[0] if revenue_projections.revenue_impact|length > 0 else '' }}{% else %}{{ revenue_projections.revenue_impact }}{% endif %}{% endif %}%</div>
-                <div class="score-label">Revenue Potential</div>
-            </div>
         </div>
         
-        <!-- Top 5 Immediate Actions -->
+        <!-- Top 4 Immediate Actions -->
         <div class="section-header">
             <span class="emoji">🎯</span>
-            <span>🎯 Top 5 Immediate Actions</span>
+            <span>🎯 Top 4 Immediate Actions</span>
         </div>
         
         <div class="priority-item">
@@ -1463,16 +1463,7 @@
         
         <div class="priority-item">
             <div class="priority-header">
-                <div class="priority-title">3. Professional Photography Upgrade <span class="priority-badge {{ 'high' if task_priorities.photo_priority == 'HIGH' else 'medium' if task_priorities.photo_priority == 'MEDIUM' else 'low' }}">{{ task_priorities.photo_priority if task_priorities else 'HIGH' }} PRIORITY</span></div>
-            </div>
-            <div class="content-section">
-                {{ photo_audit }}
-            </div>
-        </div>
-
-        <div class="priority-item">
-            <div class="priority-header">
-                <div class="priority-title">4. Guest Experience Optimization <span class="priority-badge {{ 'high' if task_priorities.experience_priority == 'HIGH' else 'medium' if task_priorities.experience_priority == 'MEDIUM' else 'low' }}">{{ task_priorities.experience_priority if task_priorities else 'LOW' }} PRIORITY</span></div>
+                <div class="priority-title">3. Guest Experience Optimization <span class="priority-badge {{ 'high' if task_priorities.experience_priority == 'HIGH' else 'medium' if task_priorities.experience_priority == 'MEDIUM' else 'low' }}">{{ task_priorities.experience_priority if task_priorities else 'LOW' }} PRIORITY</span></div>
             </div>
             <div class="content-section">
                 {{ guest_profile_analysis }}
@@ -1481,7 +1472,7 @@
         
         <div class="priority-item">
             <div class="priority-header">
-                <div class="priority-title">5. Booking Gap Analysis & Optimization <span class="priority-badge {{ 'high' if task_priorities.booking_priority == 'HIGH' else 'medium' if task_priorities.booking_priority == 'MEDIUM' else 'low' }}">{{ task_priorities.booking_priority if task_priorities else 'HIGH' }} PRIORITY</span></div>
+                <div class="priority-title">4. Booking Gap Analysis & Optimization <span class="priority-badge {{ 'high' if task_priorities.booking_priority == 'HIGH' else 'medium' if task_priorities.booking_priority == 'MEDIUM' else 'low' }}">{{ task_priorities.booking_priority if task_priorities else 'HIGH' }} PRIORITY</span></div>
             </div>
             <div class="content-section">
                 {{ booking_gap_analysis }}
@@ -1489,9 +1480,10 @@
         </div>
 
         <!-- Footer -->
-        <div style="text-align: center; font-size: 12px; color: #6b7280; margin-top: 20px; padding: 8px 0; border-top: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <div style="text-align: center; font-size: 12px; color: #6b7280; margin-top: 20px; padding: 8px 0; border-top: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: center; gap: 8px; position: relative;">
             <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
-            <span>STR Listing Optimizer Report</span>
+            <span>STR Optimizer</span>
+            <span style="position: absolute; right: 24px;">Page 1</span>
         </div>
     </div>
 
@@ -1712,7 +1704,7 @@
                                 <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0;">Strategic Recommendations</h3>
                             </div>
                             <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start;">
-                                <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{% if strategic_recommendations %}{{ strategic_recommendations | replace('**', '') | replace('*', '') }}{% endif %}</p>
+                                <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{% if strategic_recommendations %}{% set clean_recs = strategic_recommendations | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_recs = clean_recs | replace(i ~ '. ', '• ') %}{% set clean_recs = clean_recs | replace(i ~ ') ', '• ') %}{% endfor %}{{ clean_recs }}{% endif %}</p>
                             </div>
                         </div>
                     </td>
@@ -1720,9 +1712,10 @@
             </table>
 
             <!-- Footer -->
-            <div class="market-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <div class="market-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; position: relative;">
                 <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
-                <span>STR Listing Optimizer Report</span>
+                <span>STR Optimizer</span>
+                <span style="position: absolute; right: 0;">Page 3</span>
             </div>
         </div>
     </div>
@@ -1782,21 +1775,6 @@
                 </div>
             </div>
 
-            <!-- AI Photography Analysis Section -->
-            <div class="content-section">
-                <div class="content-section-header">
-                    <span class="content-section-icon">📷</span>
-                    <h1 class="content-section-title">AI Photography Analysis</h1>
-                </div>
-
-                <div class="photo-analysis">
-                    <div class="photo-found"><strong>Current Photos Found:</strong> {{ image_urls|length if image_urls else 0 }} images</div>
-                    <div class="photo-recommendation">
-                        {{ photo_audit }}
-                    </div>
-                </div>
-            </div>
-
             <!-- AI-Generated SEO Keywords Section -->
             <div class="content-section">
                 <div class="content-section-header">
@@ -1812,9 +1790,10 @@
             </div>
 
             <!-- Footer -->
-            <div class="content-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <div class="content-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; position: relative;">
                 <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
-                <span>STR Listing Optimizer Report</span>
+                <span>STR Optimizer</span>
+                <span style="position: absolute; right: 0;">Page 4</span>
             </div>
         </div>
     </div>
@@ -1852,7 +1831,7 @@
                     <div style="color: #111827; font-weight: 600; font-size: 20px; margin-bottom: 16px;">AI-Suggested Amenities Analysis</div>
                     
                     <div style="color: #374151; font-size: 16px; line-height: 1.8;">
-                        {{ amenities | replace('\n', '<br>') | safe }}
+                        {% if amenities %}{% set clean_amenities = amenities | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_amenities = clean_amenities | replace(i ~ '. ', '• ') %}{% set clean_amenities = clean_amenities | replace(i ~ ') ', '• ') %}{% endfor %}{{ clean_amenities | replace('\n', '<br>') | safe }}{% endif %}
                     </div>
                 </div>
             </div>
@@ -1874,9 +1853,10 @@
             </div>
 
             <!-- Footer -->
-            <div class="content-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <div class="content-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; position: relative;">
                 <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
-                <span>STR Listing Optimizer Report</span>
+                <span>STR Optimizer</span>
+                <span style="position: absolute; right: 0;">Page 5</span>
             </div>
         </div>
     </div>
@@ -1976,9 +1956,10 @@
 
 
             <!-- Footer -->
-            <div class="revenue-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <div class="revenue-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; position: relative;">
                 <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
-                <span>STR Listing Optimizer Report</span>
+                <span>STR Optimizer</span>
+                <span style="position: absolute; right: 0;">Page 6</span>
             </div>
         </div>
     </div>
@@ -2067,20 +2048,6 @@
                     </div>
                     {% endif %}
                     
-                    {% if image_urls and image_urls|length > 0 %}
-                    <div class="checklist-item">
-                        <span class="check-icon">✓</span>
-                        <span class="check-text">Professional photography session to enhance {{ image_urls|length }} existing photos</span>
-                    </div>
-                    {% endif %}
-                    
-                    {% if photo_audit %}
-                    <div class="checklist-item">
-                        <span class="check-icon">✓</span>
-                        <span class="check-text">Reorganize photo order based on AI analysis: {% if photo_audit and '. ' in photo_audit and photo_audit.split('. ')|length > 1 %}{% set base_text = photo_audit.split('. ')[1] %}{% set cleaned_text = base_text.split(' 2.')[0].split(' 2')[0].split('. 2.')[0].split('. 2')[0].split(' 3.')[0].split(' 3')[0].split('. 3.')[0].split('. 3')[0].split(' 4.')[0].split(' 4')[0].split('. 4.')[0].split('. 4')[0] %}{{ cleaned_text.rstrip(' .0123456789') + '.' }}{% endif %}</span>
-                    </div>
-                    {% endif %}
-                    
                     {% if amenities %}
                     <div class="checklist-item">
                         <span class="check-icon">✓</span>
@@ -2144,13 +2111,6 @@
                         <span class="check-text">Order supplies for: {% if amenities and amenities.split('\n')|length > 0 and amenities.split('\n')[0] %}{% set clean_line = amenities.split('\n')[0] | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_line = clean_line | replace(i ~ '. ', '') %}{% set clean_line = clean_line | replace(i ~ ') ', '') %}{% set clean_line = clean_line | replace(i ~ ': ', '') %}{% set clean_line = clean_line | replace(i ~ ' ', '', 1) if clean_line.startswith(i ~ ' ') %}{% endfor %}{{ clean_line.strip() }}{% endif %}</span>
                     </div>
                     {% endif %}
-                    
-                    {% if photo_audit %}
-                    <div class="checklist-item">
-                        <span class="check-icon">✓</span>
-                        <span class="check-text">Create photo opportunities: {% if photo_audit and '. ' in photo_audit and photo_audit.split('. ')|length > 1 %}{% set base_text = photo_audit.split('. ')[1] %}{% set cleaned_text = base_text.split(' 2.')[0].split(' 2')[0].split('. 2.')[0].split('. 2')[0].split(' 3.')[0].split(' 3')[0].split('. 3.')[0].split('. 3')[0].split(' 4.')[0].split(' 4')[0].split('. 4.')[0].split('. 4')[0] %}{{ cleaned_text.rstrip(' .0123456789') + '.' }}{% endif %}</span>
-                    </div>
-                    {% endif %}
                 </div>
 
 
@@ -2167,15 +2127,10 @@
             </div>
 
             <!-- Footer -->
-            <div class="roadmap-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <div class="roadmap-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; position: relative;">
                 <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
-                <span>STR Listing Optimizer Report</span>
+                <span>STR Optimizer</span>
+                <span style="position: absolute; right: 0;">Page 2</span>
             </div>
         </div>
-    </div>
-
-
-
-
-</body>
-</html> 
+    </div> 

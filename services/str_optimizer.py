@@ -713,6 +713,7 @@ Provide exactly 2 bullet points, each under 25 words."""
             pdf_path = os.path.join(tempfile.gettempdir(), pdf_filename)
             
             # Prepare optimization data for the professional PDF using already generated data
+            from datetime import datetime
             optimization_data = {
                 'title': title,
                 'description': description,
@@ -731,7 +732,9 @@ Provide exactly 2 bullet points, each under 25 words."""
                 'competitive_scores': competitive_scores,
                 'revenue_projections': revenue_projections,
                 'dynamic_percentages': dynamic_percentages,
-                'task_priorities': task_priorities
+                'task_priorities': task_priorities,
+                'analysis_date': datetime.now().strftime('%B %Y'),
+                'guest_rating': guest_rating
             }
             
             # Generate the professional PDF
