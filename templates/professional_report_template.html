@@ -1494,7 +1494,7 @@
                 <div class="priority-title">2. Dynamic Pricing Strategy <span class="priority-badge {{ 'high' if task_priorities.pricing_priority == 'HIGH' else 'medium' if task_priorities.pricing_priority == 'MEDIUM' else 'low' }}">{{ task_priorities.pricing_priority if task_priorities else 'HIGH' }} PRIORITY</span></div>
             </div>
             <div class="content-section">
-                {% if pricing_analysis %}{% set lines = pricing_analysis.split('. ') %}{{ lines[0] }}. {{ lines[1] if lines|length > 1 else '' }}{% if lines|length > 2 %}...{% endif %}{% endif %}
+                {{ pricing_analysis }}
                 </div>
             </div>
         </div>
@@ -1509,7 +1509,7 @@
     </div>
 
     <!-- Page 2: Remaining Immediate Actions -->
-    <div class="pdf-page" style="page-break-before: always; break-before: page;">
+    <div class="pdf-page">
         <div class="pdf-page-content">
             <!-- Header -->
             <div class="header">
@@ -2003,8 +2003,8 @@
         </div>
     </div>
 
-    <!-- Page 7: 30-Day Implementation Roadmap -->
-    <div class="pdf-page">
+    <!-- Page 7: 30-Day Implementation Roadmap (LAST PAGE) -->
+    <div class="pdf-page" style="page-break-after: avoid !important; break-after: avoid !important;">
         <div class="pdf-page-content">
             <div class="roadmap-main">
                 <!-- Header -->
@@ -2176,5 +2176,13 @@
             <span class="footer-page-number">Page 7</span>
         </div>
     </div>
+
+    <!-- Prevent extra blank page at end -->
+    <style>
+        .pdf-page:last-child {
+            page-break-after: avoid !important;
+            break-after: avoid !important;
+        }
+    </style>
 </body>
 </html>
