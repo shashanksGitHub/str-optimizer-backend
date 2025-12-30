@@ -17,10 +17,6 @@
             color: #333;
             background: white;
             font-size: 14px;
-            position: relative;
-            min-height: 100vh;
-            padding-bottom: 60px; /* Space for footer on first page */
-            box-sizing: border-box;
         }
         
         /* Header */
@@ -518,19 +514,6 @@
         /* Page breaks */
         .page-break {
             page-break-before: always;
-        }
-
-        /* All page containers need relative positioning for footer */
-        .page,
-        .market-analysis-page,
-        .content-optimization-page,
-        .amenities-page,
-        .revenue-optimization-page,
-        .roadmap-page {
-            position: relative;
-            min-height: 100vh;
-            padding-bottom: 60px; /* Space for footer */
-            box-sizing: border-box;
         }
         
         @media print {
@@ -1404,90 +1387,6 @@
             padding: 32px 24px;
         }
 
-        /* ========== UNIVERSAL PAGE FOOTER STYLING ========== */
-        /* Each page section is a full page with footer at bottom */
-        .page-wrapper {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-sizing: border-box;
-        }
-
-        .page-content {
-            flex: 1;
-        }
-
-        /* Universal footer styling - appears at bottom of each page */
-        .page-footer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 40px;
-            background: white;
-            border-top: 1px solid #e5e7eb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 24px;
-            font-size: 12px;
-            color: #6b7280;
-            box-sizing: border-box;
-        }
-
-        .page-footer-inner {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            position: relative;
-        }
-
-        .page-footer-logo {
-            height: 16px;
-            width: auto;
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        .page-footer-text {
-            display: inline-block;
-            vertical-align: middle;
-            line-height: 16px;
-            color: #6b7280;
-        }
-
-        .page-footer-page {
-            position: absolute;
-            right: 0;
-            font-size: 12px;
-            color: #6b7280;
-        }
-
-        /* Override old footer classes to use new unified styling */
-        .market-footer,
-        .content-footer,
-        .revenue-footer,
-        .roadmap-footer,
-        .action-footer {
-            position: absolute !important;
-            bottom: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            height: 40px !important;
-            background: white !important;
-            border-top: 1px solid #e5e7eb !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            padding: 0 24px !important;
-            font-size: 12px !important;
-            color: #6b7280 !important;
-            margin: 0 !important;
-            box-sizing: border-box !important;
-        }
 
     </style>
 </head>
@@ -1546,7 +1445,9 @@
                 <ul>
                     {% if title_suggestions and title_suggestions|length > 1 %}
                         {% for suggestion in title_suggestions[1:] %}
+                            {% if suggestion != title %}
                         <li>"{{ suggestion }}"</li>
+                            {% endif %}
                         {% endfor %}
                     {% endif %}
                 </ul>
@@ -1580,14 +1481,11 @@
             </div>
         </div>
 
-    </div>
-
-    <!-- Page 1 Footer -->
-    <div class="page-footer">
-        <div class="page-footer-inner">
-            <img src="/app/StrLogo.png" alt="STR Logo" class="page-footer-logo" />
-            <span class="page-footer-text">STR Optimizer</span>
-            <span class="page-footer-page">Page 1</span>
+        <!-- Footer -->
+        <div class="market-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; position: relative; border-top: 1px solid #e5e7eb;">
+            <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
+            <span>STR Optimizer</span>
+            <span style="position: absolute; right: 0;">Page 1</span>
         </div>
     </div>
 
@@ -1787,14 +1685,11 @@
                 </tr>
             </table>
 
-        </div>
-
-        <!-- Page 2 Footer -->
-        <div class="page-footer">
-            <div class="page-footer-inner">
-                <img src="/app/StrLogo.png" alt="STR Logo" class="page-footer-logo" />
-                <span class="page-footer-text">STR Optimizer</span>
-                <span class="page-footer-page">Page 2</span>
+            <!-- Footer -->
+            <div class="market-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; position: relative;">
+                <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
+                <span>STR Optimizer</span>
+                <span style="position: absolute; right: 0;">Page 2</span>
             </div>
         </div>
     </div>
@@ -1868,14 +1763,11 @@
                 </div>
             </div>
 
-        </div>
-
-        <!-- Page 3 Footer -->
-        <div class="page-footer">
-            <div class="page-footer-inner">
-                <img src="/app/StrLogo.png" alt="STR Logo" class="page-footer-logo" />
-                <span class="page-footer-text">STR Optimizer</span>
-                <span class="page-footer-page">Page 3</span>
+            <!-- Footer -->
+            <div class="content-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; position: relative;">
+                <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
+                <span>STR Optimizer</span>
+                <span style="position: absolute; right: 0;">Page 3</span>
             </div>
         </div>
     </div>
@@ -1934,14 +1826,11 @@
                 </div>
             </div>
 
-        </div>
-
-        <!-- Page 4 Footer -->
-        <div class="page-footer">
-            <div class="page-footer-inner">
-                <img src="/app/StrLogo.png" alt="STR Logo" class="page-footer-logo" />
-                <span class="page-footer-text">STR Optimizer</span>
-                <span class="page-footer-page">Page 4</span>
+            <!-- Footer -->
+            <div class="content-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; position: relative;">
+                <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
+                <span>STR Optimizer</span>
+                <span style="position: absolute; right: 0;">Page 4</span>
             </div>
         </div>
     </div>
@@ -2040,14 +1929,11 @@
 
 
 
-        </div>
-
-        <!-- Page 5 Footer -->
-        <div class="page-footer">
-            <div class="page-footer-inner">
-                <img src="/app/StrLogo.png" alt="STR Logo" class="page-footer-logo" />
-                <span class="page-footer-text">STR Optimizer</span>
-                <span class="page-footer-page">Page 5</span>
+            <!-- Footer -->
+            <div class="revenue-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; position: relative;">
+                <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
+                <span>STR Optimizer</span>
+                <span style="position: absolute; right: 0;">Page 5</span>
             </div>
         </div>
     </div>
@@ -2214,14 +2100,11 @@
                 </div>
             </div>
 
-        </div>
-
-        <!-- Page 6 Footer -->
-        <div class="page-footer">
-            <div class="page-footer-inner">
-                <img src="/app/StrLogo.png" alt="STR Logo" class="page-footer-logo" />
-                <span class="page-footer-text">STR Optimizer</span>
-                <span class="page-footer-page">Page 6</span>
+            <!-- Footer -->
+            <div class="roadmap-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; position: relative;">
+                <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
+                <span>STR Optimizer</span>
+                <span style="position: absolute; right: 0;">Page 6</span>
             </div>
         </div>
     </div>
