@@ -3,7 +3,6 @@ import os
 import subprocess
 import tempfile
 import time
-import threading
 from jinja2 import Template
 
 # Import WeasyPrint for fast PDF generation
@@ -15,23 +14,9 @@ except (ImportError, OSError, Exception) as e:
     WEASYPRINT_AVAILABLE = False
     print(f"⚠️ WeasyPrint not available - falling back to wkhtmltopdf. Error: {e}")
 
-class PDFGenerationTimeout(Exception):
-    """Custom exception for PDF generation timeout"""
-    pass
-
-def _weasyprint_generate(html_string, output_path, result_container):
-    """Helper function to run WeasyPrint in a separate thread"""
-    try:
-        html_doc = HTML(string=html_string)
-        html_doc.write_pdf(output_path)
-        result_container['success'] = True
-    except Exception as e:
-        result_container['error'] = str(e)
-        result_container['success'] = False
-
-def generate_html_pdf_fast(optimization_data, output_path, timeout_seconds=25):
+def generate_html_pdf_fast(optimization_data, output_path):
     """
-    FAST PDF generation using WeasyPrint - optimized for Heroku with timeout
+    FAST PDF generation using WeasyPrint - optimized for Heroku
     """
     print("⚡ Starting FAST WeasyPrint PDF generation...")
     start_time = time.time()
@@ -63,28 +48,12 @@ def generate_html_pdf_fast(optimization_data, output_path, timeout_seconds=25):
         rendered_html = template.render(**optimization_data)
         print("✅ Template rendered")
         
-        # Generate PDF using WeasyPrint with timeout
-        print(f"🚀 Generating PDF with WeasyPrint (timeout: {timeout_seconds}s)...")
+        # Generate PDF using WeasyPrint
+        print("🚀 Generating PDF with WeasyPrint...")
         
-        # Use threading for timeout control
-        result_container = {'success': False, 'error': None}
-        pdf_thread = threading.Thread(
-            target=_weasyprint_generate,
-            args=(rendered_html, output_path, result_container)
-        )
-        pdf_thread.daemon = True
-        pdf_thread.start()
-        pdf_thread.join(timeout=timeout_seconds)
-        
-        # Check if thread is still running (timeout)
-        if pdf_thread.is_alive():
-            print(f"❌ WeasyPrint timeout after {timeout_seconds} seconds - PDF generation taking too long")
-            return False
-        
-        # Check result
-        if not result_container['success']:
-            print(f"❌ WeasyPrint failed: {result_container.get('error', 'Unknown error')}")
-            return False
+        # Create HTML document and generate PDF directly
+        html_doc = HTML(string=rendered_html)
+        html_doc.write_pdf(output_path)
         
         execution_time = time.time() - start_time
         

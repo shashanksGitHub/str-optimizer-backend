@@ -8,7 +8,7 @@
         /* PDF Page Setup */
         @page {
             size: A4;
-            margin: 15mm 15mm 30mm 15mm; /* Extra bottom margin for footer */
+            margin: 15mm 15mm 25mm 15mm; /* Extra bottom margin for footer */
         }
         
         * {
@@ -23,30 +23,6 @@
             color: #333;
             background: white;
             font-size: 14px;
-        }
-        
-        /* ========== FIXED FOOTER AT PAGE BOTTOM ========== */
-        @page {
-            @bottom-center {
-                content: element(running-footer);
-            }
-        }
-        
-        .running-footer-content {
-            position: running(running-footer);
-            text-align: center;
-            font-size: 11px;
-            color: #6b7280;
-            padding: 8px 0;
-            border-top: 1px solid #e5e7eb;
-            background: white;
-        }
-        
-        .running-footer-content img {
-            height: 14px;
-            width: auto;
-            vertical-align: middle;
-            margin-right: 6px;
         }
         
         /* Header */
@@ -165,6 +141,8 @@
         
         /* Section Headers */
         .section-header {
+            display: flex;
+            align-items: center;
             margin: 40px 0 20px 0;
             font-size: 18px;
             font-weight: bold;
@@ -174,7 +152,6 @@
         .section-header .emoji {
             margin-right: 10px;
             font-size: 20px;
-            vertical-align: middle;
         }
         
         /* Priority Items */
@@ -195,6 +172,9 @@
             font-weight: bold;
             font-size: 16px;
             color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
         
         .priority-badge {
@@ -207,7 +187,8 @@
             white-space: nowrap;
             border: none;
             display: inline-block;
-            float: right;
+            margin-left: auto;
+            flex-shrink: 0;
         }
         
         .priority-badge.high {
@@ -272,6 +253,9 @@
 
         /* Page title with icon */
         .market-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-size: 24px;
             font-weight: 600;
             color: #111827;
@@ -280,8 +264,6 @@
 
         .market-icon {
             font-size: 18px;
-            margin-right: 8px;
-            vertical-align: middle;
         }
 
         /* Blue info box */
@@ -318,6 +300,8 @@
             border-radius: 8px;
             padding: 20px;
             height: auto;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Special styling for Revenue Insights card (Card 5) */
@@ -333,13 +317,14 @@
         }
 
         .market-card-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             margin-bottom: 12px;
         }
 
         .market-card-icon {
             font-size: 16px;
-            margin-right: 8px;
-            vertical-align: middle;
         }
 
         .market-card-header h3 {
@@ -436,18 +421,13 @@
         
         /* Two Column Layout */
         .two-columns {
+            display: flex;
+            gap: 30px;
             margin: 20px 0;
-            overflow: hidden;
         }
         
         .column {
-            width: 48%;
-            float: left;
-            margin-right: 4%;
-        }
-        
-        .column:last-child {
-            margin-right: 0;
+            flex: 1;
         }
         
         .feature-box {
@@ -588,6 +568,9 @@
 
         /* Page title with icon */
         .content-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-size: 24px;
             font-weight: 600;
             color: #111827;
@@ -596,8 +579,6 @@
 
         .content-icon {
             font-size: 24px;
-            margin-right: 8px;
-            vertical-align: middle;
         }
 
         /* Content analysis box */
@@ -617,13 +598,14 @@
         }
 
         .content-section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             margin-bottom: 2px;
         }
 
         .content-section-icon {
             font-size: 16px;
-            margin-right: 8px;
-            vertical-align: middle;
         }
 
         .content-section-title {
@@ -638,19 +620,13 @@
         }
 
         .content-subsection-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 12px;
             font-size: 15px;
             font-weight: 500;
             color: #374151;
-            overflow: hidden;
-        }
-        
-        .content-subsection-header > span:first-child {
-            float: left;
-        }
-        
-        .content-subsection-header .ai-generated-badge {
-            float: right;
         }
 
         .ai-generated-badge {
@@ -806,6 +782,9 @@
 
         /* Page title with icon */
         .revenue-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-size: 24px;
             font-weight: 600;
             color: #111827;
@@ -814,8 +793,6 @@
 
         .revenue-icon {
             font-size: 24px;
-            margin-right: 8px;
-            vertical-align: middle;
         }
 
         .revenue-title h2 {
@@ -836,7 +813,10 @@
         }
 
         .revenue-analysis-header {
-            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
         }
 
         .revenue-analysis-label {
@@ -871,14 +851,17 @@
         }
 
         .revenue-item {
+            display: flex;
+            align-items: flex-start;
             margin-bottom: 16px;
+            gap: 8px;
         }
 
         .revenue-number {
             color: #111827;
             font-weight: 600;
             font-size: 14px;
-            margin-right: 8px;
+            flex-shrink: 0;
         }
 
         .revenue-text {
@@ -916,14 +899,17 @@
         }
 
         .revenue-requirement {
+            display: flex;
+            align-items: flex-start;
             margin-bottom: 8px;
+            gap: 8px;
         }
 
         .requirement-label {
             color: #111827;
             font-weight: 600;
             font-size: 14px;
-            display: inline-block;
+            flex-shrink: 0;
             min-width: 160px;
         }
 
@@ -939,14 +925,17 @@
         }
 
         .revenue-strategy {
+            display: flex;
+            align-items: flex-start;
             margin-bottom: 8px;
+            gap: 8px;
         }
 
         .strategy-label {
             color: #111827;
             font-weight: 600;
             font-size: 14px;
-            display: inline-block;
+            flex-shrink: 0;
             min-width: 160px;
         }
 
@@ -1006,6 +995,9 @@
 
         /* Page title with icon */
         .action-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-size: 24px;
             font-weight: 600;
             color: #111827;
@@ -1014,8 +1006,6 @@
 
         .action-icon {
             font-size: 24px;
-            margin-right: 8px;
-            vertical-align: middle;
         }
 
         .action-title h2 {
@@ -1035,7 +1025,10 @@
         }
 
         .action-priority-header {
-            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
         }
 
         .action-priority-label {
@@ -1056,16 +1049,17 @@
         }
 
         .priority-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             margin-bottom: 12px;
         }
 
         .priority-icon {
             font-size: 16px;
-            margin-right: 8px;
-            vertical-align: middle;
         }
 
-        .action-plan-page .priority-title {
+        .priority-title {
             color: #111827;
             font-size: 16px;
             font-weight: 600;
@@ -1085,15 +1079,18 @@
             margin: 8px 0;
         }
 
-        .action-plan-page .priority-item {
+        .priority-item {
+            display: flex;
+            align-items: flex-start;
             margin-bottom: 8px;
+            gap: 8px;
         }
 
         .priority-item-label {
             color: #374151;
             font-weight: 600;
             font-size: 14px;
-            display: inline-block;
+            flex-shrink: 0;
             min-width: 120px;
         }
 
@@ -1157,13 +1154,14 @@
         }
 
         .roi-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             margin-bottom: 16px;
         }
 
         .roi-icon {
             font-size: 16px;
-            margin-right: 8px;
-            vertical-align: middle;
         }
 
         .roi-title h3 {
@@ -1188,7 +1186,10 @@
 
         /* ROI items */
         .roi-item {
+            display: flex;
+            align-items: flex-start;
             margin-bottom: 20px;
+            gap: 8px;
         }
 
         .roi-item:last-child {
@@ -1199,7 +1200,7 @@
             color: #111827;
             font-weight: 600;
             font-size: 14px;
-            margin-right: 8px;
+            flex-shrink: 0;
         }
 
         .roi-text {
@@ -1258,6 +1259,9 @@
 
         /* Page title with icon */
         .roadmap-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-size: 20px;
             font-weight: 600;
             color: #111827;
@@ -1266,8 +1270,6 @@
 
         .roadmap-icon {
             font-size: 20px;
-            margin-right: 8px;
-            vertical-align: middle;
         }
 
         .roadmap-title h2 {
@@ -1315,14 +1317,18 @@
         }
 
         .checklist-item {
+            display: flex;
+            align-items: flex-start;
             margin-bottom: 6px;
+            gap: 8px;
         }
 
         .check-icon {
             color: #10b981;
             font-weight: 600;
             font-size: 14px;
-            margin-right: 8px;
+            flex-shrink: 0;
+            margin-top: 1px;
         }
 
         .check-text {
@@ -1382,10 +1388,11 @@
             border-top: 1px solid #e5e7eb;
         }
 
-        /* ========== PAGE CONTAINER - Fixed layout for PDF ========== */
+        /* ========== PAGE CONTAINER - Fixed footer at bottom ========== */
         .pdf-page {
             position: relative;
-            min-height: 257mm; /* A4 height minus margins */
+            min-height: 297mm; /* A4 height */
+            padding-bottom: 50px; /* Space for footer */
             page-break-after: always;
             page-break-inside: avoid;
         }
@@ -1395,10 +1402,11 @@
         }
         
         .pdf-page-content {
-            padding-bottom: 50px; /* Space for footer */
+            min-height: calc(297mm - 85mm); /* A4 minus margins and footer */
         }
         
-        /* ========== UNIFIED REPORT FOOTER - FIXED AT BOTTOM ========== */
+        /* ========== UNIFIED REPORT FOOTER ========== */
+        /* Footer fixed at bottom of each page */
         .report-footer {
             position: absolute;
             bottom: 0;
@@ -1421,7 +1429,7 @@
             height: 16px;
             width: auto;
             vertical-align: middle;
-            margin-right: 6px;
+            margin-right: 8px;
         }
         
         .report-footer .footer-center span {
@@ -1432,7 +1440,7 @@
             position: absolute;
             right: 40px;
             top: 50%;
-            margin-top: -8px;
+            transform: translateY(-50%);
         }
 
         /* Page 2 specific adjustments */
@@ -1630,53 +1638,57 @@
                 <tr>
                     <!-- CARD 1: Location Analysis -->
                     <td style="width: 50%; vertical-align: top;">
-                        <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; height: 200px; position: relative;">
-                            <div style="margin-bottom: 10px;">
+                        <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; height: 200px; display: flex; flex-direction: column;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
                                 <span style="font-size: 16px;">🏢</span>
-                                <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0; display: inline;">Location Analysis</h3>
+                                <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0;">Location Analysis</h3>
                             </div>
-                            <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
-                                {% if pricing_analysis %}
-                                    {% set first_line = pricing_analysis.split('\n')[0] %}
-                                    {% set clean_line = first_line | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('6. ', '') | replace('7. ', '') | replace('8. ', '') | replace('9. ', '') | replace('10. ', '') | replace('1) ', '') | replace('2) ', '') | replace('3) ', '') | replace('4) ', '') | replace('5) ', '') %}
-                                    • {{ clean_line.strip() }}
-                                {% endif %}
-                            </p>
-                            <div style="position: absolute; bottom: 16px; left: 16px; right: 16px;">
-                                <div style="margin-bottom: 6px;">
-                                    <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
-                                        <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.market_positioning }}%;"></div>
+                            <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                                <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
+                                    {% if pricing_analysis %}
+                                        {% set first_line = pricing_analysis.split('\n')[0] %}
+                                        {% set clean_line = first_line | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('6. ', '') | replace('7. ', '') | replace('8. ', '') | replace('9. ', '') | replace('10. ', '') | replace('1) ', '') | replace('2) ', '') | replace('3) ', '') | replace('4) ', '') | replace('5) ', '') %}
+                                        • {{ clean_line.strip() }}
+                                    {% endif %}
+                                </p>
+                                <div style="margin-top: auto;">
+                                    <div style="margin-bottom: 6px;">
+                                        <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
+                                            <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.market_positioning }}%;"></div>
+                                        </div>
                                     </div>
+                                    <div style="font-size: 13px; color: #3b82f6; font-weight: 500;">Market Positioning: {{ competitive_scores.market_positioning }}%</div>
                                 </div>
-                                <div style="font-size: 13px; color: #3b82f6; font-weight: 500;">Market Positioning: {{ competitive_scores.market_positioning }}%</div>
                             </div>
                         </div>
                     </td>
                     <!-- CARD 2: Amenities Analysis -->
                     <td style="width: 50%; vertical-align: top;">
-                        <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; height: 200px; position: relative;">
-                            <div style="margin-bottom: 10px;">
+                        <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; height: 200px; display: flex; flex-direction: column;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
                                 <span style="font-size: 16px;">🏠</span>
-                                <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0; display: inline;">Amenities Analysis</h3>
+                                <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0;">Amenities Analysis</h3>
                             </div>
-                            <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
-                                {% if amenities %}
-                                    {% set lines = amenities.split('\n') %}
-                                    {% for line in lines[:2] %}
-                                        {% if line.strip() %}
-                                            {% set clean_line = line | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('6. ', '') | replace('7. ', '') | replace('8. ', '') | replace('9. ', '') | replace('10. ', '') | replace('1) ', '') | replace('2) ', '') | replace('3) ', '') | replace('4) ', '') | replace('5) ', '') %}
-                                            {% if not loop.first %}<br>{% endif %}• {{ clean_line.strip() }}
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endif %}
-                            </p>
-                            <div style="position: absolute; bottom: 16px; left: 16px; right: 16px;">
-                                <div style="margin-bottom: 6px;">
-                                    <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
-                                        <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.amenity_score }}%;"></div>
+                            <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                                <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
+                                    {% if amenities %}
+                                        {% set lines = amenities.split('\n') %}
+                                        {% for line in lines[:2] %}
+                                            {% if line.strip() %}
+                                                {% set clean_line = line | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('6. ', '') | replace('7. ', '') | replace('8. ', '') | replace('9. ', '') | replace('10. ', '') | replace('1) ', '') | replace('2) ', '') | replace('3) ', '') | replace('4) ', '') | replace('5) ', '') %}
+                                                {% if not loop.first %}<br>{% endif %}• {{ clean_line.strip() }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </p>
+                                <div style="margin-top: auto;">
+                                    <div style="margin-bottom: 6px;">
+                                        <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
+                                            <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.amenity_score }}%;"></div>
+                                        </div>
                                     </div>
+                                    <div style="font-size: 13px; color: #3b82f6; font-weight: 500;">Amenity Score: {{ competitive_scores.amenity_score }}%</div>
                                 </div>
-                                <div style="font-size: 13px; color: #3b82f6; font-weight: 500;">Amenity Score: {{ competitive_scores.amenity_score }}%</div>
                             </div>
                         </div>
                     </td>
@@ -1686,55 +1698,59 @@
                 <tr>
                     <!-- CARD 3: Visual Appeal -->
                     <td style="width: 50%; vertical-align: top;">
-                        <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; height: 200px; position: relative;">
-                            <div style="margin-bottom: 10px;">
+                        <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; height: 200px; display: flex; flex-direction: column;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
                                 <span style="font-size: 16px;">📸</span>
-                                <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0; display: inline;">Visual Appeal</h3>
+                                <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0;">Visual Appeal</h3>
                             </div>
-                            <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
-                                {% if photo_audit %}
-                                    {% set first_line = photo_audit.split('\n')[0] %}
-                                    {% set clean_line = first_line | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('6. ', '') | replace('7. ', '') | replace('8. ', '') | replace('9. ', '') | replace('10. ', '') | replace('1) ', '') | replace('2) ', '') | replace('3) ', '') | replace('4) ', '') | replace('5) ', '') %}
-                                    • {{ clean_line.strip() }}
-                                {% else %}
-                                    • No photos detected. Professional photos are essential - consider hiring a photographer to showcase your property's best features.
-                                {% endif %}
-                            </p>
-                            <div style="position: absolute; bottom: 16px; left: 16px; right: 16px;">
-                                <div style="margin-bottom: 6px;">
-                                    <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
-                                        <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.visual_score }}%;"></div>
+                            <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                                <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
+                                    {% if photo_audit %}
+                                        {% set first_line = photo_audit.split('\n')[0] %}
+                                        {% set clean_line = first_line | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('6. ', '') | replace('7. ', '') | replace('8. ', '') | replace('9. ', '') | replace('10. ', '') | replace('1) ', '') | replace('2) ', '') | replace('3) ', '') | replace('4) ', '') | replace('5) ', '') %}
+                                        • {{ clean_line.strip() }}
+                                    {% else %}
+                                        • No photos detected. Professional photos are essential - consider hiring a photographer to showcase your property's best features.
+                                    {% endif %}
+                                </p>
+                                <div style="margin-top: auto;">
+                                    <div style="margin-bottom: 6px;">
+                                        <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
+                                            <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.visual_score }}%;"></div>
+                                        </div>
                                     </div>
+                                    <div style="font-size: 13px; color: #3b82f6; font-weight: 500;">Visual Score: {{ competitive_scores.visual_score }}%</div>
                                 </div>
-                                <div style="font-size: 13px; color: #3b82f6; font-weight: 500;">Visual Score: {{ competitive_scores.visual_score }}%</div>
                             </div>
                         </div>
                     </td>
                     <!-- CARD 4: Guest Experience -->
                     <td style="width: 50%; vertical-align: top;">
-                        <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; height: 200px; position: relative;">
-                            <div style="margin-bottom: 10px;">
+                        <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; height: 200px; display: flex; flex-direction: column;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
                                 <span style="font-size: 16px;">👥</span>
-                                <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0; display: inline;">Guest Experience</h3>
+                                <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0;">Guest Experience</h3>
                             </div>
-                            <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
-                                {% if guest_profile_analysis %}
-                                    {% set lines = guest_profile_analysis.split('\n') %}
-                                    {% for line in lines[:2] %}
-                                        {% if line.strip() %}
-                                            {% set clean_line = line | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('6. ', '') | replace('7. ', '') | replace('8. ', '') | replace('9. ', '') | replace('10. ', '') | replace('1) ', '') | replace('2) ', '') | replace('3) ', '') | replace('4) ', '') | replace('5) ', '') %}
-                                            {% if not loop.first %}<br>{% endif %}• {{ clean_line.strip() }}
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endif %}
-                            </p>
-                            <div style="position: absolute; bottom: 16px; left: 16px; right: 16px;">
-                                <div style="margin-bottom: 6px;">
-                                    <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
-                                        <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.experience_score }}%;"></div>
+                            <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                                <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
+                                    {% if guest_profile_analysis %}
+                                        {% set lines = guest_profile_analysis.split('\n') %}
+                                        {% for line in lines[:2] %}
+                                            {% if line.strip() %}
+                                                {% set clean_line = line | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('6. ', '') | replace('7. ', '') | replace('8. ', '') | replace('9. ', '') | replace('10. ', '') | replace('1) ', '') | replace('2) ', '') | replace('3) ', '') | replace('4) ', '') | replace('5) ', '') %}
+                                                {% if not loop.first %}<br>{% endif %}• {{ clean_line.strip() }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </p>
+                                <div style="margin-top: auto;">
+                                    <div style="margin-bottom: 6px;">
+                                        <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
+                                            <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.experience_score }}%;"></div>
+                                        </div>
                                     </div>
+                                    <div style="font-size: 13px; color: #3b82f6; font-weight: 500;">Experience Score: {{ competitive_scores.experience_score }}%</div>
                                 </div>
-                                <div style="font-size: 13px; color: #3b82f6; font-weight: 500;">Experience Score: {{ competitive_scores.experience_score }}%</div>
                             </div>
                         </div>
                     </td>
@@ -1744,22 +1760,26 @@
                 <tr>
                     <!-- CARD 5: Revenue Insights -->
                     <td style="width: 50%; vertical-align: top;">
-                        <div style="background: #fef3c7; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; height: 200px;">
-                            <div style="margin-bottom: 12px;">
+                        <div style="background: #fef3c7; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; height: 200px; display: flex; flex-direction: column;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
                                 <span style="font-size: 16px;">📈</span>
-                                <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0; display: inline;">Revenue Insights</h3>
+                                <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0;">Revenue Insights</h3>
                             </div>
-                            <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{% if performance_insights %}{{ performance_insights | replace('**', '') | replace('*', '') }}{% endif %}</p>
+                            <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start;">
+                                <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{% if performance_insights %}{{ performance_insights | replace('**', '') | replace('*', '') }}{% endif %}</p>
+                            </div>
                         </div>
                     </td>
                     <!-- CARD 6: Strategic Recommendations -->
                     <td style="width: 50%; vertical-align: top;">
-                        <div style="background: #dcfce7; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; height: 200px;">
-                            <div style="margin-bottom: 12px;">
+                        <div style="background: #dcfce7; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; height: 200px; display: flex; flex-direction: column;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
                                 <span style="font-size: 16px;">💡</span>
-                                <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0; display: inline;">Strategic Recommendations</h3>
+                                <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0;">Strategic Recommendations</h3>
                             </div>
-                            <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{% if strategic_recommendations %}{% set clean_recs = strategic_recommendations | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_recs = clean_recs | replace(i ~ '. ', '• ') %}{% set clean_recs = clean_recs | replace(i ~ ') ', '• ') %}{% endfor %}{{ clean_recs }}{% endif %}</p>
+                            <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start;">
+                                <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{% if strategic_recommendations %}{% set clean_recs = strategic_recommendations | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_recs = clean_recs | replace(i ~ '. ', '• ') %}{% set clean_recs = clean_recs | replace(i ~ ') ', '• ') %}{% endfor %}{{ clean_recs }}{% endif %}</p>
+                            </div>
                         </div>
                     </td>
                 </tr>
