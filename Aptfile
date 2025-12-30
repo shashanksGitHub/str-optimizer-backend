@@ -1,14 +1,5 @@
-# System dependencies for wkhtmltopdf PDF generation on Heroku
-# Note: The dscout/wkhtmltopdf-buildpack provides a patched wkhtmltopdf at /app/bin/wkhtmltopdf
-
-# X11/Display dependencies for virtual framebuffer
+# System dependencies for wkhtmltopdf on Heroku
 xvfb
-libxrender1
-libxext6
-libx11-6
-
-# Font dependencies for proper text rendering
 fontconfig
-libfontconfig1
 fonts-liberation
-fonts-dejavu-core
+fonts-dejavu-core 

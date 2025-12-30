@@ -444,9 +444,9 @@ class ModernPDF(FPDF):
         self.ln(box_height + 10)
 
 def generate_professional_pdf(optimization_data, output_path):
-    """Generate professional PDF using pdfkit (wkhtmltopdf with WebKit rendering)"""
+    """Generate professional PDF using HTML-to-PDF with enhanced Chromium setup"""
     
-    print("📄 Generating professional PDF report...")
+    print("📄 Starting HTML-to-PDF generation...")
     
-    # Use pdfkit with wkhtmltopdf - fast WebKit-based rendering
+    # Use the enhanced HTML-to-PDF system with improved Chromium handling
     return generate_html_pdf(optimization_data, output_path) 

@@ -244,7 +244,7 @@ def create_checkout_session():
             print(f"❌ Error type: {type(stripe_error)}")
             raise stripe_error
 
-    except stripe.StripeError as e:
+    except stripe.error.StripeError as e:
         print(f"❌ STRIPE ERROR: {e}")
         return jsonify({'error': f'Payment processing error: {str(e)}'}), 500
     except Exception as e:
@@ -297,7 +297,7 @@ def payment_success():
         frontend_url = os.getenv('FRONTEND_URL', 'https://optimizemystr.com')
         return redirect(f'{frontend_url}/payment-success?session_id={session_id}')
         
-    except stripe.StripeError as e:
+    except stripe.error.StripeError as e:
         print(f"❌ Stripe error in payment success: {e}")
         frontend_url = os.getenv('FRONTEND_URL', 'https://optimizemystr.com')
         return redirect(f'{frontend_url}/payment-error?error=stripe_error')
@@ -321,7 +321,7 @@ def get_optimization_result(session_id):
         
         try:
             checkout_session = stripe.checkout.Session.retrieve(session_id)
-        except stripe.InvalidRequestError as e:
+        except stripe.error.InvalidRequestError as e:
             print(f"❌ Stripe session error: {e}")
             return jsonify({'error': 'Payment session has expired or is invalid. Please try making a new payment.'}), 400
             
@@ -357,7 +357,7 @@ def get_optimization_result(session_id):
             'success': True,
             'data': result
         })
-    except stripe.StripeError as e:
+    except stripe.error.StripeError as e:
         print(f"❌ Stripe API error: {e}")
         return jsonify({'error': 'Payment system error. Please contact support.'}), 500
     except Exception as e:
