@@ -1497,24 +1497,6 @@
                 {{ pricing_analysis }}
             </div>
         </div>
-        
-        <div class="priority-item">
-            <div class="priority-header">
-                <div class="priority-title">3. Guest Experience Optimization <span class="priority-badge {{ 'high' if task_priorities.experience_priority == 'HIGH' else 'medium' if task_priorities.experience_priority == 'MEDIUM' else 'low' }}">{{ task_priorities.experience_priority if task_priorities else 'LOW' }} PRIORITY</span></div>
-            </div>
-            <div class="content-section">
-                {{ guest_profile_analysis }}
-            </div>
-        </div>
-        
-        <div class="priority-item">
-            <div class="priority-header">
-                <div class="priority-title">4. Booking Gap Analysis & Optimization <span class="priority-badge {{ 'high' if task_priorities.booking_priority == 'HIGH' else 'medium' if task_priorities.booking_priority == 'MEDIUM' else 'low' }}">{{ task_priorities.booking_priority if task_priorities else 'HIGH' }} PRIORITY</span></div>
-            </div>
-            <div class="content-section">
-                {{ booking_gap_analysis }}
-            </div>
-        </div>
     </div>
     
     <!-- Footer Page 1 -->
@@ -1526,7 +1508,55 @@
         <span class="footer-page-number">Page 1</span>
     </div>
 
-    <!-- Market Analysis & Competitive Edge Page -->
+    <!-- Page 2: Remaining Immediate Actions -->
+    <div style="page-break-before: always;" class="page">
+        <!-- Header -->
+        <div class="header">
+            <div style="display: inline-block; float: left; display: flex; align-items: center;">
+                <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
+                <h1 style="color: #4285f4; font-size: 24px; font-weight: bold; margin: 0; display: inline; vertical-align: middle;">Listing Optimizer</h1>
+            </div>
+            <div class="date" style="display: inline-block; float: right;">Analysis Date: {{ analysis_date | default(generated_at | default('')) }}</div>
+            <div style="clear: both;"></div>
+        </div>
+        
+        <div class="content">
+            <!-- Continue Top 4 Immediate Actions -->
+            <div class="section-header">
+                <span class="emoji">🎯</span>
+                <span>🎯 Top 4 Immediate Actions (continued)</span>
+            </div>
+            
+            <div class="priority-item">
+                <div class="priority-header">
+                    <div class="priority-title">3. Guest Experience Optimization <span class="priority-badge {{ 'high' if task_priorities.experience_priority == 'HIGH' else 'medium' if task_priorities.experience_priority == 'MEDIUM' else 'low' }}">{{ task_priorities.experience_priority if task_priorities else 'LOW' }} PRIORITY</span></div>
+                </div>
+                <div class="content-section">
+                    {{ guest_profile_analysis }}
+                </div>
+            </div>
+            
+            <div class="priority-item">
+                <div class="priority-header">
+                    <div class="priority-title">4. Booking Gap Analysis & Optimization <span class="priority-badge {{ 'high' if task_priorities.booking_priority == 'HIGH' else 'medium' if task_priorities.booking_priority == 'MEDIUM' else 'low' }}">{{ task_priorities.booking_priority if task_priorities else 'HIGH' }} PRIORITY</span></div>
+                </div>
+                <div class="content-section">
+                    {{ booking_gap_analysis }}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer Page 2 -->
+    <div class="report-footer">
+        <div class="footer-center">
+            <img src="/app/StrLogo.png" alt="STR Logo" />
+            <span>STR Optimizer</span>
+        </div>
+        <span class="footer-page-number">Page 2</span>
+    </div>
+
+    <!-- Page 3: Market Analysis & Competitive Edge -->
     <div style="page-break-before: always;" class="page market-analysis-page">
                 <!-- Header with blue top border -->
                 <div class="market-header">
@@ -1731,10 +1761,10 @@
             <img src="/app/StrLogo.png" alt="STR Logo" />
             <span>STR Optimizer</span>
         </div>
-        <span class="footer-page-number">Page 2</span>
+        <span class="footer-page-number">Page 3</span>
     </div>
 
-    <!-- Content & Visual Optimization Page -->
+    <!-- Page 4: Content & Visual Optimization -->
     <div style="page-break-before: always;" class="page content-optimization-page">
                 <!-- Header with blue bottom border -->
                 <div class="content-header">
@@ -1812,10 +1842,10 @@
             <img src="/app/StrLogo.png" alt="STR Logo" />
             <span>STR Optimizer</span>
         </div>
-        <span class="footer-page-number">Page 3</span>
+        <span class="footer-page-number">Page 4</span>
     </div>
 
-    <!-- AI-Suggested Amenities Page -->
+    <!-- Page 5: AI-Suggested Amenities -->
     <div style="page-break-before: always;" class="page amenities-page">
                 <!-- Header -->
                 <div class="content-header">
@@ -1878,10 +1908,10 @@
             <img src="/app/StrLogo.png" alt="STR Logo" />
             <span>STR Optimizer</span>
         </div>
-        <span class="footer-page-number">Page 4</span>
+        <span class="footer-page-number">Page 5</span>
     </div>
 
-    <!-- Revenue Optimization Page -->
+    <!-- Page 6: Revenue Optimization -->
     <div style="page-break-before: always;" class="page revenue-optimization-page">
                 <!-- Header with blue bottom border -->
                 <div class="revenue-header">
@@ -1984,10 +2014,10 @@
             <img src="/app/StrLogo.png" alt="STR Logo" />
             <span>STR Optimizer</span>
         </div>
-        <span class="footer-page-number">Page 5</span>
+        <span class="footer-page-number">Page 6</span>
     </div>
 
-    <!-- 30-Day Implementation Roadmap Page 1 -->
+    <!-- Page 7: 30-Day Implementation Roadmap -->
     <div style="page-break-before: always;" class="page roadmap-page">
         <div class="roadmap-main">
                     <!-- Header -->
@@ -2157,7 +2187,7 @@
             <img src="/app/StrLogo.png" alt="STR Logo" />
             <span>STR Optimizer</span>
         </div>
-        <span class="footer-page-number">Page 6</span>
+        <span class="footer-page-number">Page 7</span>
     </div>
 </body>
 </html>
