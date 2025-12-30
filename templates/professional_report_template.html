@@ -19,6 +19,33 @@
             font-size: 14px;
         }
         
+        /* Page container for fixed footer */
+        .page {
+            position: relative;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+        
+        /* Fixed footer at bottom of page */
+        .page-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 40px;
+            border-top: 1px solid #e5e7eb;
+            background: white;
+        }
+        
+        .page-footer .page-number {
+            position: absolute;
+            right: 40px;
+        }
+        
         /* Header */
         .header {
             padding: 20px 40px;
@@ -1391,6 +1418,8 @@
     </style>
 </head>
 <body>
+    <!-- Page 1: Top 4 Immediate Actions -->
+    <div class="page page-1">
     <!-- Header -->
     <div class="header">
         <div style="display: inline-block; float: left; display: flex; align-items: center;">
@@ -1482,15 +1511,14 @@
                 {{ booking_gap_analysis }}
             </div>
         </div>
-
     </div>
-    
-    <!-- Footer for Page 1 -->
-    <div class="market-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; border-top: 1px solid #e5e7eb; padding: 8px 0; margin-top: 12px;">
+
+    <!-- Footer Page 1 -->
+    <div class="page-footer">
         <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
         <span>STR Optimizer</span>
-        <span>|</span>
-        <span>Page 1</span>
+        <span class="page-number">Page 1</span>
+    </div>
     </div>
 
     <!-- Market Analysis & Competitive Edge Page -->
@@ -1688,15 +1716,13 @@
                     </td>
                 </tr>
             </table>
-
         </div>
-        
-        <!-- Footer -->
-        <div class="market-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; border-top: 1px solid #e5e7eb; padding: 8px 0; margin-top: 12px;">
+
+        <!-- Footer Page 2 -->
+        <div class="page-footer">
             <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
             <span>STR Optimizer</span>
-            <span>|</span>
-            <span>Page 2</span>
+            <span class="page-number">Page 2</span>
         </div>
     </div>
 
@@ -1768,15 +1794,13 @@
                     <div class="keyword-item"><strong>Key Features:</strong> {{ amenities.split('\n')[0] if amenities else 'AI-suggested amenities' }}</div>
                 </div>
             </div>
-
         </div>
-        
-        <!-- Footer -->
-        <div class="content-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; border-top: 1px solid #e5e7eb; padding: 8px 0; margin-top: 12px;">
+
+        <!-- Footer Page 3 -->
+        <div class="page-footer">
             <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
             <span>STR Optimizer</span>
-            <span>|</span>
-            <span>Page 3</span>
+            <span class="page-number">Page 3</span>
         </div>
     </div>
 
@@ -1833,15 +1857,13 @@
                     </div>
                 </div>
             </div>
-
         </div>
-        
-        <!-- Footer -->
-        <div class="content-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; border-top: 1px solid #e5e7eb; padding: 8px 0; margin-top: 12px;">
+
+        <!-- Footer Page 4 -->
+        <div class="page-footer">
             <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
             <span>STR Optimizer</span>
-            <span>|</span>
-            <span>Page 4</span>
+            <span class="page-number">Page 4</span>
         </div>
     </div>
 
@@ -1936,17 +1958,13 @@
                     </div>
                 </div>
             </div>
-
-
-
         </div>
-        
-        <!-- Footer -->
-        <div class="revenue-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; border-top: 1px solid #e5e7eb; padding: 8px 0; margin-top: 12px;">
+
+        <!-- Footer Page 5 -->
+        <div class="page-footer">
             <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
             <span>STR Optimizer</span>
-            <span>|</span>
-            <span>Page 5</span>
+            <span class="page-number">Page 5</span>
         </div>
     </div>
 
@@ -2111,14 +2129,14 @@
                     <p class="cta-text">This AI-powered analysis identified optimization opportunities specific to your property in {{ location }}.</p>
                 </div>
             </div>
-
         </div>
-        
-        <!-- Footer -->
-        <div class="roadmap-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; border-top: 1px solid #e5e7eb; padding: 8px 0; margin-top: 12px;">
+
+        <!-- Footer Page 6 -->
+        <div class="page-footer">
             <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
             <span>STR Optimizer</span>
-            <span>|</span>
-            <span>Page 6</span>
+            <span class="page-number">Page 6</span>
         </div>
     </div>
+</body>
+</html>
