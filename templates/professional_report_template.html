@@ -1444,9 +1444,11 @@
                 <p><strong>Additional Options:</strong></p>
                 <ul>
                     {% if title_suggestions and title_suggestions|length > 1 %}
+                        {% set ns = namespace(count=0) %}
                         {% for suggestion in title_suggestions[1:] %}
-                            {% if suggestion != title %}
+                            {% if suggestion != title and ns.count < 2 %}
                         <li>"{{ suggestion }}"</li>
+                                {% set ns.count = ns.count + 1 %}
                             {% endif %}
                         {% endfor %}
                     {% endif %}
