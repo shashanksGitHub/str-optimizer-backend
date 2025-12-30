@@ -54,6 +54,59 @@ WEASYPRINT_CSS_OVERRIDES = """
     page-break-before: always !important;
     break-before: page !important;
 }
+
+/* ===== FOOTER STYLING - WeasyPrint compatible with floats ===== */
+.report-footer {
+    width: 100% !important;
+    padding: 10px 40px !important;
+    border-top: 1px solid #e5e7eb !important;
+    font-size: 12px !important;
+    color: #6b7280 !important;
+    background: white !important;
+    margin-top: auto !important;
+    overflow: hidden !important;
+    text-align: center !important;
+}
+
+.report-footer .footer-center {
+    display: inline-block !important;
+    text-align: center !important;
+}
+
+.report-footer .footer-center img {
+    height: 16px !important;
+    width: auto !important;
+    vertical-align: middle !important;
+    margin-right: 8px !important;
+}
+
+.report-footer .footer-center span {
+    vertical-align: middle !important;
+}
+
+.report-footer .footer-page-number {
+    float: right !important;
+    font-weight: 500 !important;
+    color: #374151 !important;
+    font-size: 12px !important;
+}
+
+/* PDF page container */
+.pdf-page {
+    min-height: 100vh !important;
+    display: block !important;
+    page-break-after: always !important;
+    page-break-inside: avoid !important;
+    position: relative !important;
+}
+
+.pdf-page:last-of-type {
+    page-break-after: avoid !important;
+}
+
+.pdf-page-content {
+    display: block !important;
+}
 """
 
 def _weasyprint_generate(rendered_html, output_path, css_override):
