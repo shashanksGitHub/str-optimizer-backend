@@ -1389,7 +1389,6 @@
         }
 
         /* ========== UNIFIED REPORT FOOTER ========== */
-        /* Simple footer style - no flexbox to avoid WeasyPrint timeout */
         .report-footer {
             width: 100%;
             padding: 10px 40px;
@@ -1432,8 +1431,10 @@
 </head>
 <body>
     <!-- Page 1: Top 4 Immediate Actions -->
-    <!-- Header -->
-    <div class="header">
+    
+        
+            <!-- Header -->
+            <div class="header">
                 <div style="display: inline-block; float: left; display: flex; align-items: center;">
                     <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
                     <h1 style="color: #4285f4; font-size: 24px; font-weight: bold; margin: 0; display: inline; vertical-align: middle;">Listing Optimizer</h1>
@@ -1503,10 +1504,9 @@
             </div>
             <div class="content-section">
                 {{ pricing_analysis }}
+                </div>
             </div>
         </div>
-    </div>
-    
     <!-- Footer Page 1 -->
     <div class="report-footer">
         <div class="footer-center">
@@ -1517,18 +1517,19 @@
     </div>
 
     <!-- Page 2: Remaining Immediate Actions -->
-    <div style="page-break-before: always;">
-        <!-- Header -->
-        <div class="header">
-            <div style="display: inline-block; float: left; display: flex; align-items: center;">
-                <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
-                <h1 style="color: #4285f4; font-size: 24px; font-weight: bold; margin: 0; display: inline; vertical-align: middle;">Listing Optimizer</h1>
-            </div>
-            <div class="date" style="display: inline-block; float: right;">Analysis Date: {{ analysis_date | default(generated_at | default('')) }}</div>
-            <div style="clear: both;"></div>
-        </div>
+    
         
-        <div class="content">
+            <!-- Header -->
+            <div class="header">
+                <div style="display: inline-block; float: left; display: flex; align-items: center;">
+                    <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
+                    <h1 style="color: #4285f4; font-size: 24px; font-weight: bold; margin: 0; display: inline; vertical-align: middle;">Listing Optimizer</h1>
+                </div>
+                <div class="date" style="display: inline-block; float: right;">Analysis Date: {{ analysis_date | default(generated_at | default('')) }}</div>
+                <div style="clear: both;"></div>
+            </div>
+            
+            <div class="content">
                 <!-- Continue Top 4 Immediate Actions -->
                 <div class="section-header">
                     <span class="emoji">🎯</span>
@@ -1552,9 +1553,8 @@
                         {{ booking_gap_analysis }}
                     </div>
                 </div>
+            </div>
         </div>
-    </div>
-    
     <!-- Footer Page 2 -->
     <div class="report-footer">
         <div class="footer-center">
@@ -1565,9 +1565,10 @@
     </div>
 
     <!-- Page 3: Market Analysis & Competitive Edge -->
-    <div style="page-break-before: always;" class="market-analysis-page">
-        <!-- Header with blue top border -->
-        <div class="market-header">
+    
+        
+            <!-- Header with blue top border -->
+            <div class="market-header">
                     <div class="market-header-top"></div>
                     <div class="market-header-content">
                         <div class="market-header-left" style="display: flex; align-items: center;">
@@ -1759,9 +1760,9 @@
                     </td>
                 </tr>
             </table>
+
+            </div>
         </div>
-    </div>
-    
     <!-- Footer Page 3 -->
     <div class="report-footer">
         <div class="footer-center">
@@ -1772,9 +1773,11 @@
     </div>
 
     <!-- Page 4: Content & Visual Optimization -->
-    <div style="page-break-before: always;" class="content-optimization-page">
-        <!-- Header with blue bottom border -->
-        <div class="content-header">
+    
+        
+            <div class="page content-optimization-page">
+                <!-- Header with blue bottom border -->
+                <div class="content-header">
                     <div class="content-header-content">
                         <div class="content-header-left" style="display: flex; align-items: center;">
                             <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
@@ -1839,9 +1842,8 @@
                     <div class="keyword-item"><strong>Key Features:</strong> {{ amenities.split('\n')[0] if amenities else 'AI-suggested amenities' }}</div>
                 </div>
             </div>
+            </div>
         </div>
-    </div>
-    
     <!-- Footer Page 4 -->
     <div class="report-footer">
         <div class="footer-center">
@@ -1852,9 +1854,10 @@
     </div>
 
     <!-- Page 5: AI-Suggested Amenities -->
-    <div style="page-break-before: always;" class="amenities-page">
-        <!-- Header -->
-        <div class="content-header">
+    
+        
+            <!-- Header -->
+                <div class="content-header">
                     <div class="content-header-content">
                         <div class="content-header-left" style="display: flex; align-items: center;">
                             <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
@@ -1905,8 +1908,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    
     <!-- Footer Page 5 -->
     <div class="report-footer">
         <div class="footer-center">
@@ -1917,9 +1918,10 @@
     </div>
 
     <!-- Page 6: Revenue Optimization -->
-    <div style="page-break-before: always;" class="revenue-optimization-page">
-        <!-- Header with blue bottom border -->
-        <div class="revenue-header">
+    
+        
+            <!-- Header with blue bottom border -->
+                <div class="revenue-header">
                     <div class="revenue-header-content">
                         <div class="revenue-header-left" style="display: flex; align-items: center;">
                             <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
@@ -2006,10 +2008,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    
+            </div>        </div>
     <!-- Footer Page 6 -->
     <div class="report-footer">
         <div class="footer-center">
@@ -2020,10 +2019,11 @@
     </div>
 
     <!-- Page 7: 30-Day Implementation Roadmap -->
-    <div style="page-break-before: always;" class="roadmap-page">
-        <div class="roadmap-main">
-            <!-- Header -->
-            <div class="roadmap-header">
+    
+        
+            <div class="roadmap-main">
+                <!-- Header -->
+                    <div class="roadmap-header">
                         <div class="roadmap-header-content">
                             <div style="display: flex; align-items: center; float: left;">
                                 <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
@@ -2180,9 +2180,8 @@
                     <p class="cta-text">This AI-powered analysis identified optimization opportunities specific to your property in {{ location }}.</p>
                 </div>
             </div>
+            </div>
         </div>
-    </div>
-    
     <!-- Footer Page 7 -->
     <div class="report-footer">
         <div class="footer-center">
