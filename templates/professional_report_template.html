@@ -1363,12 +1363,15 @@
             display: block;
             position: relative;
             page-break-after: always;
+            break-after: page;
             page-break-inside: avoid;
+            break-inside: avoid;
             padding-bottom: 50px; /* Space for footer */
         }
         
         .pdf-page:last-of-type {
             page-break-after: avoid;
+            break-after: avoid;
         }
         
         .pdf-page-content {
@@ -1834,7 +1837,7 @@
     </div>
 
     <!-- Page 5: AI-Suggested Amenities -->
-    <div class="pdf-page">
+    <div class="pdf-page" style="page-break-before: always; break-before: page;">
         <div class="pdf-page-content">
             <!-- Header -->
                 <div class="content-header">
