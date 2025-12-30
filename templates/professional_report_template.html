@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listing Optimizer - {{ title | default("Property Analysis Report") }}</title>
     <style>
+        /* PDF Page Setup */
+        @page {
+            size: A4;
+            margin: 15mm 15mm 25mm 15mm; /* Extra bottom margin for footer */
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -1382,7 +1388,25 @@
             border-top: 1px solid #e5e7eb;
         }
 
+        /* ========== PAGE CONTAINER - Pushes footer to bottom ========== */
+        .pdf-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            page-break-after: always;
+            page-break-inside: avoid;
+        }
+        
+        .pdf-page:last-of-type {
+            page-break-after: avoid;
+        }
+        
+        .pdf-page-content {
+            flex: 1;
+        }
+        
         /* ========== UNIFIED REPORT FOOTER ========== */
+        /* Footer anchored at bottom of each page */
         .report-footer {
             width: 100%;
             padding: 10px 40px;
@@ -1392,7 +1416,7 @@
             background: white;
             text-align: center;
             position: relative;
-            margin-top: 20px;
+            margin-top: auto;
         }
         
         .report-footer .footer-center {
@@ -1425,8 +1449,10 @@
 </head>
 <body>
     <!-- Page 1: Top 4 Immediate Actions -->
-    <!-- Header -->
-    <div class="header">
+    <div class="pdf-page">
+        <div class="pdf-page-content">
+            <!-- Header -->
+            <div class="header">
                 <div style="display: inline-block; float: left; display: flex; align-items: center;">
                     <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
                     <h1 style="color: #4285f4; font-size: 24px; font-weight: bold; margin: 0; display: inline; vertical-align: middle;">Listing Optimizer</h1>
@@ -1496,23 +1522,24 @@
             </div>
             <div class="content-section">
                 {{ pricing_analysis }}
+                </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Footer Page 1 -->
-    <div class="report-footer">
-        <div class="footer-center">
-            <img src="/app/StrLogo.png" alt="STR Logo" />
-            <span>STR Optimizer</span>
+        <!-- Footer Page 1 -->
+        <div class="report-footer">
+            <div class="footer-center">
+                <img src="/app/StrLogo.png" alt="STR Logo" />
+                <span>STR Optimizer</span>
+            </div>
+            <span class="footer-page-number">Page 1</span>
         </div>
-        <span class="footer-page-number">Page 1</span>
     </div>
 
     <!-- Page 2: Remaining Immediate Actions -->
-    <div style="page-break-before: always;">
-        <!-- Header -->
-        <div class="header">
+    <div class="pdf-page">
+        <div class="pdf-page-content">
+            <!-- Header -->
+            <div class="header">
                 <div style="display: inline-block; float: left; display: flex; align-items: center;">
                     <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
                     <h1 style="color: #4285f4; font-size: 24px; font-weight: bold; margin: 0; display: inline; vertical-align: middle;">Listing Optimizer</h1>
@@ -1547,21 +1574,21 @@
                 </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Footer Page 2 -->
-    <div class="report-footer">
-        <div class="footer-center">
-            <img src="/app/StrLogo.png" alt="STR Logo" />
-            <span>STR Optimizer</span>
+        <!-- Footer Page 2 -->
+        <div class="report-footer">
+            <div class="footer-center">
+                <img src="/app/StrLogo.png" alt="STR Logo" />
+                <span>STR Optimizer</span>
+            </div>
+            <span class="footer-page-number">Page 2</span>
         </div>
-        <span class="footer-page-number">Page 2</span>
     </div>
 
     <!-- Page 3: Market Analysis & Competitive Edge -->
-    <div style="page-break-before: always;" class="market-analysis-page">
-        <!-- Header with blue top border -->
-        <div class="market-header">
+    <div class="pdf-page">
+        <div class="pdf-page-content">
+            <!-- Header with blue top border -->
+            <div class="market-header">
                     <div class="market-header-top"></div>
                     <div class="market-header-content">
                         <div class="market-header-left" style="display: flex; align-items: center;">
@@ -1753,22 +1780,25 @@
                     </td>
                 </tr>
             </table>
+
+            </div>
         </div>
-    </div>
-    
-    <!-- Footer Page 3 -->
-    <div class="report-footer">
-        <div class="footer-center">
-            <img src="/app/StrLogo.png" alt="STR Logo" />
-            <span>STR Optimizer</span>
+        <!-- Footer Page 3 -->
+        <div class="report-footer">
+            <div class="footer-center">
+                <img src="/app/StrLogo.png" alt="STR Logo" />
+                <span>STR Optimizer</span>
+            </div>
+            <span class="footer-page-number">Page 3</span>
         </div>
-        <span class="footer-page-number">Page 3</span>
     </div>
 
     <!-- Page 4: Content & Visual Optimization -->
-    <div style="page-break-before: always;" class="content-optimization-page">
-        <!-- Header with blue bottom border -->
-        <div class="content-header">
+    <div class="pdf-page">
+        <div class="pdf-page-content">
+            <div class="page content-optimization-page">
+                <!-- Header with blue bottom border -->
+                <div class="content-header">
                     <div class="content-header-content">
                         <div class="content-header-left" style="display: flex; align-items: center;">
                             <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
@@ -1833,22 +1863,23 @@
                     <div class="keyword-item"><strong>Key Features:</strong> {{ amenities.split('\n')[0] if amenities else 'AI-suggested amenities' }}</div>
                 </div>
             </div>
+            </div>
         </div>
-    </div>
-    
-    <!-- Footer Page 4 -->
-    <div class="report-footer">
-        <div class="footer-center">
-            <img src="/app/StrLogo.png" alt="STR Logo" />
-            <span>STR Optimizer</span>
+        <!-- Footer Page 4 -->
+        <div class="report-footer">
+            <div class="footer-center">
+                <img src="/app/StrLogo.png" alt="STR Logo" />
+                <span>STR Optimizer</span>
+            </div>
+            <span class="footer-page-number">Page 4</span>
         </div>
-        <span class="footer-page-number">Page 4</span>
     </div>
 
     <!-- Page 5: AI-Suggested Amenities -->
-    <div style="page-break-before: always;" class="amenities-page">
-        <!-- Header -->
-        <div class="content-header">
+    <div class="pdf-page">
+        <div class="pdf-page-content">
+            <!-- Header -->
+                <div class="content-header">
                     <div class="content-header-content">
                         <div class="content-header-left" style="display: flex; align-items: center;">
                             <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
@@ -1899,21 +1930,21 @@
                 </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Footer Page 5 -->
-    <div class="report-footer">
-        <div class="footer-center">
-            <img src="/app/StrLogo.png" alt="STR Logo" />
-            <span>STR Optimizer</span>
+        <!-- Footer Page 5 -->
+        <div class="report-footer">
+            <div class="footer-center">
+                <img src="/app/StrLogo.png" alt="STR Logo" />
+                <span>STR Optimizer</span>
+            </div>
+            <span class="footer-page-number">Page 5</span>
         </div>
-        <span class="footer-page-number">Page 5</span>
     </div>
 
     <!-- Page 6: Revenue Optimization -->
-    <div style="page-break-before: always;" class="revenue-optimization-page">
-        <!-- Header with blue bottom border -->
-        <div class="revenue-header">
+    <div class="pdf-page">
+        <div class="pdf-page-content">
+            <!-- Header with blue bottom border -->
+                <div class="revenue-header">
                     <div class="revenue-header-content">
                         <div class="revenue-header-left" style="display: flex; align-items: center;">
                             <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
@@ -2000,24 +2031,23 @@
                         </div>
                     </div>
                 </div>
+            </div>        </div>
+        <!-- Footer Page 6 -->
+        <div class="report-footer">
+            <div class="footer-center">
+                <img src="/app/StrLogo.png" alt="STR Logo" />
+                <span>STR Optimizer</span>
             </div>
+            <span class="footer-page-number">Page 6</span>
         </div>
-    </div>
-    
-    <!-- Footer Page 6 -->
-    <div class="report-footer">
-        <div class="footer-center">
-            <img src="/app/StrLogo.png" alt="STR Logo" />
-            <span>STR Optimizer</span>
-        </div>
-        <span class="footer-page-number">Page 6</span>
     </div>
 
     <!-- Page 7: 30-Day Implementation Roadmap -->
-    <div style="page-break-before: always;" class="roadmap-page">
-        <div class="roadmap-main">
-            <!-- Header -->
-            <div class="roadmap-header">
+    <div class="pdf-page">
+        <div class="pdf-page-content">
+            <div class="roadmap-main">
+                <!-- Header -->
+                    <div class="roadmap-header">
                         <div class="roadmap-header-content">
                             <div style="display: flex; align-items: center; float: left;">
                                 <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
@@ -2174,16 +2204,16 @@
                     <p class="cta-text">This AI-powered analysis identified optimization opportunities specific to your property in {{ location }}.</p>
                 </div>
             </div>
+            </div>
         </div>
-    </div>
-    
-    <!-- Footer Page 7 -->
-    <div class="report-footer">
-        <div class="footer-center">
-            <img src="/app/StrLogo.png" alt="STR Logo" />
-            <span>STR Optimizer</span>
+        <!-- Footer Page 7 -->
+        <div class="report-footer">
+            <div class="footer-center">
+                <img src="/app/StrLogo.png" alt="STR Logo" />
+                <span>STR Optimizer</span>
+            </div>
+            <span class="footer-page-number">Page 7</span>
         </div>
-        <span class="footer-page-number">Page 7</span>
     </div>
 </body>
 </html>
