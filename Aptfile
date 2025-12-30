@@ -15,3 +15,6 @@ fontconfig
 libfontconfig1
 fonts-liberation
 fonts-dejavu-core
+
+# Qt/WebKit dependencies that wkhtmltopdf needs
+libpcre2-16-0
