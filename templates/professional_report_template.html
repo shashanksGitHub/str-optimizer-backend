@@ -372,40 +372,6 @@
             border-top: 1px solid #e5e7eb;
         }
         
-        /* Unified Page Footer - anchored to bottom */
-        .page-footer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px 40px;
-            border-top: 1px solid #e5e7eb;
-            font-size: 12px;
-            color: #6b7280;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-        }
-        
-        .page-footer .page-number {
-            position: absolute;
-            right: 40px;
-        }
-        
-        /* Page wrapper for proper footer positioning */
-        .page-wrapper {
-            position: relative;
-            min-height: 100vh;
-            page-break-after: always;
-            padding-bottom: 50px;
-        }
-        
-        .page-wrapper:last-child {
-            page-break-after: avoid;
-        }
-        
         /* Content Sections */
         .content-section {
             margin-bottom: 2px;
@@ -1416,6 +1382,38 @@
             border-top: 1px solid #e5e7eb;
         }
 
+        /* ========== UNIFIED REPORT FOOTER ========== */
+        /* Unified footer style for all pages */
+        .report-footer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+            padding: 8px 40px;
+            border-top: 1px solid #e5e7eb;
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 20px;
+            background: white;
+        }
+        
+        .report-footer .footer-center {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .report-footer .footer-center img {
+            height: 16px;
+            width: auto;
+        }
+        
+        .report-footer .footer-page-number {
+            position: absolute;
+            right: 40px;
+        }
+
         /* Page 2 specific adjustments */
         .roadmap-main-2 {
             padding: 32px 24px;
@@ -1426,18 +1424,17 @@
 </head>
 <body>
     <!-- Page 1: Top 4 Immediate Actions -->
-    <div class="page-wrapper">
-        <!-- Header -->
-        <div class="header">
-            <div style="display: inline-block; float: left; display: flex; align-items: center;">
-                <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
-                <h1 style="color: #4285f4; font-size: 24px; font-weight: bold; margin: 0; display: inline; vertical-align: middle;">Listing Optimizer</h1>
-            </div>
-            <div class="date" style="display: inline-block; float: right;">Analysis Date: {{ analysis_date | default(generated_at | default('')) }}</div>
-            <div style="clear: both;"></div>
+    <!-- Header -->
+    <div class="header">
+        <div style="display: inline-block; float: left; display: flex; align-items: center;">
+            <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
+            <h1 style="color: #4285f4; font-size: 24px; font-weight: bold; margin: 0; display: inline; vertical-align: middle;">Listing Optimizer</h1>
         </div>
-        
-        <div class="content">
+        <div class="date" style="display: inline-block; float: right;">Analysis Date: {{ analysis_date | default(generated_at | default('')) }}</div>
+        <div style="clear: both;"></div>
+    </div>
+    
+    <div class="content">
         <!-- Title Section -->
         <div class="title-section">
             <div class="main-title">{{ title }}</div>
@@ -1518,35 +1515,35 @@
                 {{ booking_gap_analysis }}
             </div>
         </div>
-
     </div>
-        
-        <!-- Footer Page 1 -->
-        <div class="page-footer">
-            <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
+    
+    <!-- Footer Page 1 -->
+    <div class="report-footer">
+        <div class="footer-center">
+            <img src="/app/StrLogo.png" alt="STR Logo" />
             <span>STR Optimizer</span>
-            <span class="page-number">Page 1</span>
         </div>
+        <span class="footer-page-number">Page 1</span>
     </div>
 
     <!-- Market Analysis & Competitive Edge Page -->
-    <div class="page-wrapper market-analysis-page">
-        <!-- Header with blue top border -->
-        <div class="market-header">
-            <div class="market-header-top"></div>
-            <div class="market-header-content">
-                <div class="market-header-left" style="display: flex; align-items: center;">
-                    <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
-                    <h1 style="display: inline-block;">Listing Optimizer</h1>
+    <div style="page-break-before: always;" class="page market-analysis-page">
+                <!-- Header with blue top border -->
+                <div class="market-header">
+                    <div class="market-header-top"></div>
+                    <div class="market-header-content">
+                        <div class="market-header-left" style="display: flex; align-items: center;">
+                            <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
+                            <h1 style="display: inline-block;">Listing Optimizer</h1>
+                        </div>
+                        <div class="market-header-right">
+                            <span style="display: inline-block; float: right;">Market Analysis</span>
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
                 </div>
-                <div class="market-header-right">
-                    <span style="display: inline-block; float: right;">Market Analysis</span>
-                </div>
-                <div style="clear: both;"></div>
-            </div>
-        </div>
 
-        <div class="market-content">
+                <div class="market-content">
             <!-- Page Title with icon -->
             <div class="market-title">
                 <span class="market-icon">📊</span>
@@ -1726,32 +1723,34 @@
             </table>
 
         </div>
-        
-        <!-- Footer Page 2 -->
-        <div class="page-footer">
-            <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
+    </div>
+    
+    <!-- Footer Page 2 -->
+    <div class="report-footer">
+        <div class="footer-center">
+            <img src="/app/StrLogo.png" alt="STR Logo" />
             <span>STR Optimizer</span>
-            <span class="page-number">Page 2</span>
         </div>
+        <span class="footer-page-number">Page 2</span>
     </div>
 
     <!-- Content & Visual Optimization Page -->
-    <div class="page-wrapper content-optimization-page">
-        <!-- Header with blue bottom border -->
-        <div class="content-header">
-            <div class="content-header-content">
-                <div class="content-header-left" style="display: flex; align-items: center;">
-                    <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
-                    <h1 style="display: inline-block;">Listing Optimizer</h1>
+    <div style="page-break-before: always;" class="page content-optimization-page">
+                <!-- Header with blue bottom border -->
+                <div class="content-header">
+                    <div class="content-header-content">
+                        <div class="content-header-left" style="display: flex; align-items: center;">
+                            <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
+                            <h1 style="display: inline-block;">Listing Optimizer</h1>
+                        </div>
+                        <div class="content-header-right">
+                            <span style="display: inline-block; float: right;">Content Strategy</span>
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
                 </div>
-                <div class="content-header-right">
-                    <span style="display: inline-block; float: right;">Content Strategy</span>
-                </div>
-                <div style="clear: both;"></div>
-            </div>
-        </div>
 
-        <div class="content-main">
+                <div class="content-main">
             <!-- Page Title with icon -->
             <div class="content-title">
                 <span class="content-icon">✍️</span>
@@ -1805,32 +1804,34 @@
             </div>
 
         </div>
-        
-        <!-- Footer Page 3 -->
-        <div class="page-footer">
-            <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
+    </div>
+    
+    <!-- Footer Page 3 -->
+    <div class="report-footer">
+        <div class="footer-center">
+            <img src="/app/StrLogo.png" alt="STR Logo" />
             <span>STR Optimizer</span>
-            <span class="page-number">Page 3</span>
         </div>
+        <span class="footer-page-number">Page 3</span>
     </div>
 
     <!-- AI-Suggested Amenities Page -->
-    <div class="page-wrapper amenities-page">
-        <!-- Header -->
-        <div class="content-header">
-            <div class="content-header-content">
-                <div class="content-header-left" style="display: flex; align-items: center;">
-                    <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
-                    <h1 style="display: inline-block;">Listing Optimizer</h1>
+    <div style="page-break-before: always;" class="page amenities-page">
+                <!-- Header -->
+                <div class="content-header">
+                    <div class="content-header-content">
+                        <div class="content-header-left" style="display: flex; align-items: center;">
+                            <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
+                            <h1 style="display: inline-block;">Listing Optimizer</h1>
+                        </div>
+                        <div class="content-header-right">
+                            <span style="display: inline-block; float: right;">AI Recommendations</span>
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
                 </div>
-                <div class="content-header-right">
-                    <span style="display: inline-block; float: right;">AI Recommendations</span>
-                </div>
-                <div style="clear: both;"></div>
-            </div>
-        </div>
 
-        <div class="content-main">
+                <div class="content-main">
             <!-- Page Title with icon -->
             <div class="content-title">
                 <span style="font-size: 24px;">💡</span>
@@ -1869,32 +1870,34 @@
             </div>
 
         </div>
-        
-        <!-- Footer Page 4 -->
-        <div class="page-footer">
-            <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
+    </div>
+    
+    <!-- Footer Page 4 -->
+    <div class="report-footer">
+        <div class="footer-center">
+            <img src="/app/StrLogo.png" alt="STR Logo" />
             <span>STR Optimizer</span>
-            <span class="page-number">Page 4</span>
         </div>
+        <span class="footer-page-number">Page 4</span>
     </div>
 
     <!-- Revenue Optimization Page -->
-    <div class="page-wrapper revenue-optimization-page">
-        <!-- Header with blue bottom border -->
-        <div class="revenue-header">
-            <div class="revenue-header-content">
-                <div class="revenue-header-left" style="display: flex; align-items: center;">
-                    <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
-                    <h1 style="display: inline-block;">Listing Optimizer</h1>
+    <div style="page-break-before: always;" class="page revenue-optimization-page">
+                <!-- Header with blue bottom border -->
+                <div class="revenue-header">
+                    <div class="revenue-header-content">
+                        <div class="revenue-header-left" style="display: flex; align-items: center;">
+                            <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
+                            <h1 style="display: inline-block;">Listing Optimizer</h1>
+                        </div>
+                        <div class="revenue-header-right">
+                            <span style="display: inline-block; float: right;">Revenue Optimization</span>
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
                 </div>
-                <div class="revenue-header-right">
-                    <span style="display: inline-block; float: right;">Revenue Optimization</span>
-                </div>
-                <div style="clear: both;"></div>
-            </div>
-        </div>
 
-        <div class="revenue-main">
+                <div class="revenue-main">
             <!-- Page Title with icon -->
             <div class="revenue-title">
                 <span class="revenue-icon">💰</span>
@@ -1973,31 +1976,33 @@
 
 
         </div>
-        
-        <!-- Footer Page 5 -->
-        <div class="page-footer">
-            <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
+    </div>
+    
+    <!-- Footer Page 5 -->
+    <div class="report-footer">
+        <div class="footer-center">
+            <img src="/app/StrLogo.png" alt="STR Logo" />
             <span>STR Optimizer</span>
-            <span class="page-number">Page 5</span>
         </div>
+        <span class="footer-page-number">Page 5</span>
     </div>
 
     <!-- 30-Day Implementation Roadmap Page 1 -->
-    <div class="page-wrapper roadmap-page">
+    <div style="page-break-before: always;" class="page roadmap-page">
         <div class="roadmap-main">
-            <!-- Header -->
-            <div class="roadmap-header">
-                <div class="roadmap-header-content">
-                    <div style="display: flex; align-items: center; float: left;">
-                        <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
-                        <h1 style="display: inline-block;">Listing Optimizer</h1>
+                    <!-- Header -->
+                    <div class="roadmap-header">
+                        <div class="roadmap-header-content">
+                            <div style="display: flex; align-items: center; float: left;">
+                                <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
+                                <h1 style="display: inline-block;">Listing Optimizer</h1>
+                            </div>
+                            <span style="display: inline-block; float: right;">Action Plan</span>
+                            <div style="clear: both;"></div>
+                        </div>
                     </div>
-                    <span style="display: inline-block; float: right;">Action Plan</span>
-                    <div style="clear: both;"></div>
-                </div>
-            </div>
 
-            <!-- Page Title with icon -->
+                    <!-- Page Title with icon -->
             <div class="roadmap-title">
                 <span class="roadmap-icon">🚀</span>
                 <span>30-Day Implementation Roadmap</span>
@@ -2143,13 +2148,16 @@
                     <p class="cta-text">This AI-powered analysis identified optimization opportunities specific to your property in {{ location }}.</p>
                 </div>
             </div>
-
-        </div>
-        
-        <!-- Footer Page 6 -->
-        <div class="page-footer">
-            <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
-            <span>STR Optimizer</span>
-            <span class="page-number">Page 6</span>
         </div>
     </div>
+    
+    <!-- Footer Page 6 -->
+    <div class="report-footer">
+        <div class="footer-center">
+            <img src="/app/StrLogo.png" alt="STR Logo" />
+            <span>STR Optimizer</span>
+        </div>
+        <span class="footer-page-number">Page 6</span>
+    </div>
+</body>
+</html>
