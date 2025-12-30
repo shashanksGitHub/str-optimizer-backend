@@ -1,10 +1,7 @@
 # System dependencies for wkhtmltopdf PDF generation on Heroku
-# These packages are installed by the heroku-community/apt buildpack
+# Note: The dscout/wkhtmltopdf-buildpack provides a patched wkhtmltopdf at /app/bin/wkhtmltopdf
 
-# wkhtmltopdf - the core PDF generation tool (uses WebKit)
-wkhtmltopdf
-
-# X11/Display dependencies (wkhtmltopdf needs these even in headless mode)
+# X11/Display dependencies for virtual framebuffer
 xvfb
 libxrender1
 libxext6
@@ -15,12 +12,3 @@ fontconfig
 libfontconfig1
 fonts-liberation
 fonts-dejavu-core
-
-# Qt dependencies for wkhtmltopdf
-libpcre2-16-0
-libqt5core5t64
-libqt5gui5t64
-libqt5network5t64
-libqt5svg5
-libqt5webkit5
-qt5-qpa-plugins

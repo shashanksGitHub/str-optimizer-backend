@@ -5,13 +5,11 @@ import time
 import pdfkit
 from jinja2 import Template
 
-# Set Qt to use offscreen platform (required for headless wkhtmltopdf)
-os.environ['QT_QPA_PLATFORM'] = 'offscreen'
-
 # Configure pdfkit to find wkhtmltopdf
-# Heroku with Apt buildpack installs to /app/.apt/usr/bin/wkhtmltopdf
+# Priority order: dscout buildpack (patched), apt buildpack, system
 WKHTMLTOPDF_PATHS = [
-    '/app/.apt/usr/bin/wkhtmltopdf',  # Heroku with Apt buildpack
+    '/app/bin/wkhtmltopdf',            # Heroku dscout/wkhtmltopdf-buildpack (patched, recommended)
+    '/app/.apt/usr/bin/wkhtmltopdf',   # Heroku with Apt buildpack
     '/usr/local/bin/wkhtmltopdf',      # macOS with Homebrew
     '/usr/bin/wkhtmltopdf',            # Linux system install
 ]
