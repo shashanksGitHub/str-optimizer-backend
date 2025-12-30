@@ -5,6 +5,9 @@ import time
 import pdfkit
 from jinja2 import Template
 
+# Set Qt to use offscreen platform (required for headless wkhtmltopdf)
+os.environ['QT_QPA_PLATFORM'] = 'offscreen'
+
 # Configure pdfkit to find wkhtmltopdf
 # Heroku with Apt buildpack installs to /app/.apt/usr/bin/wkhtmltopdf
 WKHTMLTOPDF_PATHS = [
@@ -26,6 +29,8 @@ def get_pdfkit_config():
 
 def get_pdfkit_options():
     """Get optimized pdfkit options for fast, high-quality PDF generation"""
+    # Note: Some options like --print-media-type and --image-quality 
+    # are not supported with unpatched Qt (Ubuntu's wkhtmltopdf)
     return {
         'page-size': 'A4',
         'margin-top': '15mm',
@@ -34,13 +39,11 @@ def get_pdfkit_options():
         'margin-left': '15mm',
         'encoding': 'UTF-8',
         'enable-local-file-access': None,  # Allow local file access for images
-        'print-media-type': None,          # Use print media type CSS
         'no-stop-slow-scripts': None,      # Don't stop slow scripts
-        'javascript-delay': 100,           # Small delay for JS (minimal)
+        'disable-javascript': None,        # Disable JS for faster rendering
         'no-background': False,            # Keep backgrounds
         'lowquality': False,               # Keep quality high
         'dpi': 150,                         # Good balance of quality and speed
-        'image-quality': 94,               # High image quality
         'quiet': None,                      # Suppress wkhtmltopdf output
     }
 
