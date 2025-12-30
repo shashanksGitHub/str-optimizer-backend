@@ -1,5 +1,22 @@
-# System dependencies for wkhtmltopdf on Heroku
+# System dependencies for wkhtmltopdf PDF generation on Heroku
+# These packages are installed by the heroku-community/apt buildpack
+
+# wkhtmltopdf - the core PDF generation tool (uses WebKit)
+wkhtmltopdf
+
+# X11/Display dependencies (wkhtmltopdf needs these even in headless mode)
 xvfb
+libxrender1
+libxext6
+libx11-6
+
+# Font dependencies for proper text rendering
 fontconfig
+libfontconfig1
 fonts-liberation
-fonts-dejavu-core 
+fonts-dejavu-core
+
+# Additional libraries wkhtmltopdf may need
+libjpeg62-turbo
+libpng16-16
+zlib1g

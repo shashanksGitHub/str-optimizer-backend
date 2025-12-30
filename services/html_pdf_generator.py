@@ -1,271 +1,141 @@
-# HYBRID SOLUTION - FAST PDF GENERATION FOR HEROKU
+# PDF Generation using pdfkit (wkhtmltopdf) - Fast and reliable
 import os
-import subprocess
 import tempfile
 import time
+import pdfkit
 from jinja2 import Template
 
-# Import WeasyPrint for fast PDF generation
-try:
-    from weasyprint import HTML, CSS
-    WEASYPRINT_AVAILABLE = True
-    print("✅ WeasyPrint available - using fast PDF generation")
-except (ImportError, OSError, Exception) as e:
-    WEASYPRINT_AVAILABLE = False
-    print(f"⚠️ WeasyPrint not available - falling back to wkhtmltopdf. Error: {e}")
+# Configure pdfkit to find wkhtmltopdf
+# Heroku with Apt buildpack installs to /app/.apt/usr/bin/wkhtmltopdf
+WKHTMLTOPDF_PATHS = [
+    '/app/.apt/usr/bin/wkhtmltopdf',  # Heroku with Apt buildpack
+    '/usr/local/bin/wkhtmltopdf',      # macOS with Homebrew
+    '/usr/bin/wkhtmltopdf',            # Linux system install
+]
 
-def generate_html_pdf_fast(optimization_data, output_path):
-    """
-    FAST PDF generation using WeasyPrint - optimized for Heroku
-    """
-    print("⚡ Starting FAST WeasyPrint PDF generation...")
-    start_time = time.time()
-    
-    # Load and render template
-    try:
-        print("📋 Loading template for WeasyPrint...")
-        
-        # Determine base path for images
-        base_path = None
-        template_paths = [
-            os.path.join(os.path.dirname(__file__), '..', 'templates', 'professional_report_template.html'),
-            os.path.join('/app', 'templates', 'professional_report_template.html')
-        ]
-        
-        template_content = None
-        for template_path in template_paths:
-            if os.path.exists(template_path):
-                with open(template_path, 'r', encoding='utf-8') as f:
-                    template_content = f.read()
-                base_path = os.path.dirname(os.path.dirname(template_path))
-                print(f"✅ Template loaded from: {template_path}")
-                print(f"✅ Base path for images: {base_path}")
-                break
-        
-        if not template_content:
-            print("❌ Template not found for WeasyPrint")
-            return False
-        
-        # Remove image references to speed up PDF generation (images cause slow loading)
-        # Replace logo images with text placeholder to avoid slow network/file lookups
-        import re
-        rendered_html_clean = template_content
-        # Remove img tags with logo to speed up generation
-        rendered_html_clean = re.sub(
-            r'<img[^>]*StrLogo[^>]*/?>', 
-            '<span style="font-weight:bold;color:#4285f4;">STR</span>', 
-            rendered_html_clean
-        )
-        
-        # Render template with data
-        print("🎨 Rendering template...")
-        template = Template(rendered_html_clean)
-        rendered_html = template.render(**optimization_data)
-        print("✅ Template rendered")
-        
-        # Generate PDF using WeasyPrint with timeout protection
-        print("🚀 Generating PDF with WeasyPrint (with timeout protection)...")
-        
-        import signal
-        
-        def timeout_handler(signum, frame):
-            raise TimeoutError("WeasyPrint PDF generation timed out after 25 seconds")
-        
-        # Set 25 second timeout (Heroku has 30s limit)
-        old_handler = None
-        try:
-            old_handler = signal.signal(signal.SIGALRM, timeout_handler)
-            signal.alarm(25)  # 25 second timeout
-            
-            # Create HTML document and generate PDF
-            # Use base_url to help resolve local paths, but we've removed images anyway
-            html_doc = HTML(string=rendered_html, base_url=base_path)
-            html_doc.write_pdf(output_path)
-            
-            signal.alarm(0)  # Cancel the alarm
-        except TimeoutError as e:
-            print(f"⏰ {e}")
-            return False
-        finally:
-            signal.alarm(0)  # Ensure alarm is cancelled
-            if old_handler:
-                signal.signal(signal.SIGALRM, old_handler)
-        
-        execution_time = time.time() - start_time
-        
-        # Verify PDF was created
-        if os.path.exists(output_path):
-            pdf_size = os.path.getsize(output_path)
-            if pdf_size > 5000:
-                print(f"🎉 FAST WeasyPrint SUCCESS! PDF: {pdf_size:,} bytes in {execution_time:.2f} seconds")
-                return True
-            else:
-                print(f"❌ PDF too small: {pdf_size} bytes")
-        else:
-            print("❌ PDF not created by WeasyPrint")
-        
-        return False
-        
-    except Exception as e:
-        print(f"❌ WeasyPrint error: {e}")
-        import traceback
-        traceback.print_exc()
-        return False
-
-def generate_html_pdf_slow(optimization_data, output_path):
-    """
-    BACKUP: Optimized wkhtmltopdf with aggressive timeout for Heroku
-    """
-    print("🐌 Using BACKUP wkhtmltopdf method...")
-    
-    # Check system package location first, then fallback to compiled version
-    possible_paths = ['/usr/bin/wkhtmltopdf', '/usr/local/bin/wkhtmltopdf', '/app/bin/wkhtmltopdf']
-    wkhtmltopdf_cmd = None
-    
-    for path in possible_paths:
+def get_pdfkit_config():
+    """Get pdfkit configuration with correct wkhtmltopdf path"""
+    for path in WKHTMLTOPDF_PATHS:
         if os.path.exists(path):
-            wkhtmltopdf_cmd = path
-            break
+            print(f"✅ Found wkhtmltopdf at: {path}")
+            return pdfkit.configuration(wkhtmltopdf=path)
     
-    if not wkhtmltopdf_cmd:
-        wkhtmltopdf_cmd = '/app/bin/wkhtmltopdf'  # Default to Heroku location
+    # If not found in common paths, let pdfkit find it in PATH
+    print("⚠️ wkhtmltopdf not found in common paths, using system PATH")
+    return None
+
+def get_pdfkit_options():
+    """Get optimized pdfkit options for fast, high-quality PDF generation"""
+    return {
+        'page-size': 'A4',
+        'margin-top': '15mm',
+        'margin-right': '15mm',
+        'margin-bottom': '25mm',
+        'margin-left': '15mm',
+        'encoding': 'UTF-8',
+        'enable-local-file-access': None,  # Allow local file access for images
+        'print-media-type': None,          # Use print media type CSS
+        'no-stop-slow-scripts': None,      # Don't stop slow scripts
+        'javascript-delay': 100,           # Small delay for JS (minimal)
+        'no-background': False,            # Keep backgrounds
+        'lowquality': False,               # Keep quality high
+        'dpi': 150,                         # Good balance of quality and speed
+        'image-quality': 94,               # High image quality
+        'quiet': None,                      # Suppress wkhtmltopdf output
+    }
+
+def load_template():
+    """Load the HTML template from available paths"""
+    template_paths = [
+        os.path.join(os.path.dirname(__file__), '..', 'templates', 'professional_report_template.html'),
+        os.path.join('/app', 'templates', 'professional_report_template.html'),
+        os.path.join(os.path.dirname(__file__), 'templates', 'professional_report_template.html'),
+    ]
     
-    print(f"🎯 Using wkhtmltopdf: {wkhtmltopdf_cmd}")
+    for template_path in template_paths:
+        if os.path.exists(template_path):
+            with open(template_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            print(f"✅ Template loaded from: {template_path}")
+            return content
     
-    # Load and render template
-    try:
-        print("📋 Loading template...")
-        
-        template_paths = [
-            os.path.join(os.path.dirname(__file__), '..', 'templates', 'professional_report_template.html'),
-            os.path.join('/app', 'templates', 'professional_report_template.html')
-        ]
-        
-        template_content = None
-        for template_path in template_paths:
-            if os.path.exists(template_path):
-                with open(template_path, 'r', encoding='utf-8') as f:
-                    template_content = f.read()
-                print(f"✅ Template loaded from: {template_path}")
-                break
-        
-        if not template_content:
-            print("❌ Template not found")
-            return False
-        
-        # Render template
-        template = Template(template_content)
-        html_content = template.render(**optimization_data)
-        print("✅ Template rendered")
-        
-    except Exception as e:
-        print(f"❌ Template error: {e}")
-        return False
-    
-    # Save temporary HTML
-    try:
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False, 
-                                       encoding='utf-8', dir='/tmp') as temp_file:
-            temp_file.write(html_content)
-            temp_html_path = temp_file.name
-        
-        print(f"✅ HTML saved: {temp_html_path}")
-        
-    except Exception as e:
-        print(f"❌ HTML save failed: {e}")
-        return False
-    
-    # Generate PDF - AGGRESSIVE SPEED OPTIMIZATIONS
-    try:
-        print("🚀 SPEED-OPTIMIZED PDF generation...")
-        
-        cmd = [
-            'xvfb-run', '-a', '--server-args=-screen 0 800x600x16',  # Smaller screen, less memory
-            wkhtmltopdf_cmd,
-            '--page-size', 'A4',
-            '--margin-top', '0.5in',      # Smaller margins = faster
-            '--margin-right', '0.5in',
-            '--margin-bottom', '0.5in', 
-            '--margin-left', '0.5in',
-            '--encoding', 'UTF-8',
-            '--enable-local-file-access',
-            '--disable-smart-shrinking',   # Faster processing
-            '--disable-javascript',       # No JS = much faster
-            '--load-error-handling', 'ignore',  # Ignore load errors
-            '--zoom', '0.75',              # Smaller zoom = faster
-            '--dpi', '72',                # Lower DPI = faster
-            temp_html_path,
-            output_path
-        ]
-        
-        print(f"🔧 Fast command: wkhtmltopdf [optimized] -> {output_path}")
-        
-        start_time = time.time()
-        result = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            timeout=20,  # AGGRESSIVE 20-second timeout for Heroku
-            cwd='/tmp'
-        )
-        
-        execution_time = time.time() - start_time
-        print(f"⏱️ Completed in {execution_time:.2f} seconds")
-        
-        # LENIENT success detection - accept exit code 1 if PDF exists and is reasonable size
-        pdf_created = os.path.exists(output_path)
-        pdf_size = os.path.getsize(output_path) if pdf_created else 0
-        
-        if pdf_created and pdf_size > 10000:  # Accept if >10KB
-            print(f"⚡ BACKUP SUCCESS! PDF: {pdf_size:,} bytes (exit code: {result.returncode})")
-            return True
-        else:
-            print(f"❌ wkhtmltopdf failed: {result.returncode}, size: {pdf_size}")
-            if result.stderr:
-                print(f"Error: {result.stderr}")
-        
-        return False
-        
-    except subprocess.TimeoutExpired:
-        print("❌ wkhtmltopdf timeout after 20 seconds")
-        return False
-    except Exception as e:
-        print(f"❌ PDF generation error: {e}")
-        return False
-    
-    finally:
-        # Quick cleanup
-        try:
-            if 'temp_html_path' in locals() and os.path.exists(temp_html_path):
-                os.unlink(temp_html_path)
-                print("✅ Cleaned up temp file")
-        except:
-            pass
+    raise FileNotFoundError(f"Template not found in paths: {template_paths}")
 
 def generate_html_pdf(optimization_data, output_path):
     """
-    HYBRID APPROACH - Try fast WeasyPrint first, fallback to optimized wkhtmltopdf
+    Generate PDF using pdfkit (wkhtmltopdf) - Fast WebKit-based rendering
+    
+    This is the primary and only PDF generation method.
+    wkhtmltopdf uses WebKit rendering engine which handles modern CSS
+    including flexbox much better than WeasyPrint.
     """
-    print("🚀 Starting HYBRID PDF generation...")
-    
-    # Try the fast WeasyPrint approach first
-    if WEASYPRINT_AVAILABLE:
-        try:
-            if generate_html_pdf_fast(optimization_data, output_path):
-                print("✅ Fast WeasyPrint succeeded!")
-                return True
-        except Exception as e:
-            print(f"⚠️ WeasyPrint failed: {e}")
-    
-    # Fallback to optimized wkhtmltopdf approach
-    print("🔄 Falling back to optimized wkhtmltopdf...")
+    print("🚀 Starting pdfkit PDF generation...")
+    start_time = time.time()
     
     try:
-        if generate_html_pdf_slow(optimization_data, output_path):
-            print("✅ Backup wkhtmltopdf succeeded!")
-            return True
+        # Step 1: Load template
+        print("📋 Loading template...")
+        template_content = load_template()
+        
+        # Step 2: Render template with data
+        print("🎨 Rendering template with data...")
+        template = Template(template_content)
+        rendered_html = template.render(**optimization_data)
+        print(f"✅ Template rendered ({len(rendered_html):,} characters)")
+        
+        # Step 3: Get pdfkit configuration
+        config = get_pdfkit_config()
+        options = get_pdfkit_options()
+        
+        # Step 4: Generate PDF
+        print("📄 Generating PDF with wkhtmltopdf...")
+        
+        # Save HTML to temp file first (more reliable than string input for complex HTML)
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False, 
+                                         encoding='utf-8', dir='/tmp') as temp_file:
+            temp_file.write(rendered_html)
+            temp_html_path = temp_file.name
+        
+        try:
+            if config:
+                pdfkit.from_file(temp_html_path, output_path, options=options, configuration=config)
+            else:
+                pdfkit.from_file(temp_html_path, output_path, options=options)
+        finally:
+            # Clean up temp file
+            if os.path.exists(temp_html_path):
+                os.unlink(temp_html_path)
+        
+        # Step 5: Verify PDF was created successfully
+        execution_time = time.time() - start_time
+        
+        if os.path.exists(output_path):
+            pdf_size = os.path.getsize(output_path)
+            if pdf_size > 5000:  # Minimum reasonable PDF size
+                print(f"🎉 PDF generated successfully!")
+                print(f"   📊 Size: {pdf_size:,} bytes")
+                print(f"   ⏱️ Time: {execution_time:.2f} seconds")
+                return True
+            else:
+                print(f"❌ PDF too small ({pdf_size} bytes), generation may have failed")
+                return False
+        else:
+            print("❌ PDF file was not created")
+            return False
+            
     except Exception as e:
-        print(f"❌ Backup wkhtmltopdf also failed: {e}")
-    
-    print("❌ All PDF generation methods failed")
-    return False 
+        execution_time = time.time() - start_time
+        print(f"❌ PDF generation failed after {execution_time:.2f}s: {str(e)}")
+        
+        # Log more details for debugging
+        import traceback
+        print(f"📋 Full error traceback:")
+        traceback.print_exc()
+        
+        return False
+
+
+# Legacy function name for backwards compatibility
+def generate_html_pdf_fast(optimization_data, output_path):
+    """Legacy wrapper - calls generate_html_pdf"""
+    return generate_html_pdf(optimization_data, output_path)
