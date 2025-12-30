@@ -1736,7 +1736,9 @@
                                 <span style="font-size: 16px; vertical-align: middle;">💡</span>
                                 <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0; display: inline; vertical-align: middle; margin-left: 8px;">Strategic Recommendations</h3>
                             </div>
-                            <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{% if strategic_recommendations %}{% set clean_recs = strategic_recommendations | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_recs = clean_recs | replace(i ~ '. ', '• ') %}{% set clean_recs = clean_recs | replace(i ~ ') ', '• ') %}{% endfor %}{{ clean_recs }}{% endif %}</p>
+                            <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{% if strategic_recommendations %}{% set clean_recs = strategic_recommendations | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_recs = clean_recs | replace(i ~ '. ', '• ') %}{% set clean_recs = clean_recs | replace(i ~ ') ', '• ') %}{% endfor %}{{ clean_recs }}{% else %}• Market Positioning: Optimize your listing title and photos to highlight unique features and attract your target guest demographic in {{ location | default('your area') }}.
+
+• Revenue Strategy: Implement dynamic pricing with seasonal adjustments and offer length-of-stay discounts to maximize occupancy and revenue.{% endif %}</p>
                         </div>
                     </td>
                 </tr>
