@@ -1426,7 +1426,181 @@
     </style>
 </head>
 <body>
-    <!-- Page 1: Top 4 Immediate Actions -->
+    <!-- Page 1: 30-Day Implementation Roadmap -->
+    <div class="pdf-page">
+        <div class="pdf-page-content">
+            <div class="roadmap-main">
+                <!-- Header -->
+                    <div class="roadmap-header">
+                        <div class="roadmap-header-content">
+                            <div style="display: inline-block; float: left;">
+                                <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
+                                <h1 style="display: inline-block;">Listing Optimizer</h1>
+                            </div>
+                            <span style="display: inline-block; float: right;">Action Plan</span>
+                            <div style="clear: both;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Page Title with icon -->
+            <div class="roadmap-title">
+                <span class="roadmap-icon">🚀</span>
+                <span>30-Day Implementation Roadmap</span>
+            </div>
+
+            <!-- Quick Win Strategy Box -->
+            <div class="quick-win-box">
+                <div class="quick-win-content">
+                    <strong>Quick Win Strategy:</strong> Focus on high-impact, low-effort changes first. You can implement {{ dynamic_percentages.conversion_rate | default("80") }}% of recommendations within 30 days for immediate results.
+                </div>
+            </div>
+
+            <!-- Week 1 -->
+            <div class="week-section">
+                <h3 class="week-title">Week 1: Immediate Actions (3 hours effort)</h3>
+                
+                <div class="checklist-items">
+                    {% if title_suggestions and title_suggestions|length > 0 %}
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Update title to: "{{ title_suggestions[0] }}"</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if optimized_description %}
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Rewrite description using AI-optimized content ({{ optimized_description.split()|length }} words)</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if dynamic_percentages and dynamic_percentages.average_rate_adjustment %}
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Consider rate adjustments of {{ dynamic_percentages.average_rate_adjustment }}% based on market analysis</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if dynamic_percentages and dynamic_percentages.minimum_stay_revenue %}
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Enable instant booking with {{ dynamic_percentages.minimum_stay_revenue }}% revenue optimization</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if dynamic_percentages and dynamic_percentages.holiday_premium %}
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Add weekend pricing premiums (up to {{ dynamic_percentages.holiday_premium }}%)</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+
+            </div>
+
+            <!-- Week 2 -->
+            <div class="week-section">
+                <h3 class="week-title">Week 2: Content Enhancement (5 hours effort)</h3>
+                
+                <div class="checklist-items">
+                    {% if optimized_description %}
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Complete description rewrite using AI-generated content for {{ location }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if amenities %}
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Create package offerings: {% if amenities and amenities.split('\n')|length > 0 and amenities.split('\n')[0] %}{% set clean_line = amenities.split('\n')[0] | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('1.', '') | replace('2.', '') | replace('3.', '') | replace('4.', '') | replace('5.', '') %}{{ clean_line.strip() }}{% endif %}</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+
+            </div>
+
+            <!-- Week 3 -->
+            <div class="week-section">
+                <h3 class="week-title">Week 3: Revenue Optimization (3 hours effort)</h3>
+                
+                <div class="checklist-items">
+                    {% if market_analysis_data and market_analysis_data.market_insights %}
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Implement seasonal pricing strategy: {{ market_analysis_data.market_insights[0] if market_analysis_data.market_insights|length > 0 else 'AI-optimized pricing strategy based on local market conditions' }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if amenities %}
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Set up add-on packages: {% if amenities and amenities.split('\n')|length > 0 and amenities.split('\n')[0] %}{% set clean_line = amenities.split('\n')[0] | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('1.', '') | replace('2.', '') | replace('3.', '') | replace('4.', '') | replace('5.', '') %}{{ clean_line.strip() }}{% endif %}</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if dynamic_percentages and dynamic_percentages.lastminute_discount %}
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Create gap-filling discount rules: {{ dynamic_percentages.lastminute_discount }}% last-minute, {{ dynamic_percentages.extended_stay_discount }}% extended stays</span>
+                    </div>
+                    {% endif %}
+                    
+
+                </div>
+
+
+            </div>
+
+            <!-- Week 4 -->
+            <div class="week-section">
+                <h3 class="week-title">Week 4: Guest Experience Enhancement (4 hours effort)</h3>
+                
+                <div class="checklist-items">
+                    {% if location %}
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Create digital welcome guide with local recommendations for {{ location }}</span>
+                    </div>
+                    {% endif %}
+                    
+
+                    
+                    {% if amenities %}
+                    <div class="checklist-item">
+                        <span class="check-icon">✓</span>
+                        <span class="check-text">Order supplies for: {% if amenities and amenities.split('\n')|length > 0 and amenities.split('\n')[0] %}{% set clean_line = amenities.split('\n')[0] | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('1.', '') | replace('2.', '') | replace('3.', '') | replace('4.', '') | replace('5.', '') %}{{ clean_line.strip() }}{% endif %}</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+
+            </div>
+
+
+
+            <!-- Call to Action Section -->
+            <div class="cta-section">
+                <div class="cta-content">
+                    <h3 class="cta-title">Ready to Transform Your Listing?</h3>
+                    <p class="cta-text">This AI-powered analysis identified optimization opportunities specific to your property in {{ location }}.</p>
+                </div>
+            </div>
+            </div>
+        </div>
+        <!-- Footer Page 1 -->
+        <div class="report-footer">
+            <div class="footer-center">
+                <img src="/app/StrLogo.png" alt="STR Logo" />
+                <span>STR Optimizer</span>
+            </div>
+            <span class="footer-page-number">Page 1</span>
+        </div>
+    </div>
+
+    <!-- Page 2: Top 4 Immediate Actions -->
     <div class="pdf-page">
         <div class="pdf-page-content">
             <!-- Header -->
@@ -1503,17 +1677,17 @@
                 </div>
             </div>
         </div>
-        <!-- Footer Page 1 -->
+        <!-- Footer Page 2 -->
         <div class="report-footer">
             <div class="footer-center">
                 <img src="/app/StrLogo.png" alt="STR Logo" />
                 <span>STR Optimizer</span>
             </div>
-            <span class="footer-page-number">Page 1</span>
+            <span class="footer-page-number">Page 2</span>
         </div>
     </div>
 
-    <!-- Page 2: Remaining Immediate Actions -->
+    <!-- Page 3: Remaining Immediate Actions -->
     <div class="pdf-page">
         <div class="pdf-page-content">
             <!-- Header -->
@@ -1558,7 +1732,7 @@
                 <img src="/app/StrLogo.png" alt="STR Logo" />
                 <span>STR Optimizer</span>
             </div>
-            <span class="footer-page-number">Page 2</span>
+            <span class="footer-page-number">Page 3</span>
         </div>
     </div>
 
@@ -1757,7 +1931,7 @@
                 <img src="/app/StrLogo.png" alt="STR Logo" />
                 <span>STR Optimizer</span>
             </div>
-            <span class="footer-page-number">Page 3</span>
+            <span class="footer-page-number">Page 4</span>
         </div>
     </div>
 
@@ -1839,7 +2013,7 @@
                 <img src="/app/StrLogo.png" alt="STR Logo" />
                 <span>STR Optimizer</span>
             </div>
-            <span class="footer-page-number">Page 4</span>
+            <span class="footer-page-number">Page 5</span>
         </div>
     </div>
 
@@ -1904,12 +2078,12 @@
                 <img src="/app/StrLogo.png" alt="STR Logo" />
                 <span>STR Optimizer</span>
             </div>
-            <span class="footer-page-number">Page 5</span>
+            <span class="footer-page-number">Page 6</span>
         </div>
     </div>
 
-    <!-- Page 6: Revenue Optimization -->
-    <div class="pdf-page" style="page-break-before: always; break-before: page;">
+    <!-- Page 7: Revenue Optimization (LAST PAGE) -->
+    <div class="pdf-page" style="page-break-before: always; break-before: page; page-break-after: avoid !important; break-after: avoid !important;">
         <div class="pdf-page-content">
             <!-- Header with blue bottom border -->
                 <div class="revenue-header">
@@ -2006,190 +2180,8 @@
                 <img src="/app/StrLogo.png" alt="STR Logo" />
                 <span>STR Optimizer</span>
             </div>
-            <span class="footer-page-number">Page 6</span>
-        </div>
-    </div>
-
-    <!-- Page 7: 30-Day Implementation Roadmap (LAST PAGE) -->
-    <div class="pdf-page" style="page-break-after: avoid !important; break-after: avoid !important;">
-        <div class="pdf-page-content">
-            <div class="roadmap-main">
-                <!-- Header -->
-                    <div class="roadmap-header">
-                        <div class="roadmap-header-content">
-                            <div style="display: inline-block; float: left;">
-                                <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
-                                <h1 style="display: inline-block;">Listing Optimizer</h1>
-                            </div>
-                            <span style="display: inline-block; float: right;">Action Plan</span>
-                            <div style="clear: both;"></div>
-                        </div>
-                    </div>
-
-                    <!-- Page Title with icon -->
-            <div class="roadmap-title">
-                <span class="roadmap-icon">🚀</span>
-                <span>30-Day Implementation Roadmap</span>
-            </div>
-
-            <!-- Quick Win Strategy Box -->
-            <div class="quick-win-box">
-                <div class="quick-win-content">
-                    <strong>Quick Win Strategy:</strong> Focus on high-impact, low-effort changes first. You can implement {{ dynamic_percentages.conversion_rate | default("80") }}% of recommendations within 30 days for immediate results.
-                </div>
-            </div>
-
-            <!-- Week 1 -->
-            <div class="week-section">
-                <h3 class="week-title">Week 1: Immediate Actions (3 hours effort)</h3>
-                
-                <div class="checklist-items">
-                    {% if title_suggestions and title_suggestions|length > 0 %}
-                    <div class="checklist-item">
-                        <span class="check-icon">✓</span>
-                        <span class="check-text">Update title to: "{{ title_suggestions[0] }}"</span>
-                    </div>
-                    {% endif %}
-                    
-                    {% if optimized_description %}
-                    <div class="checklist-item">
-                        <span class="check-icon">✓</span>
-                        <span class="check-text">Rewrite description using AI-optimized content ({{ optimized_description.split()|length }} words)</span>
-                    </div>
-                    {% endif %}
-                    
-                    {% if dynamic_percentages and dynamic_percentages.average_rate_adjustment %}
-                    <div class="checklist-item">
-                        <span class="check-icon">✓</span>
-                        <span class="check-text">Consider rate adjustments of {{ dynamic_percentages.average_rate_adjustment }}% based on market analysis</span>
-                    </div>
-                    {% endif %}
-                    
-                    {% if dynamic_percentages and dynamic_percentages.minimum_stay_revenue %}
-                    <div class="checklist-item">
-                        <span class="check-icon">✓</span>
-                        <span class="check-text">Enable instant booking with {{ dynamic_percentages.minimum_stay_revenue }}% revenue optimization</span>
-                    </div>
-                    {% endif %}
-                    
-                    {% if dynamic_percentages and dynamic_percentages.holiday_premium %}
-                    <div class="checklist-item">
-                        <span class="check-icon">✓</span>
-                        <span class="check-text">Add weekend pricing premiums (up to {{ dynamic_percentages.holiday_premium }}%)</span>
-                    </div>
-                    {% endif %}
-                </div>
-
-
-            </div>
-
-            <!-- Week 2 -->
-            <div class="week-section">
-                <h3 class="week-title">Week 2: Content Enhancement (5 hours effort)</h3>
-                
-                <div class="checklist-items">
-                    {% if optimized_description %}
-                    <div class="checklist-item">
-                        <span class="check-icon">✓</span>
-                        <span class="check-text">Complete description rewrite using AI-generated content for {{ location }}</span>
-                    </div>
-                    {% endif %}
-                    
-                    {% if amenities %}
-                    <div class="checklist-item">
-                        <span class="check-icon">✓</span>
-                        <span class="check-text">Create package offerings: {% if amenities and amenities.split('\n')|length > 0 and amenities.split('\n')[0] %}{% set clean_line = amenities.split('\n')[0] | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('1.', '') | replace('2.', '') | replace('3.', '') | replace('4.', '') | replace('5.', '') %}{{ clean_line.strip() }}{% endif %}</span>
-                    </div>
-                    {% endif %}
-                </div>
-
-
-            </div>
-
-            <!-- Week 3 -->
-            <div class="week-section">
-                <h3 class="week-title">Week 3: Revenue Optimization (3 hours effort)</h3>
-                
-                <div class="checklist-items">
-                    {% if market_analysis_data and market_analysis_data.market_insights %}
-                    <div class="checklist-item">
-                        <span class="check-icon">✓</span>
-                        <span class="check-text">Implement seasonal pricing strategy: {{ market_analysis_data.market_insights[0] if market_analysis_data.market_insights|length > 0 else 'AI-optimized pricing strategy based on local market conditions' }}</span>
-                    </div>
-                    {% endif %}
-                    
-                    {% if amenities %}
-                    <div class="checklist-item">
-                        <span class="check-icon">✓</span>
-                        <span class="check-text">Set up add-on packages: {% if amenities and amenities.split('\n')|length > 0 and amenities.split('\n')[0] %}{% set clean_line = amenities.split('\n')[0] | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('1.', '') | replace('2.', '') | replace('3.', '') | replace('4.', '') | replace('5.', '') %}{{ clean_line.strip() }}{% endif %}</span>
-                    </div>
-                    {% endif %}
-                    
-                    {% if dynamic_percentages and dynamic_percentages.lastminute_discount %}
-                    <div class="checklist-item">
-                        <span class="check-icon">✓</span>
-                        <span class="check-text">Create gap-filling discount rules: {{ dynamic_percentages.lastminute_discount }}% last-minute, {{ dynamic_percentages.extended_stay_discount }}% extended stays</span>
-                    </div>
-                    {% endif %}
-                    
-
-                </div>
-
-
-            </div>
-
-            <!-- Week 4 -->
-            <div class="week-section">
-                <h3 class="week-title">Week 4: Guest Experience Enhancement (4 hours effort)</h3>
-                
-                <div class="checklist-items">
-                    {% if location %}
-                    <div class="checklist-item">
-                        <span class="check-icon">✓</span>
-                        <span class="check-text">Create digital welcome guide with local recommendations for {{ location }}</span>
-                    </div>
-                    {% endif %}
-                    
-
-                    
-                    {% if amenities %}
-                    <div class="checklist-item">
-                        <span class="check-icon">✓</span>
-                        <span class="check-text">Order supplies for: {% if amenities and amenities.split('\n')|length > 0 and amenities.split('\n')[0] %}{% set clean_line = amenities.split('\n')[0] | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('1.', '') | replace('2.', '') | replace('3.', '') | replace('4.', '') | replace('5.', '') %}{{ clean_line.strip() }}{% endif %}</span>
-                    </div>
-                    {% endif %}
-                </div>
-
-
-            </div>
-
-
-
-            <!-- Call to Action Section -->
-            <div class="cta-section">
-                <div class="cta-content">
-                    <h3 class="cta-title">Ready to Transform Your Listing?</h3>
-                    <p class="cta-text">This AI-powered analysis identified optimization opportunities specific to your property in {{ location }}.</p>
-                </div>
-            </div>
-            </div>
-        </div>
-        <!-- Footer Page 7 -->
-        <div class="report-footer">
-            <div class="footer-center">
-                <img src="/app/StrLogo.png" alt="STR Logo" />
-                <span>STR Optimizer</span>
-            </div>
             <span class="footer-page-number">Page 7</span>
         </div>
     </div>
-
-    <!-- Prevent extra blank page at end -->
-    <style>
-        .pdf-page:last-child {
-            page-break-after: avoid !important;
-            break-after: avoid !important;
-        }
-    </style>
 </body>
 </html>
