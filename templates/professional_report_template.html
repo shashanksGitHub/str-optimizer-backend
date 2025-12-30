@@ -17,13 +17,17 @@
             color: #333;
             background: white;
             font-size: 14px;
+            position: relative;
+            min-height: 100vh;
+            padding-bottom: 60px; /* Space for footer on first page */
+            box-sizing: border-box;
         }
         
         /* Header */
         .header {
-            padding: 15px 40px;
+            padding: 20px 40px;
             border-bottom: 3px solid #4285f4;
-            margin-bottom: 15px;
+            margin-bottom: 30px;
             min-height: 40px;
             overflow: hidden;
         }
@@ -73,8 +77,8 @@
             background: #d4edda;
             border: 1px solid #c3e6cb;
             border-left: 4px solid #28a745;
-            padding: 16px;
-            margin-bottom: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
             border-radius: 4px;
         }
         
@@ -95,7 +99,7 @@
             width: 100%;
             table-layout: fixed;
             border-spacing: 15px 0;
-            margin-bottom: 20px;
+            margin-bottom: 40px;
         }
         
         .score-card {
@@ -137,7 +141,7 @@
         .section-header {
             display: flex;
             align-items: center;
-            margin: 20px 0 12px 0;
+            margin: 40px 0 20px 0;
             font-size: 18px;
             font-weight: bold;
             color: #333;
@@ -153,8 +157,8 @@
             background: #f8f9fa;
             border: 1px solid #dee2e6;
             border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
             position: relative;
         }
         
@@ -362,25 +366,14 @@
 
 
 
-        /* Footer - Fixed at bottom of each page */
+        /* Footer */
         .market-footer {
             text-align: center;
             font-size: 12px;
             color: #6b7280;
-            padding: 8px 24px;
+            margin-top: 12px;
+            padding: 6px 0;
             border-top: 1px solid #e5e7eb;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-        }
-        
-        /* Ensure pages have relative positioning for footer */
-        .page {
-            position: relative;
-            min-height: 100vh;
-            padding-bottom: 50px;
         }
         
         /* Content Sections */
@@ -525,6 +518,19 @@
         /* Page breaks */
         .page-break {
             page-break-before: always;
+        }
+
+        /* All page containers need relative positioning for footer */
+        .page,
+        .market-analysis-page,
+        .content-optimization-page,
+        .amenities-page,
+        .revenue-optimization-page,
+        .roadmap-page {
+            position: relative;
+            min-height: 100vh;
+            padding-bottom: 60px; /* Space for footer */
+            box-sizing: border-box;
         }
         
         @media print {
@@ -737,18 +743,14 @@
             color: #6b7280;
         }
 
-        /* Footer - Fixed at bottom */
+        /* Footer */
         .content-footer {
             text-align: center;
-            color: #6b7280;
+            color: #9ca3af;
             font-size: 12px;
-            padding: 8px 24px;
+            margin-top: 0px;
+            padding-top: 2px;
             border-top: 1px solid #e5e7eb;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
         }
 
         /* Revenue Optimization Page Styles */
@@ -954,18 +956,14 @@
             line-height: 1.5;
         }
 
-        /* Footer - Fixed at bottom */
+        /* Footer */
         .revenue-footer {
             text-align: center;
             font-size: 12px;
             color: #6b7280;
-            padding: 8px 24px;
+            margin-top: 16px;
+            padding: 8px 0;
             border-top: 1px solid #e5e7eb;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
         }
 
         /* Action Plan Page Styles */
@@ -1222,18 +1220,14 @@
             line-height: 1.6;
         }
 
-        /* Action footer - Fixed at bottom */
+        /* Action footer */
         .action-footer {
             text-align: center;
             font-size: 12px;
             color: #6b7280;
-            padding: 8px 24px;
+            margin-top: 16px;
+            padding: 8px 0;
             border-top: 1px solid #e5e7eb;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
         }
 
         /* 30-Day Implementation Roadmap Page Styles */
@@ -1395,18 +1389,14 @@
             margin: 0;
         }
 
-        /* Roadmap footer - Fixed at bottom */
+        /* Roadmap footer */
         .roadmap-footer {
             text-align: center;
             font-size: 12px;
             color: #6b7280;
-            padding: 8px 24px;
+            margin-top: 24px;
+            padding: 8px 0;
             border-top: 1px solid #e5e7eb;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
         }
 
         /* Page 2 specific adjustments */
@@ -1414,6 +1404,90 @@
             padding: 32px 24px;
         }
 
+        /* ========== UNIVERSAL PAGE FOOTER STYLING ========== */
+        /* Each page section is a full page with footer at bottom */
+        .page-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .page-content {
+            flex: 1;
+        }
+
+        /* Universal footer styling - appears at bottom of each page */
+        .page-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 24px;
+            font-size: 12px;
+            color: #6b7280;
+            box-sizing: border-box;
+        }
+
+        .page-footer-inner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            position: relative;
+        }
+
+        .page-footer-logo {
+            height: 16px;
+            width: auto;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .page-footer-text {
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 16px;
+            color: #6b7280;
+        }
+
+        .page-footer-page {
+            position: absolute;
+            right: 0;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* Override old footer classes to use new unified styling */
+        .market-footer,
+        .content-footer,
+        .revenue-footer,
+        .roadmap-footer,
+        .action-footer {
+            position: absolute !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            height: 40px !important;
+            background: white !important;
+            border-top: 1px solid #e5e7eb !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 0 24px !important;
+            font-size: 12px !important;
+            color: #6b7280 !important;
+            margin: 0 !important;
+            box-sizing: border-box !important;
+        }
 
     </style>
 </head>
@@ -1447,7 +1521,7 @@
             </div>
             <div class="score-card">
                 <div class="score-value">{{ guest_rating }}</div>
-                <div class="score-label">Guest Rating</div>
+            <div class="score-label">Guest Rating</div>
             </div>
             <div class="score-card">
                 <div class="score-value">{{ competitive_scores.market_positioning if competitive_scores and competitive_scores.market_positioning else '0' }}/100</div>
@@ -1467,26 +1541,15 @@
             </div>
             <div class="content-section">
                 <p><strong>Current:</strong> "{{ title }}"</p>
-                {% if title_suggestions and title_suggestions|length > 0 %}
-                    {% set ai_title = title_suggestions[0] %}
-                    {% if ai_title != title and ai_title | lower != title | lower %}
-                        <p><strong>AI-Optimized:</strong> "{{ ai_title }}"</p>
-                    {% elif title_suggestions|length > 1 %}
-                        <p><strong>AI-Optimized:</strong> "{{ title_suggestions[1] }}"</p>
-                    {% else %}
-                        <p><strong>AI-Optimized:</strong> <em>Consider adding location keywords and unique selling points to improve visibility.</em></p>
-                    {% endif %}
-                {% endif %}
-                {% if title_suggestions and title_suggestions|length > 1 %}
+                <p><strong>Optimized:</strong> "{{ title_suggestions[0] if title_suggestions else '' }}"</p>
                 <p><strong>Additional Options:</strong></p>
                 <ul>
-                    {% for suggestion in title_suggestions %}
-                        {% if suggestion != title and suggestion | lower != title | lower %}
+                    {% if title_suggestions and title_suggestions|length > 1 %}
+                        {% for suggestion in title_suggestions[1:] %}
                         <li>"{{ suggestion }}"</li>
-                        {% endif %}
-                    {% endfor %}
+                        {% endfor %}
+                    {% endif %}
                 </ul>
-                {% endif %}
             </div>
         </div>
         
@@ -1517,11 +1580,14 @@
             </div>
         </div>
 
-        <!-- Footer -->
-        <div class="market-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; position: relative; border-top: 1px solid #e5e7eb;">
-            <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
-            <span>STR Optimizer</span>
-            <span style="position: absolute; right: 0;">Page 1</span>
+    </div>
+
+    <!-- Page 1 Footer -->
+    <div class="page-footer">
+        <div class="page-footer-inner">
+            <img src="/app/StrLogo.png" alt="STR Logo" class="page-footer-logo" />
+            <span class="page-footer-text">STR Optimizer</span>
+            <span class="page-footer-page">Page 1</span>
         </div>
     </div>
 
@@ -1714,23 +1780,21 @@
                                 <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0;">Strategic Recommendations</h3>
                             </div>
                             <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start;">
-                                {% if strategic_recommendations and strategic_recommendations.strip() %}
-                                    {% set clean_recs = strategic_recommendations | replace('**', '') | replace('*', '') | replace('1. ', '• ') | replace('2. ', '• ') | replace('3. ', '• ') | replace('4. ', '• ') | replace('5. ', '• ') | replace('6. ', '• ') | replace('7. ', '• ') | replace('8. ', '• ') | replace('9. ', '• ') | replace('10. ', '• ') | replace('1) ', '• ') | replace('2) ', '• ') | replace('3) ', '• ') | replace('4) ', '• ') | replace('5) ', '• ') %}
-                                    <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{{ clean_recs }}</p>
-                                {% else %}
-                                    <p style="font-size: 13px; color: #6b7280; line-height: 1.4; margin: 0; font-style: italic;">No strategic recommendations generated for this listing. Focus on implementing the action items on the previous page.</p>
-                                {% endif %}
+                                <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{% if strategic_recommendations %}{% set clean_recs = strategic_recommendations | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_recs = clean_recs | replace(i ~ '. ', '• ') %}{% set clean_recs = clean_recs | replace(i ~ ') ', '• ') %}{% endfor %}{{ clean_recs }}{% endif %}</p>
                             </div>
                         </div>
                     </td>
                 </tr>
             </table>
 
-            <!-- Footer -->
-            <div class="market-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; position: relative;">
-                <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
-                <span>STR Optimizer</span>
-                <span style="position: absolute; right: 0;">Page 2</span>
+        </div>
+
+        <!-- Page 2 Footer -->
+        <div class="page-footer">
+            <div class="page-footer-inner">
+                <img src="/app/StrLogo.png" alt="STR Logo" class="page-footer-logo" />
+                <span class="page-footer-text">STR Optimizer</span>
+                <span class="page-footer-page">Page 2</span>
             </div>
         </div>
     </div>
@@ -1804,11 +1868,14 @@
                 </div>
             </div>
 
-            <!-- Footer -->
-            <div class="content-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; position: relative;">
-                <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
-                <span>STR Optimizer</span>
-                <span style="position: absolute; right: 0;">Page 3</span>
+        </div>
+
+        <!-- Page 3 Footer -->
+        <div class="page-footer">
+            <div class="page-footer-inner">
+                <img src="/app/StrLogo.png" alt="STR Logo" class="page-footer-logo" />
+                <span class="page-footer-text">STR Optimizer</span>
+                <span class="page-footer-page">Page 3</span>
             </div>
         </div>
     </div>
@@ -1846,10 +1913,7 @@
                     <div style="color: #111827; font-weight: 600; font-size: 20px; margin-bottom: 16px;">AI-Suggested Amenities Analysis</div>
                     
                     <div style="color: #374151; font-size: 16px; line-height: 1.8;">
-                        {% if amenities %}
-                            {% set clean_amenities = amenities | replace('**', '') | replace('*', '') | replace('1. ', '• ') | replace('2. ', '• ') | replace('3. ', '• ') | replace('4. ', '• ') | replace('5. ', '• ') | replace('6. ', '• ') | replace('7. ', '• ') | replace('8. ', '• ') | replace('9. ', '• ') | replace('10. ', '• ') | replace('11. ', '• ') | replace('12. ', '• ') | replace('1) ', '• ') | replace('2) ', '• ') | replace('3) ', '• ') | replace('4) ', '• ') | replace('5) ', '• ') | replace('6) ', '• ') %}
-                            {{ clean_amenities | replace('\n', '<br>') | safe }}
-                        {% endif %}
+                        {% if amenities %}{% set clean_amenities = amenities | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_amenities = clean_amenities | replace(i ~ '. ', '• ') %}{% set clean_amenities = clean_amenities | replace(i ~ ') ', '• ') %}{% endfor %}{{ clean_amenities | replace('\n', '<br>') | safe }}{% endif %}
                     </div>
                 </div>
             </div>
@@ -1870,11 +1934,14 @@
                 </div>
             </div>
 
-            <!-- Footer -->
-            <div class="content-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; position: relative;">
-                <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
-                <span>STR Optimizer</span>
-                <span style="position: absolute; right: 0;">Page 4</span>
+        </div>
+
+        <!-- Page 4 Footer -->
+        <div class="page-footer">
+            <div class="page-footer-inner">
+                <img src="/app/StrLogo.png" alt="STR Logo" class="page-footer-logo" />
+                <span class="page-footer-text">STR Optimizer</span>
+                <span class="page-footer-page">Page 4</span>
             </div>
         </div>
     </div>
@@ -1973,11 +2040,14 @@
 
 
 
-            <!-- Footer -->
-            <div class="revenue-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; position: relative;">
-                <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
-                <span>STR Optimizer</span>
-                <span style="position: absolute; right: 0;">Page 5</span>
+        </div>
+
+        <!-- Page 5 Footer -->
+        <div class="page-footer">
+            <div class="page-footer-inner">
+                <img src="/app/StrLogo.png" alt="STR Logo" class="page-footer-logo" />
+                <span class="page-footer-text">STR Optimizer</span>
+                <span class="page-footer-page">Page 5</span>
             </div>
         </div>
     </div>
@@ -2144,13 +2214,14 @@
                 </div>
             </div>
 
-            <!-- Footer -->
-            <div class="roadmap-footer" style="display: flex; align-items: center; justify-content: center; gap: 8px; position: relative;">
-                <img src="/app/StrLogo.png" alt="STR Logo" style="height: 16px; width: auto;" />
-                <span>STR Optimizer</span>
-                <span style="position: absolute; right: 0;">Page 6</span>
+        </div>
+
+        <!-- Page 6 Footer -->
+        <div class="page-footer">
+            <div class="page-footer-inner">
+                <img src="/app/StrLogo.png" alt="STR Logo" class="page-footer-logo" />
+                <span class="page-footer-text">STR Optimizer</span>
+                <span class="page-footer-page">Page 6</span>
             </div>
         </div>
     </div>
-</body>
-</html>
