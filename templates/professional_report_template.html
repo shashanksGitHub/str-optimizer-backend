@@ -1494,7 +1494,7 @@
                 <div class="priority-title">2. Dynamic Pricing Strategy <span class="priority-badge {{ 'high' if task_priorities.pricing_priority == 'HIGH' else 'medium' if task_priorities.pricing_priority == 'MEDIUM' else 'low' }}">{{ task_priorities.pricing_priority if task_priorities else 'HIGH' }} PRIORITY</span></div>
             </div>
             <div class="content-section">
-                {{ pricing_analysis }}
+                {% if pricing_analysis %}{% set lines = pricing_analysis.split('. ') %}{{ lines[0] }}. {{ lines[1] if lines|length > 1 else '' }}{% if lines|length > 2 %}...{% endif %}{% endif %}
                 </div>
             </div>
         </div>
@@ -1509,7 +1509,7 @@
     </div>
 
     <!-- Page 2: Remaining Immediate Actions -->
-    <div class="pdf-page">
+    <div class="pdf-page" style="page-break-before: always; break-before: page;">
         <div class="pdf-page-content">
             <!-- Header -->
             <div class="header">
