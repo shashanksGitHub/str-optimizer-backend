@@ -25,6 +25,8 @@ def generate_html_pdf_fast(optimization_data, output_path):
     try:
         print("📋 Loading template for WeasyPrint...")
         
+        # Determine base path for images
+        base_path = None
         template_paths = [
             os.path.join(os.path.dirname(__file__), '..', 'templates', 'professional_report_template.html'),
             os.path.join('/app', 'templates', 'professional_report_template.html')
@@ -35,25 +37,59 @@ def generate_html_pdf_fast(optimization_data, output_path):
             if os.path.exists(template_path):
                 with open(template_path, 'r', encoding='utf-8') as f:
                     template_content = f.read()
+                base_path = os.path.dirname(os.path.dirname(template_path))
                 print(f"✅ Template loaded from: {template_path}")
+                print(f"✅ Base path for images: {base_path}")
                 break
         
         if not template_content:
             print("❌ Template not found for WeasyPrint")
             return False
         
+        # Remove image references to speed up PDF generation (images cause slow loading)
+        # Replace logo images with text placeholder to avoid slow network/file lookups
+        import re
+        rendered_html_clean = template_content
+        # Remove img tags with logo to speed up generation
+        rendered_html_clean = re.sub(
+            r'<img[^>]*StrLogo[^>]*/?>', 
+            '<span style="font-weight:bold;color:#4285f4;">STR</span>', 
+            rendered_html_clean
+        )
+        
         # Render template with data
         print("🎨 Rendering template...")
-        template = Template(template_content)
+        template = Template(rendered_html_clean)
         rendered_html = template.render(**optimization_data)
         print("✅ Template rendered")
         
-        # Generate PDF using WeasyPrint
-        print("🚀 Generating PDF with WeasyPrint...")
+        # Generate PDF using WeasyPrint with timeout protection
+        print("🚀 Generating PDF with WeasyPrint (with timeout protection)...")
         
-        # Create HTML document and generate PDF directly
-        html_doc = HTML(string=rendered_html)
-        html_doc.write_pdf(output_path)
+        import signal
+        
+        def timeout_handler(signum, frame):
+            raise TimeoutError("WeasyPrint PDF generation timed out after 25 seconds")
+        
+        # Set 25 second timeout (Heroku has 30s limit)
+        old_handler = None
+        try:
+            old_handler = signal.signal(signal.SIGALRM, timeout_handler)
+            signal.alarm(25)  # 25 second timeout
+            
+            # Create HTML document and generate PDF
+            # Use base_url to help resolve local paths, but we've removed images anyway
+            html_doc = HTML(string=rendered_html, base_url=base_path)
+            html_doc.write_pdf(output_path)
+            
+            signal.alarm(0)  # Cancel the alarm
+        except TimeoutError as e:
+            print(f"⏰ {e}")
+            return False
+        finally:
+            signal.alarm(0)  # Ensure alarm is cancelled
+            if old_handler:
+                signal.signal(signal.SIGALRM, old_handler)
         
         execution_time = time.time() - start_time
         
@@ -72,6 +108,8 @@ def generate_html_pdf_fast(optimization_data, output_path):
         
     except Exception as e:
         print(f"❌ WeasyPrint error: {e}")
+        import traceback
+        traceback.print_exc()
         return False
 
 def generate_html_pdf_slow(optimization_data, output_path):
