@@ -3,8 +3,9 @@ import os
 import subprocess
 import tempfile
 import time
+import threading
+import re
 from jinja2 import Template
-from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
 
 # Import WeasyPrint for fast PDF generation
 try:
@@ -15,44 +16,58 @@ except (ImportError, OSError, Exception) as e:
     WEASYPRINT_AVAILABLE = False
     print(f"⚠️ WeasyPrint not available - falling back to wkhtmltopdf. Error: {e}")
 
-# CSS overrides for WeasyPrint - minimal to preserve PDF-optimized template layout
-WEASYPRINT_CSS_OVERRIDES = """
-/* Ensure page breaks work properly */
-.page-break {
-    page-break-before: always !important;
-    break-before: page !important;
-}
+# Timeout value for PDF generation (in seconds)
+PDF_TIMEOUT = 20
 
-/* Fix footer page number positioning for WeasyPrint (no transform support) */
-.report-footer .footer-page-number {
-    position: absolute !important;
-    right: 40px !important;
-    top: 8px !important;
-    font-weight: 500 !important;
-    color: #374151 !important;
-}
-
-/* Ensure page containers work correctly */
-.pdf-page {
-    page-break-after: always !important;
-    page-break-inside: avoid !important;
-}
-
-.pdf-page:last-of-type {
-    page-break-after: avoid !important;
-}
-"""
-
-def _weasyprint_generate(rendered_html, output_path, css_override):
-    """Internal function to run WeasyPrint PDF generation (for timeout wrapper)"""
-    html_doc = HTML(string=rendered_html)
-    css = CSS(string=css_override)
-    html_doc.write_pdf(output_path, stylesheets=[css])
-    return True
-
-def generate_html_pdf_fast(optimization_data, output_path, timeout_seconds=20):
+def optimize_html_for_weasyprint(html_content):
     """
-    FAST PDF generation using WeasyPrint - optimized for Heroku with timeout
+    Optimize HTML by replacing flexbox with simpler layouts that WeasyPrint handles faster.
+    """
+    # Replace display: flex with display: block (for simple containers)
+    # This is a safe transformation for most layout purposes
+    optimized = html_content
+    
+    # Replace flex-direction: column containers with simple block
+    optimized = re.sub(
+        r'display:\s*flex;\s*flex-direction:\s*column;?',
+        'display: block;',
+        optimized,
+        flags=re.IGNORECASE
+    )
+    
+    # Replace simple display: flex with display: block
+    optimized = re.sub(
+        r'display:\s*flex;',
+        'display: block;',
+        optimized,
+        flags=re.IGNORECASE
+    )
+    
+    # Remove flex-related properties that are now meaningless
+    optimized = re.sub(r'flex:\s*\d+;?', '', optimized, flags=re.IGNORECASE)
+    optimized = re.sub(r'flex-wrap:\s*\w+;?', '', optimized, flags=re.IGNORECASE)
+    optimized = re.sub(r'justify-content:\s*[\w-]+;?', '', optimized, flags=re.IGNORECASE)
+    optimized = re.sub(r'align-items:\s*[\w-]+;?', '', optimized, flags=re.IGNORECASE)
+    optimized = re.sub(r'flex-shrink:\s*\d+;?', '', optimized, flags=re.IGNORECASE)
+    optimized = re.sub(r'gap:\s*[\d\w]+;?', '', optimized, flags=re.IGNORECASE)
+    
+    return optimized
+
+def _weasyprint_worker(html_content, output_path, result_container):
+    """
+    Worker function to generate PDF in a separate thread with timeout support.
+    """
+    try:
+        html_doc = HTML(string=html_content)
+        html_doc.write_pdf(output_path)
+        result_container['success'] = True
+    except Exception as e:
+        result_container['error'] = str(e)
+        result_container['success'] = False
+
+def generate_html_pdf_fast(optimization_data, output_path):
+    """
+    FAST PDF generation using WeasyPrint - optimized for Heroku with timeout protection
     """
     print("⚡ Starting FAST WeasyPrint PDF generation...")
     start_time = time.time()
@@ -84,19 +99,36 @@ def generate_html_pdf_fast(optimization_data, output_path, timeout_seconds=20):
         rendered_html = template.render(**optimization_data)
         print("✅ Template rendered")
         
-        # Generate PDF using WeasyPrint with timeout protection
-        print(f"🚀 Generating PDF with WeasyPrint (timeout: {timeout_seconds}s)...")
+        # Optimize HTML for WeasyPrint (remove flexbox)
+        print("🔧 Optimizing HTML for WeasyPrint...")
+        optimized_html = optimize_html_for_weasyprint(rendered_html)
+        print("✅ HTML optimized (flexbox removed)")
         
-        # Use ThreadPoolExecutor for timeout handling (works on Heroku)
-        with ThreadPoolExecutor(max_workers=1) as executor:
-            future = executor.submit(_weasyprint_generate, rendered_html, output_path, WEASYPRINT_CSS_OVERRIDES)
-            try:
-                future.result(timeout=timeout_seconds)
-            except FuturesTimeoutError:
-                print(f"⏱️ WeasyPrint timeout after {timeout_seconds} seconds")
-                return False
+        # Generate PDF using WeasyPrint with timeout
+        print(f"🚀 Generating PDF with WeasyPrint (timeout: {PDF_TIMEOUT}s)...")
+        
+        # Use threading for timeout support
+        result_container = {'success': False, 'error': None}
+        worker_thread = threading.Thread(
+            target=_weasyprint_worker,
+            args=(optimized_html, output_path, result_container)
+        )
+        worker_thread.start()
+        worker_thread.join(timeout=PDF_TIMEOUT)
         
         execution_time = time.time() - start_time
+        
+        # Check if thread is still running (timeout)
+        if worker_thread.is_alive():
+            print(f"⏰ WeasyPrint TIMEOUT after {PDF_TIMEOUT} seconds - will try backup method")
+            # Thread is still running - we can't kill it, but we return False
+            # The thread will eventually finish or be cleaned up when the process ends
+            return False
+        
+        # Check for errors
+        if result_container.get('error'):
+            print(f"❌ WeasyPrint error: {result_container['error']}")
+            return False
         
         # Verify PDF was created
         if os.path.exists(output_path):
@@ -111,9 +143,6 @@ def generate_html_pdf_fast(optimization_data, output_path, timeout_seconds=20):
         
         return False
         
-    except FuturesTimeoutError:
-        print(f"⏱️ WeasyPrint timed out after {timeout_seconds} seconds")
-        return False
     except Exception as e:
         print(f"❌ WeasyPrint error: {e}")
         return False
@@ -248,83 +277,16 @@ def generate_html_pdf_slow(optimization_data, output_path):
         except:
             pass
 
-def generate_simple_text_pdf(optimization_data, output_path):
-    """
-    EMERGENCY FALLBACK: Generate a simple text-based PDF when all else fails
-    Uses basic HTML that WeasyPrint can render quickly
-    """
-    print("📄 Generating simple text-based PDF as fallback...")
-    
-    try:
-        # Extract key data
-        title = optimization_data.get('title', 'Property Analysis Report')
-        optimized_title = optimization_data.get('optimized_title', '')
-        optimized_description = optimization_data.get('optimized_description', '')
-        amenities = optimization_data.get('amenities', [])
-        
-        # Create simple HTML
-        simple_html = f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <style>
-                body {{ font-family: Arial, sans-serif; padding: 40px; line-height: 1.6; }}
-                h1 {{ color: #4285f4; border-bottom: 2px solid #4285f4; padding-bottom: 10px; }}
-                h2 {{ color: #333; margin-top: 30px; }}
-                .section {{ background: #f8f9fa; padding: 20px; margin: 20px 0; border-radius: 8px; }}
-                ul {{ padding-left: 20px; }}
-                li {{ margin-bottom: 8px; }}
-            </style>
-        </head>
-        <body>
-            <h1>🏠 STR Listing Optimization Report</h1>
-            <p><strong>Property:</strong> {title}</p>
-            
-            <h2>✨ Optimized Title</h2>
-            <div class="section">{optimized_title or 'See full report for optimized title'}</div>
-            
-            <h2>📝 Optimized Description</h2>
-            <div class="section">{optimized_description or 'See full report for optimized description'}</div>
-            
-            <h2>🎯 Recommended Amenities</h2>
-            <div class="section">
-                <ul>
-                    {''.join(f'<li>{a}</li>' for a in (amenities[:10] if amenities else ['Contact us for amenity recommendations']))}
-                </ul>
-            </div>
-            
-            <p style="margin-top: 40px; color: #666; font-size: 12px;">
-                Generated by STR Optimizer - optimizemystr.com<br>
-                For the full detailed report, please contact support.
-            </p>
-        </body>
-        </html>
-        """
-        
-        html_doc = HTML(string=simple_html)
-        html_doc.write_pdf(output_path)
-        
-        if os.path.exists(output_path) and os.path.getsize(output_path) > 1000:
-            print("✅ Simple fallback PDF generated successfully")
-            return True
-        return False
-        
-    except Exception as e:
-        print(f"❌ Simple PDF fallback also failed: {e}")
-        return False
-
 def generate_html_pdf(optimization_data, output_path):
     """
-    HYBRID APPROACH - Try fast WeasyPrint first, fallback to optimized wkhtmltopdf, 
-    then simple text PDF as last resort
+    HYBRID APPROACH - Try fast WeasyPrint first, fallback to optimized wkhtmltopdf
     """
     print("🚀 Starting HYBRID PDF generation...")
     
-    # Try the fast WeasyPrint approach first (with shorter timeout for Heroku)
+    # Try the fast WeasyPrint approach first
     if WEASYPRINT_AVAILABLE:
         try:
-            if generate_html_pdf_fast(optimization_data, output_path, timeout_seconds=18):
+            if generate_html_pdf_fast(optimization_data, output_path):
                 print("✅ Fast WeasyPrint succeeded!")
                 return True
         except Exception as e:
@@ -339,16 +301,6 @@ def generate_html_pdf(optimization_data, output_path):
             return True
     except Exception as e:
         print(f"❌ Backup wkhtmltopdf also failed: {e}")
-    
-    # Last resort: Generate simple text-based PDF
-    if WEASYPRINT_AVAILABLE:
-        print("🔄 Trying simple text PDF as last resort...")
-        try:
-            if generate_simple_text_pdf(optimization_data, output_path):
-                print("✅ Simple text PDF succeeded!")
-                return True
-        except Exception as e:
-            print(f"❌ Simple text PDF also failed: {e}")
     
     print("❌ All PDF generation methods failed")
     return False 

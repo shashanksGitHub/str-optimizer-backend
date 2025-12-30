@@ -139,24 +139,18 @@
             display: block;
         }
         
-        /* Section Headers - PDF-optimized (no flexbox) */
+        /* Section Headers */
         .section-header {
+            display: block;
             margin: 40px 0 20px 0;
             font-size: 18px;
             font-weight: bold;
             color: #333;
-            overflow: hidden;
         }
         
         .section-header .emoji {
-            display: inline-block;
-            vertical-align: middle;
             margin-right: 10px;
             font-size: 20px;
-        }
-        
-        .section-header span {
-            display: inline-block;
             vertical-align: middle;
         }
         
@@ -174,12 +168,11 @@
             margin-bottom: 15px;
         }
         
-        /* Priority title - PDF-optimized (no flexbox) */
         .priority-title {
             font-weight: bold;
             font-size: 16px;
             color: #333;
-            overflow: hidden;
+            display: block;
         }
         
         .priority-badge {
@@ -192,8 +185,8 @@
             white-space: nowrap;
             border: none;
             display: inline-block;
-            float: right;
-            margin-left: 10px;
+            margin-left: auto;
+            flex-shrink: 0;
         }
         
         .priority-badge.high {
@@ -256,25 +249,17 @@
             padding: 16px 24px;
         }
 
-        /* Page title with icon - PDF-optimized (no flexbox) */
+        /* Page title with icon */
         .market-title {
+            display: block;
             font-size: 24px;
             font-weight: 600;
             color: #111827;
             margin-bottom: 12px;
-            overflow: hidden;
         }
 
         .market-icon {
-            display: inline-block;
-            vertical-align: middle;
             font-size: 18px;
-            margin-right: 8px;
-        }
-        
-        .market-title span {
-            display: inline-block;
-            vertical-align: middle;
         }
 
         /* Blue info box */
@@ -305,7 +290,6 @@
             margin-bottom: 32px;
         }
 
-        /* Market card - PDF-optimized (no flexbox) */
         .market-card {
             background: #f9fafb;
             border: 1px solid #e5e7eb;
@@ -327,22 +311,13 @@
             border: 1px solid #e5e7eb;
         }
 
-        /* Market card header - PDF-optimized (no flexbox) */
         .market-card-header {
+            display: block;
             margin-bottom: 12px;
-            overflow: hidden;
         }
 
         .market-card-icon {
-            display: inline-block;
-            vertical-align: middle;
             font-size: 16px;
-            margin-right: 8px;
-        }
-        
-        .market-card-header h3 {
-            display: inline-block;
-            vertical-align: middle;
         }
 
         .market-card-header h3 {
@@ -437,19 +412,25 @@
             line-height: 1.6;
         }
         
-        /* Two Column Layout - PDF-optimized (no flexbox) */
+        /* Two Column Layout */
         .two-columns {
             display: table;
             width: 100%;
             table-layout: fixed;
-            border-spacing: 15px 0;
             margin: 20px 0;
+        }
+        .two-columns > * {
+            display: table-cell;
+            vertical-align: top;
+            padding-right: 15px;
+        }
+        .two-columns > *:last-child {
+            padding-right: 0;
+            padding-left: 15px;
         }
         
         .column {
-            display: table-cell;
-            width: 50%;
-            vertical-align: top;
+            flex: 1;
         }
         
         .feature-box {
@@ -588,25 +569,17 @@
             margin: 0 auto;
         }
 
-        /* Page title with icon - PDF-optimized (no flexbox) */
+        /* Page title with icon */
         .content-title {
+            display: block;
             font-size: 24px;
             font-weight: 600;
             color: #111827;
             margin-bottom: 16px;
-            overflow: hidden;
         }
 
         .content-icon {
-            display: inline-block;
-            vertical-align: middle;
             font-size: 24px;
-            margin-right: 8px;
-        }
-        
-        .content-title span {
-            display: inline-block;
-            vertical-align: middle;
         }
 
         /* Content analysis box */
@@ -625,22 +598,16 @@
             margin-bottom: 3px;
         }
 
-        /* Content section header - PDF-optimized (no flexbox) */
         .content-section-header {
+            display: block;
             margin-bottom: 2px;
-            overflow: hidden;
         }
 
         .content-section-icon {
-            display: inline-block;
-            vertical-align: middle;
             font-size: 16px;
-            margin-right: 8px;
         }
 
         .content-section-title {
-            display: inline-block;
-            vertical-align: middle;
             font-size: 17px;
             font-weight: 600;
             color: #374151;
@@ -651,21 +618,12 @@
             margin-bottom: 16px;
         }
 
-        /* Content subsection header - PDF-optimized (no flexbox) */
         .content-subsection-header {
+            display: block;
             margin-bottom: 12px;
             font-size: 15px;
             font-weight: 500;
             color: #374151;
-            overflow: hidden;
-        }
-        
-        .content-subsection-header span:first-child {
-            display: inline-block;
-        }
-        
-        .content-subsection-header .ai-generated-badge {
-            float: right;
         }
 
         .ai-generated-badge {
@@ -819,25 +777,17 @@
             padding: 0 24px 16px 24px;
         }
 
-        /* Page title with icon - PDF-optimized (no flexbox) */
+        /* Page title with icon */
         .revenue-title {
+            display: block;
             font-size: 24px;
             font-weight: 600;
             color: #111827;
             margin-bottom: 16px;
-            overflow: hidden;
         }
 
         .revenue-icon {
-            display: inline-block;
-            vertical-align: middle;
             font-size: 24px;
-            margin-right: 8px;
-        }
-        
-        .revenue-title span {
-            display: inline-block;
-            vertical-align: middle;
         }
 
         .revenue-title h2 {
@@ -857,15 +807,8 @@
             margin-bottom: 20px;
         }
 
-        /* Revenue analysis header - PDF-optimized (no flexbox) */
         .revenue-analysis-header {
-            overflow: hidden;
-        }
-        
-        .revenue-analysis-header span {
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 8px;
+            display: block;
         }
 
         .revenue-analysis-label {
@@ -899,28 +842,22 @@
             margin-bottom: 24px;
         }
 
-        /* Revenue item - PDF-optimized (no flexbox) */
         .revenue-item {
-            display: table;
-            width: 100%;
+            display: block;
             margin-bottom: 16px;
         }
 
         .revenue-number {
-            display: table-cell;
-            width: 30px;
             color: #111827;
             font-weight: 600;
             font-size: 14px;
-            vertical-align: top;
+            flex-shrink: 0;
         }
 
         .revenue-text {
-            display: table-cell;
             color: #374151;
             font-size: 14px;
             line-height: 1.6;
-            vertical-align: top;
         }
 
         /* Revenue sections */
@@ -951,28 +888,23 @@
             margin-left: 16px;
         }
 
-        /* Revenue requirement - PDF-optimized (no flexbox) */
         .revenue-requirement {
-            display: table;
-            width: 100%;
+            display: block;
             margin-bottom: 8px;
         }
 
         .requirement-label {
-            display: table-cell;
-            width: 160px;
             color: #111827;
             font-weight: 600;
             font-size: 14px;
-            vertical-align: top;
+            flex-shrink: 0;
+            min-width: 160px;
         }
 
         .requirement-text {
-            display: table-cell;
             color: #6b7280;
             font-size: 14px;
             line-height: 1.5;
-            vertical-align: top;
         }
 
         /* Strategies styling */
@@ -980,28 +912,23 @@
             margin-left: 16px;
         }
 
-        /* Revenue strategy - PDF-optimized (no flexbox) */
         .revenue-strategy {
-            display: table;
-            width: 100%;
+            display: block;
             margin-bottom: 8px;
         }
 
         .strategy-label {
-            display: table-cell;
-            width: 160px;
             color: #111827;
             font-weight: 600;
             font-size: 14px;
-            vertical-align: top;
+            flex-shrink: 0;
+            min-width: 160px;
         }
 
         .strategy-text {
-            display: table-cell;
             color: #6b7280;
             font-size: 14px;
             line-height: 1.5;
-            vertical-align: top;
         }
 
         /* Footer */
@@ -1052,26 +979,17 @@
             padding: 16px 24px;
         }
 
-        /* Page title with icon - PDF-optimized (no flexbox) */
+        /* Page title with icon */
         .action-title {
+            display: block;
             font-size: 24px;
             font-weight: 600;
             color: #111827;
             margin-bottom: 16px;
-            overflow: hidden;
         }
 
         .action-icon {
-            display: inline-block;
-            vertical-align: middle;
             font-size: 24px;
-            margin-right: 8px;
-        }
-        
-        .action-title span,
-        .action-title h2 {
-            display: inline-block;
-            vertical-align: middle;
         }
 
         .action-title h2 {
@@ -1090,15 +1008,8 @@
             border-radius: 0 4px 4px 0;
         }
 
-        /* Action priority header - PDF-optimized (no flexbox) */
         .action-priority-header {
-            overflow: hidden;
-        }
-        
-        .action-priority-header span {
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 8px;
+            display: block;
         }
 
         .action-priority-label {
@@ -1113,26 +1024,21 @@
             line-height: 1.5;
         }
 
-        /* Priority sections - PDF-optimized (no flexbox) */
+        /* Priority sections */
         .priority-section {
             margin-bottom: 24px;
         }
 
         .priority-header {
+            display: block;
             margin-bottom: 12px;
-            overflow: hidden;
         }
 
         .priority-icon {
-            display: inline-block;
-            vertical-align: middle;
             font-size: 16px;
-            margin-right: 8px;
         }
 
-        .priority-section .priority-title {
-            display: inline-block;
-            vertical-align: middle;
+        .priority-title {
             color: #111827;
             font-size: 16px;
             font-weight: 600;
@@ -1152,28 +1058,23 @@
             margin: 8px 0;
         }
 
-        /* Priority item - PDF-optimized (no flexbox) */
-        .priority-section .priority-item {
-            display: table;
-            width: 100%;
+        .priority-item {
+            display: block;
             margin-bottom: 8px;
         }
 
         .priority-item-label {
-            display: table-cell;
-            width: 120px;
             color: #374151;
             font-weight: 600;
             font-size: 14px;
-            vertical-align: top;
+            flex-shrink: 0;
+            min-width: 120px;
         }
 
         .priority-item-text {
-            display: table-cell;
             color: #111827;
             font-size: 14px;
             line-height: 1.5;
-            vertical-align: top;
         }
 
         .priority-alternatives {
@@ -1229,22 +1130,13 @@
             margin-bottom: 24px;
         }
 
-        /* ROI title - PDF-optimized (no flexbox) */
         .roi-title {
+            display: block;
             margin-bottom: 16px;
-            overflow: hidden;
         }
 
         .roi-icon {
-            display: inline-block;
-            vertical-align: middle;
             font-size: 16px;
-            margin-right: 8px;
-        }
-        
-        .roi-title h3 {
-            display: inline-block;
-            vertical-align: middle;
         }
 
         .roi-title h3 {
@@ -1267,10 +1159,9 @@
             margin-bottom: 0;
         }
 
-        /* ROI items - PDF-optimized (no flexbox) */
+        /* ROI items */
         .roi-item {
-            display: table;
-            width: 100%;
+            display: block;
             margin-bottom: 20px;
         }
 
@@ -1279,20 +1170,16 @@
         }
 
         .roi-number {
-            display: table-cell;
-            width: 30px;
             color: #111827;
             font-weight: 600;
             font-size: 14px;
-            vertical-align: top;
+            flex-shrink: 0;
         }
 
         .roi-text {
-            display: table-cell;
             color: #374151;
             font-size: 14px;
             line-height: 1.6;
-            vertical-align: top;
         }
 
         /* Action footer */
@@ -1343,26 +1230,17 @@
             font-weight: 500;
         }
 
-        /* Page title with icon - PDF-optimized (no flexbox) */
+        /* Page title with icon */
         .roadmap-title {
+            display: block;
             font-size: 20px;
             font-weight: 600;
             color: #111827;
             margin-bottom: 8px;
-            overflow: hidden;
         }
 
         .roadmap-icon {
-            display: inline-block;
-            vertical-align: middle;
             font-size: 20px;
-            margin-right: 8px;
-        }
-        
-        .roadmap-title span,
-        .roadmap-title h2 {
-            display: inline-block;
-            vertical-align: middle;
         }
 
         .roadmap-title h2 {
@@ -1409,29 +1287,23 @@
             margin-bottom: 8px;
         }
 
-        /* Checklist item - PDF-optimized (no flexbox) */
         .checklist-item {
-            display: table;
-            width: 100%;
+            display: block;
             margin-bottom: 6px;
         }
 
         .check-icon {
-            display: table-cell;
-            width: 25px;
             color: #10b981;
             font-weight: 600;
             font-size: 14px;
-            vertical-align: top;
-            padding-top: 1px;
+            flex-shrink: 0;
+            margin-top: 1px;
         }
 
         .check-text {
-            display: table-cell;
             color: #374151;
             font-size: 14px;
             line-height: 1.5;
-            vertical-align: top;
         }
 
         /* Impact boxes */
@@ -1485,13 +1357,14 @@
             border-top: 1px solid #e5e7eb;
         }
 
-        /* ========== PAGE CONTAINER - PDF-optimized (no flexbox) ========== */
+        /* ========== PAGE CONTAINER - Pushes footer to bottom ========== */
         .pdf-page {
-            display: table;
-            width: 100%;
             min-height: 100vh;
+            display: block;
+            position: relative;
             page-break-after: always;
             page-break-inside: avoid;
+            padding-bottom: 50px; /* Space for footer */
         }
         
         .pdf-page:last-of-type {
@@ -1499,24 +1372,13 @@
         }
         
         .pdf-page-content {
-            display: table-row;
-            height: 100%;
-        }
-        
-        .pdf-page-content > * {
             display: block;
         }
         
-        /* ========== UNIFIED REPORT FOOTER - PDF-optimized (no flexbox) ========== */
+        /* ========== UNIFIED REPORT FOOTER ========== */
         /* Footer anchored at bottom of each page */
         .report-footer {
-            display: table-row;
             width: 100%;
-            height: 1px;
-        }
-        
-        .report-footer > * {
-            display: block;
             padding: 10px 40px;
             border-top: 1px solid #e5e7eb;
             font-size: 12px;
@@ -1524,31 +1386,27 @@
             background: white;
             text-align: center;
             position: relative;
+            margin-top: auto;
         }
         
         .report-footer .footer-center {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         .report-footer .footer-center img {
-            display: inline-block;
-            vertical-align: middle;
             height: 16px;
             width: auto;
-            margin-right: 8px;
-        }
-        
-        .report-footer .footer-center span {
-            display: inline-block;
             vertical-align: middle;
         }
         
         .report-footer .footer-page-number {
             position: absolute;
             right: 40px;
-            top: 8px;
-            font-weight: 500;
-            color: #374151;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         /* Page 2 specific adjustments */
@@ -1563,13 +1421,13 @@
     <!-- Page 1: Top 4 Immediate Actions -->
     <div class="pdf-page">
         <div class="pdf-page-content">
-            <!-- Header - PDF-optimized (no flexbox) -->
+            <!-- Header -->
             <div class="header">
-                <div style="float: left;">
-                    <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="display: inline-block; vertical-align: middle; height: 40px; width: auto; margin-right: 12px;" />
-                    <h1 style="display: inline-block; vertical-align: middle; color: #4285f4; font-size: 24px; font-weight: bold; margin: 0;">Listing Optimizer</h1>
+                <div style="display: inline-block; float: left;">
+                    <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
+                    <h1 style="color: #4285f4; font-size: 24px; font-weight: bold; margin: 0; display: inline; vertical-align: middle;">Listing Optimizer</h1>
                 </div>
-                <div class="date" style="float: right;">Analysis Date: {{ analysis_date | default(generated_at | default('')) }}</div>
+                <div class="date" style="display: inline-block; float: right;">Analysis Date: {{ analysis_date | default(generated_at | default('')) }}</div>
                 <div style="clear: both;"></div>
             </div>
             
@@ -1650,13 +1508,13 @@
     <!-- Page 2: Remaining Immediate Actions -->
     <div class="pdf-page">
         <div class="pdf-page-content">
-            <!-- Header - PDF-optimized (no flexbox) -->
+            <!-- Header -->
             <div class="header">
-                <div style="float: left;">
-                    <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="display: inline-block; vertical-align: middle; height: 40px; width: auto; margin-right: 12px;" />
-                    <h1 style="display: inline-block; vertical-align: middle; color: #4285f4; font-size: 24px; font-weight: bold; margin: 0;">Listing Optimizer</h1>
+                <div style="display: inline-block; float: left;">
+                    <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
+                    <h1 style="color: #4285f4; font-size: 24px; font-weight: bold; margin: 0; display: inline; vertical-align: middle;">Listing Optimizer</h1>
                 </div>
-                <div class="date" style="float: right;">Analysis Date: {{ analysis_date | default(generated_at | default('')) }}</div>
+                <div class="date" style="display: inline-block; float: right;">Analysis Date: {{ analysis_date | default(generated_at | default('')) }}</div>
                 <div style="clear: both;"></div>
             </div>
             
@@ -1699,16 +1557,16 @@
     <!-- Page 3: Market Analysis & Competitive Edge -->
     <div class="pdf-page">
         <div class="pdf-page-content">
-            <!-- Header with blue top border - PDF-optimized (no flexbox) -->
+            <!-- Header with blue top border -->
             <div class="market-header">
                     <div class="market-header-top"></div>
                     <div class="market-header-content">
-                        <div class="market-header-left" style="float: left;">
-                            <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="display: inline-block; vertical-align: middle; height: 40px; width: auto; margin-right: 12px;" />
-                            <h1 style="display: inline-block; vertical-align: middle;">Listing Optimizer</h1>
+                        <div class="market-header-left" style="display: inline-block;">
+                            <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
+                            <h1 style="display: inline-block;">Listing Optimizer</h1>
                         </div>
                         <div class="market-header-right">
-                            <span style="float: right;">Market Analysis</span>
+                            <span style="display: inline-block; float: right;">Market Analysis</span>
                         </div>
                         <div style="clear: both;"></div>
                     </div>
@@ -1740,7 +1598,7 @@
             <!-- Section Title -->
             <h2 class="market-section-title" style="margin-bottom: 12px;">Competitive Advantages</h2>
 
-            <!-- 6-card layout using table for PDF compatibility (2 cards per row) - PDF-optimized (no flexbox) -->
+            <!-- 6-card layout using table for PDF compatibility (2 cards per row) - OPTIMIZED FOR WEASYPRINT -->
             <table style="width: 100%; border-collapse: separate; border-spacing: 6px; margin-bottom: 0px;">
                 <!-- ROW 1: Cards 1 & 2 -->
                 <tr>
@@ -1748,25 +1606,23 @@
                     <td style="width: 50%; vertical-align: top;">
                         <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; height: 200px; position: relative;">
                             <div style="margin-bottom: 10px;">
-                                <span style="display: inline-block; vertical-align: middle; font-size: 16px; margin-right: 8px;">🏢</span>
-                                <h3 style="display: inline-block; vertical-align: middle; font-size: 15px; font-weight: 600; color: #111827; margin: 0;">Location Analysis</h3>
+                                <span style="font-size: 16px; vertical-align: middle;">🏢</span>
+                                <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0; display: inline; vertical-align: middle; margin-left: 8px;">Location Analysis</h3>
                             </div>
-                            <div>
-                                <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
-                                    {% if pricing_analysis %}
-                                        {% set first_line = pricing_analysis.split('\n')[0] %}
-                                        {% set clean_line = first_line | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('6. ', '') | replace('7. ', '') | replace('8. ', '') | replace('9. ', '') | replace('10. ', '') | replace('1) ', '') | replace('2) ', '') | replace('3) ', '') | replace('4) ', '') | replace('5) ', '') %}
-                                        • {{ clean_line.strip() }}
-                                    {% endif %}
-                                </p>
-                                <div style="position: absolute; bottom: 16px; left: 16px; right: 16px;">
-                                    <div style="margin-bottom: 6px;">
-                                        <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
-                                            <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.market_positioning }}%;"></div>
-                                        </div>
+                            <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
+                                {% if pricing_analysis %}
+                                    {% set first_line = pricing_analysis.split('\n')[0] %}
+                                    {% set clean_line = first_line | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('6. ', '') | replace('7. ', '') | replace('8. ', '') | replace('9. ', '') | replace('10. ', '') | replace('1) ', '') | replace('2) ', '') | replace('3) ', '') | replace('4) ', '') | replace('5) ', '') %}
+                                    • {{ clean_line.strip() }}
+                                {% endif %}
+                            </p>
+                            <div style="position: absolute; bottom: 16px; left: 16px; right: 16px;">
+                                <div style="margin-bottom: 6px;">
+                                    <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
+                                        <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.market_positioning }}%;"></div>
                                     </div>
-                                    <div style="font-size: 13px; color: #3b82f6; font-weight: 500;">Market Positioning: {{ competitive_scores.market_positioning }}%</div>
                                 </div>
+                                <div style="font-size: 13px; color: #3b82f6; font-weight: 500;">Market Positioning: {{ competitive_scores.market_positioning }}%</div>
                             </div>
                         </div>
                     </td>
@@ -1774,61 +1630,57 @@
                     <td style="width: 50%; vertical-align: top;">
                         <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; height: 200px; position: relative;">
                             <div style="margin-bottom: 10px;">
-                                <span style="display: inline-block; vertical-align: middle; font-size: 16px; margin-right: 8px;">🏠</span>
-                                <h3 style="display: inline-block; vertical-align: middle; font-size: 15px; font-weight: 600; color: #111827; margin: 0;">Amenities Analysis</h3>
+                                <span style="font-size: 16px; vertical-align: middle;">🏠</span>
+                                <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0; display: inline; vertical-align: middle; margin-left: 8px;">Amenities Analysis</h3>
                             </div>
-                            <div>
-                                <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
-                                    {% if amenities %}
-                                        {% set lines = amenities.split('\n') %}
-                                        {% for line in lines[:2] %}
-                                            {% if line.strip() %}
-                                                {% set clean_line = line | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('6. ', '') | replace('7. ', '') | replace('8. ', '') | replace('9. ', '') | replace('10. ', '') | replace('1) ', '') | replace('2) ', '') | replace('3) ', '') | replace('4) ', '') | replace('5) ', '') %}
-                                                {% if not loop.first %}<br>{% endif %}• {{ clean_line.strip() }}
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
-                                </p>
-                                <div style="position: absolute; bottom: 16px; left: 16px; right: 16px;">
-                                    <div style="margin-bottom: 6px;">
-                                        <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
-                                            <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.amenity_score }}%;"></div>
-                                        </div>
+                            <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
+                                {% if amenities %}
+                                    {% set lines = amenities.split('\n') %}
+                                    {% for line in lines[:2] %}
+                                        {% if line.strip() %}
+                                            {% set clean_line = line | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('6. ', '') | replace('7. ', '') | replace('8. ', '') | replace('9. ', '') | replace('10. ', '') | replace('1) ', '') | replace('2) ', '') | replace('3) ', '') | replace('4) ', '') | replace('5) ', '') %}
+                                            {% if not loop.first %}<br>{% endif %}• {{ clean_line.strip() }}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </p>
+                            <div style="position: absolute; bottom: 16px; left: 16px; right: 16px;">
+                                <div style="margin-bottom: 6px;">
+                                    <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
+                                        <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.amenity_score }}%;"></div>
                                     </div>
-                                    <div style="font-size: 13px; color: #3b82f6; font-weight: 500;">Amenity Score: {{ competitive_scores.amenity_score }}%</div>
                                 </div>
+                                <div style="font-size: 13px; color: #3b82f6; font-weight: 500;">Amenity Score: {{ competitive_scores.amenity_score }}%</div>
                             </div>
                         </div>
                     </td>
                 </tr>
                 
-                <!-- ROW 2: Cards 3 & 4 - PDF-optimized (no flexbox) -->
+                <!-- ROW 2: Cards 3 & 4 -->
                 <tr>
                     <!-- CARD 3: Visual Appeal -->
                     <td style="width: 50%; vertical-align: top;">
                         <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; height: 200px; position: relative;">
                             <div style="margin-bottom: 10px;">
-                                <span style="display: inline-block; vertical-align: middle; font-size: 16px; margin-right: 8px;">📸</span>
-                                <h3 style="display: inline-block; vertical-align: middle; font-size: 15px; font-weight: 600; color: #111827; margin: 0;">Visual Appeal</h3>
+                                <span style="font-size: 16px; vertical-align: middle;">📸</span>
+                                <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0; display: inline; vertical-align: middle; margin-left: 8px;">Visual Appeal</h3>
                             </div>
-                            <div>
-                                <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
-                                    {% if photo_audit %}
-                                        {% set first_line = photo_audit.split('\n')[0] %}
-                                        {% set clean_line = first_line | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('6. ', '') | replace('7. ', '') | replace('8. ', '') | replace('9. ', '') | replace('10. ', '') | replace('1) ', '') | replace('2) ', '') | replace('3) ', '') | replace('4) ', '') | replace('5) ', '') %}
-                                        • {{ clean_line.strip() }}
-                                    {% else %}
-                                        • No photos detected. Professional photos are essential - consider hiring a photographer to showcase your property's best features.
-                                    {% endif %}
-                                </p>
-                                <div style="position: absolute; bottom: 16px; left: 16px; right: 16px;">
-                                    <div style="margin-bottom: 6px;">
-                                        <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
-                                            <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.visual_score }}%;"></div>
-                                        </div>
+                            <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
+                                {% if photo_audit %}
+                                    {% set first_line = photo_audit.split('\n')[0] %}
+                                    {% set clean_line = first_line | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('6. ', '') | replace('7. ', '') | replace('8. ', '') | replace('9. ', '') | replace('10. ', '') | replace('1) ', '') | replace('2) ', '') | replace('3) ', '') | replace('4) ', '') | replace('5) ', '') %}
+                                    • {{ clean_line.strip() }}
+                                {% else %}
+                                    • No photos detected. Professional photos are essential - consider hiring a photographer to showcase your property's best features.
+                                {% endif %}
+                            </p>
+                            <div style="position: absolute; bottom: 16px; left: 16px; right: 16px;">
+                                <div style="margin-bottom: 6px;">
+                                    <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
+                                        <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.visual_score }}%;"></div>
                                     </div>
-                                    <div style="font-size: 13px; color: #3b82f6; font-weight: 500;">Visual Score: {{ competitive_scores.visual_score }}%</div>
                                 </div>
+                                <div style="font-size: 13px; color: #3b82f6; font-weight: 500;">Visual Score: {{ competitive_scores.visual_score }}%</div>
                             </div>
                         </div>
                     </td>
@@ -1836,58 +1688,52 @@
                     <td style="width: 50%; vertical-align: top;">
                         <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; height: 200px; position: relative;">
                             <div style="margin-bottom: 10px;">
-                                <span style="display: inline-block; vertical-align: middle; font-size: 16px; margin-right: 8px;">👥</span>
-                                <h3 style="display: inline-block; vertical-align: middle; font-size: 15px; font-weight: 600; color: #111827; margin: 0;">Guest Experience</h3>
+                                <span style="font-size: 16px; vertical-align: middle;">👥</span>
+                                <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0; display: inline; vertical-align: middle; margin-left: 8px;">Guest Experience</h3>
                             </div>
-                            <div>
-                                <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
-                                    {% if guest_profile_analysis %}
-                                        {% set lines = guest_profile_analysis.split('\n') %}
-                                        {% for line in lines[:2] %}
-                                            {% if line.strip() %}
-                                                {% set clean_line = line | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('6. ', '') | replace('7. ', '') | replace('8. ', '') | replace('9. ', '') | replace('10. ', '') | replace('1) ', '') | replace('2) ', '') | replace('3) ', '') | replace('4) ', '') | replace('5) ', '') %}
-                                                {% if not loop.first %}<br>{% endif %}• {{ clean_line.strip() }}
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
-                                </p>
-                                <div style="position: absolute; bottom: 16px; left: 16px; right: 16px;">
-                                    <div style="margin-bottom: 6px;">
-                                        <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
-                                            <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.experience_score }}%;"></div>
-                                        </div>
+                            <p style="font-size: 13px; color: #4b5563; line-height: 1.3; margin: 0 0 12px 0;">
+                                {% if guest_profile_analysis %}
+                                    {% set lines = guest_profile_analysis.split('\n') %}
+                                    {% for line in lines[:2] %}
+                                        {% if line.strip() %}
+                                            {% set clean_line = line | replace('**', '') | replace('*', '') | replace('1. ', '') | replace('2. ', '') | replace('3. ', '') | replace('4. ', '') | replace('5. ', '') | replace('6. ', '') | replace('7. ', '') | replace('8. ', '') | replace('9. ', '') | replace('10. ', '') | replace('1) ', '') | replace('2) ', '') | replace('3) ', '') | replace('4) ', '') | replace('5) ', '') %}
+                                            {% if not loop.first %}<br>{% endif %}• {{ clean_line.strip() }}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </p>
+                            <div style="position: absolute; bottom: 16px; left: 16px; right: 16px;">
+                                <div style="margin-bottom: 6px;">
+                                    <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
+                                        <div style="height: 100%; background: #3b82f6; border-radius: 3px; width: {{ competitive_scores.experience_score }}%;"></div>
                                     </div>
-                                    <div style="font-size: 13px; color: #3b82f6; font-weight: 500;">Experience Score: {{ competitive_scores.experience_score }}%</div>
                                 </div>
+                                <div style="font-size: 13px; color: #3b82f6; font-weight: 500;">Experience Score: {{ competitive_scores.experience_score }}%</div>
                             </div>
                         </div>
                     </td>
                 </tr>
                 
-                <!-- ROW 3: Cards 5 & 6 - PDF-optimized (no flexbox) -->
+                <!-- ROW 3: Cards 5 & 6 -->
                 <tr>
                     <!-- CARD 5: Revenue Insights -->
                     <td style="width: 50%; vertical-align: top;">
                         <div style="background: #fef3c7; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; height: 200px;">
                             <div style="margin-bottom: 12px;">
-                                <span style="display: inline-block; vertical-align: middle; font-size: 16px; margin-right: 8px;">📈</span>
-                                <h3 style="display: inline-block; vertical-align: middle; font-size: 15px; font-weight: 600; color: #111827; margin: 0;">Revenue Insights</h3>
+                                <span style="font-size: 16px; vertical-align: middle;">📈</span>
+                                <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0; display: inline; vertical-align: middle; margin-left: 8px;">Revenue Insights</h3>
                             </div>
-                            <div>
-                                <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{% if performance_insights %}{{ performance_insights | replace('**', '') | replace('*', '') }}{% endif %}</p>
-                            </div>
+                            <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{% if performance_insights %}{{ performance_insights | replace('**', '') | replace('*', '') }}{% endif %}</p>
                         </div>
                     </td>
                     <!-- CARD 6: Strategic Recommendations -->
                     <td style="width: 50%; vertical-align: top;">
                         <div style="background: #dcfce7; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; height: 200px;">
                             <div style="margin-bottom: 12px;">
-                                <span style="display: inline-block; vertical-align: middle; font-size: 16px; margin-right: 8px;">💡</span>
-                                <h3 style="display: inline-block; vertical-align: middle; font-size: 15px; font-weight: 600; color: #111827; margin: 0;">Strategic Recommendations</h3>
+                                <span style="font-size: 16px; vertical-align: middle;">💡</span>
+                                <h3 style="font-size: 15px; font-weight: 600; color: #111827; margin: 0; display: inline; vertical-align: middle; margin-left: 8px;">Strategic Recommendations</h3>
                             </div>
-                            <div>
-                                <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{% if strategic_recommendations %}{% set clean_recs = strategic_recommendations | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_recs = clean_recs | replace(i ~ '. ', '• ') %}{% set clean_recs = clean_recs | replace(i ~ ') ', '• ') %}{% endfor %}{{ clean_recs }}{% endif %}</p>
-                            </div>
+                            <p style="font-size: 13px; color: #4b5563; line-height: 1.4; margin: 0; white-space: pre-line;">{% if strategic_recommendations %}{% set clean_recs = strategic_recommendations | replace('**', '') | replace('*', '') %}{% for i in range(1, 21) %}{% set clean_recs = clean_recs | replace(i ~ '. ', '• ') %}{% set clean_recs = clean_recs | replace(i ~ ') ', '• ') %}{% endfor %}{{ clean_recs }}{% endif %}</p>
                         </div>
                     </td>
                 </tr>
@@ -1909,15 +1755,15 @@
     <div class="pdf-page">
         <div class="pdf-page-content">
             <div class="page content-optimization-page">
-                <!-- Header with blue bottom border - PDF-optimized (no flexbox) -->
+                <!-- Header with blue bottom border -->
                 <div class="content-header">
                     <div class="content-header-content">
-                        <div class="content-header-left" style="float: left;">
-                            <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="display: inline-block; vertical-align: middle; height: 40px; width: auto; margin-right: 12px;" />
-                            <h1 style="display: inline-block; vertical-align: middle;">Listing Optimizer</h1>
+                        <div class="content-header-left" style="display: inline-block;">
+                            <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
+                            <h1 style="display: inline-block;">Listing Optimizer</h1>
                         </div>
                         <div class="content-header-right">
-                            <span style="float: right;">Content Strategy</span>
+                            <span style="display: inline-block; float: right;">Content Strategy</span>
                         </div>
                         <div style="clear: both;"></div>
                     </div>
@@ -1990,15 +1836,15 @@
     <!-- Page 5: AI-Suggested Amenities -->
     <div class="pdf-page">
         <div class="pdf-page-content">
-            <!-- Header - PDF-optimized (no flexbox) -->
+            <!-- Header -->
                 <div class="content-header">
                     <div class="content-header-content">
-                        <div class="content-header-left" style="float: left;">
-                            <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="display: inline-block; vertical-align: middle; height: 40px; width: auto; margin-right: 12px;" />
-                            <h1 style="display: inline-block; vertical-align: middle;">Listing Optimizer</h1>
+                        <div class="content-header-left" style="display: inline-block;">
+                            <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
+                            <h1 style="display: inline-block;">Listing Optimizer</h1>
                         </div>
                         <div class="content-header-right">
-                            <span style="float: right;">AI Recommendations</span>
+                            <span style="display: inline-block; float: right;">AI Recommendations</span>
                         </div>
                         <div style="clear: both;"></div>
                     </div>
@@ -2011,11 +1857,11 @@
                 <span>AI-Suggested Amenities</span>
             </div>
 
-            <!-- AI-Suggested Amenities Section - PDF-optimized (no flexbox) -->
+            <!-- AI-Suggested Amenities Section -->
             <div class="content-section">
                 <div style="background: #f1f5f9; border-left: 4px solid #3b82f6; padding: 24px; margin: 16px 0; border-radius: 0 8px 8px 0;">
                     <div style="margin-bottom: 20px;">
-                        <span style="display: inline-block; background: #fef3c7; color: #d97706; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px;">MEDIUM PRIORITY</span>
+                        <span style="background: #fef3c7; color: #d97706; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px;">MEDIUM PRIORITY</span>
                     </div>
                     
                     <div style="color: #111827; font-weight: 600; font-size: 20px; margin-bottom: 16px;">AI-Suggested Amenities Analysis</div>
@@ -2055,15 +1901,15 @@
     <!-- Page 6: Revenue Optimization -->
     <div class="pdf-page">
         <div class="pdf-page-content">
-            <!-- Header with blue bottom border - PDF-optimized (no flexbox) -->
+            <!-- Header with blue bottom border -->
                 <div class="revenue-header">
                     <div class="revenue-header-content">
-                        <div class="revenue-header-left" style="float: left;">
-                            <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="display: inline-block; vertical-align: middle; height: 40px; width: auto; margin-right: 12px;" />
-                            <h1 style="display: inline-block; vertical-align: middle;">Listing Optimizer</h1>
+                        <div class="revenue-header-left" style="display: inline-block;">
+                            <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
+                            <h1 style="display: inline-block;">Listing Optimizer</h1>
                         </div>
                         <div class="revenue-header-right">
-                            <span style="float: right;">Revenue Optimization</span>
+                            <span style="display: inline-block; float: right;">Revenue Optimization</span>
                         </div>
                         <div style="clear: both;"></div>
                     </div>
@@ -2158,14 +2004,14 @@
     <div class="pdf-page">
         <div class="pdf-page-content">
             <div class="roadmap-main">
-                <!-- Header - PDF-optimized (no flexbox) -->
+                <!-- Header -->
                     <div class="roadmap-header">
                         <div class="roadmap-header-content">
-                            <div style="float: left;">
-                                <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="display: inline-block; vertical-align: middle; height: 40px; width: auto; margin-right: 12px;" />
-                                <h1 style="display: inline-block; vertical-align: middle;">Listing Optimizer</h1>
+                            <div style="display: inline-block; float: left;">
+                                <img src="/app/StrLogo.png" alt="STR Optimizer Logo" style="height: 40px; width: auto; margin-right: 12px; vertical-align: middle;" />
+                                <h1 style="display: inline-block;">Listing Optimizer</h1>
                             </div>
-                            <span style="float: right;">Action Plan</span>
+                            <span style="display: inline-block; float: right;">Action Plan</span>
                             <div style="clear: both;"></div>
                         </div>
                     </div>
