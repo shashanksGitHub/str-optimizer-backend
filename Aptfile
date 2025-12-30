@@ -15,8 +15,3 @@ fontconfig
 libfontconfig1
 fonts-liberation
 fonts-dejavu-core
-
-# Additional libraries wkhtmltopdf may need
-libjpeg62-turbo
-libpng16-16
-zlib1g
